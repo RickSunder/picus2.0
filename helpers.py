@@ -1,8 +1,11 @@
 import csv
 import urllib.request
-
+from cs50 import SQL
 from flask import redirect, render_template, request, session
 from functools import wraps
+
+# configure CS50 Library to use SQLite database
+db = SQL("sqlite:///PicUs.db")
 
 def login_required(f):
     """
@@ -16,6 +19,11 @@ def login_required(f):
             return redirect("/")
         return f(*args, **kwargs)
     return decorated_function
+
+
+def find_user(u):
+    user = db.execute("SELECT * FROM users WHERE username=:username", username=u)
+    return user
 
 
 
