@@ -69,41 +69,42 @@ def register():
     else:
         return render_template("register.html")
 
+
 @app.route("/makegroup", methods=["GET", "POST"])
 @login_required
 def makegroup():
     """Make new group"""
     if request.method == "POST":
-        count = request.form.get("count_member")
+        name_group = request.form.get("name_group")
 
-        return render_template("addgroupmember.html", count=count)
+        db.execute("INSERT INTO groups (name_group) VALUES(:groupname)", groupname=name_group)
+
+        return render_template("addgroupmember.html", groupname = name_group)
     else:
         return render_template("makegroup.html")
+
 
 @app.route("/addmember", methods=["GET", "POST"])
 @login_required
 def addmember():
     if request.method == "POST":
-
-        name_group = request.form.get("name_group")
         add_members = request.form.get("add_members")
 
-        for number in range(len(count)):
-            add_members = request.form.get(number)
-
-            user = find_user(add_members)
-            if user == []:
-                return "Username doesn't exist"
-
-            db.execute("INSERT INTO groups (groupname, username) VALUES(:groupname, :username)", groupname=name_group, username=add_members)
-        return render_template("addgroupmember.html", count=count)
         user = find_user(add_members)
-        if user == None:
+        print(user)
+        if user == []:
             return "Username doesn't exist"
-        user = tuple(user)
 
+        id_user = db.execute("SELECT id FROM users WHERE username=:username", username=add_members)
+        id_user = id_user[0]["id"]
 
-        return "bla"
+        id_group = db.execute("SELECT id FROM groups WHERE name_group=:group", group=name_group)
+        id_group = id_group[0]["group_id"]
+
+        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=id_group)
+
+        return render_template("addgroupmember.html")
+
     else:
         return render_template("addgroupmember.html")
 
