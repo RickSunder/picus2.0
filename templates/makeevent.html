@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Layout
+
 {% endblock %}
 
 {% block main %}
+<form action="{{ url_for('makeevent') }}" method="post">
   <body>
     <div class="partofgroup">
         <h1><font size="+15">Be part of your own group now!</fontsize></h1>
@@ -18,6 +19,7 @@
 
 </div>
   </body>
+</form>
 
 {% endblock %}
 
