@@ -137,3 +137,6 @@ def login():
 def groupfeed():
     return "groupfeed"
 
+@app.route("/aboutus", methods=["GET", "POST"])
+def aboutus():
+    return render_template("aboutus.html")
