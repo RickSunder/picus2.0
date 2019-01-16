@@ -75,20 +75,15 @@ def makegroup():
     """Make new group"""
     if request.method == "POST":
         name_group = request.form.get("name_group")
-        count = request.form.get("count_member")
+        add_members = request.form.get("add_members")
 
-        for line in range(len(count)):
-            add_members = request.form.get("add_members")
+        user = find_user(add_members)
+        if user == None:
+            return "Username doesn't exist"
+        user = tuple(user)
 
-            user = find_user(add_members)
-            if user == []:
-                return "Username doesn't exist"
-            user = [user]
 
-            db.execute("INSERT INTO groups (groupname, username) VALUES(:groupname, :username)", groupname=name_group, username=add_members)
-            render_template("makegroup.html", member_table=user)
-
-        return "succeded"
+        return "bla"
     else:
         return render_template("makegroup.html")
 
@@ -103,13 +98,18 @@ def eventview():
 @login_required
 def makeevent():
     if request.method == "POST":
+
         if not request.form.get("makeevent"):
-            return "inset eventname"
+            return "insert eventname"
 
-        return render_template("aboutus")
-        if len(db.execute("SELECT * FROM event WHERE event=:event", event=request.form.get("makeevent"))) > 0:
-            return apology("eventname already exists")
 
+        if len(db.execute("SELECT * FROM events WHERE event=:event", event=request.form.get("makeevent"))) > 0:
+            return "eventname already exists"
+        else:
+            #db.execute("INSERT INTO events (eventname, event_id, username) VALUES(:eventname, :event_id, :username)", eventname=request.form.get("makeevent"), event_id=iets , username=session.get("username")))
+            session["event_id"] = rows[0]["event_id"]
+            return redirect(url_for("eventfeed"))
+            #session["user_id"] = rows[0]["id"]
     else:
         return render_template("makeevent")
 
