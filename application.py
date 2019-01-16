@@ -70,6 +70,7 @@ def register():
         return render_template("register.html")
 
 @app.route("/makegroup", methods=["GET", "POST"])
+@login_required
 def makegroup():
     """Make new group"""
     if request.method == "POST":
@@ -94,11 +95,13 @@ def eventview():
         return render_template("eventview.html")
 
 @app.route("/makeevent", methods=["GET", "POST"])
+@login_required
 def makeevent():
     if request.method == "POST":
         if not request.form.get("makeevent"):
             return "inset eventname"
 
+        return render_template("aboutus")
         if len(db.execute("SELECT * FROM event WHERE event=:event", event=request.form.get("makeevent"))) > 0:
             return apology("eventname already exists")
 

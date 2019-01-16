@@ -1,25 +1,21 @@
 {% extends "layout.html" %}
 
 {% block title %}
-
+    Layout
 {% endblock %}
 
 {% block main %}
-<form action="{{ url_for('makeevent') }}" method="post">
   <body>
-    <div class="partofgroup">
-        <h1><font size="+15">Be part of your own group now!</fontsize></h1>
-    </div>
-    <div class="laptop">
+    <div>
       <input autocomplete="off" name="makeevent" placeholder="Make Event" type="text"/>
     </div>
+
 
 <div>
 <a href="makeevent" type="button" class="btn btn-outline-secondary" style="font-family: Rubik Mono One; border-radius: 10px;"><font size="+6">Make Event</fontsize></button></a>
 
 </div>
   </body>
-</form>
 
 {% endblock %}
 
