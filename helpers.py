@@ -23,8 +23,6 @@ def login_required(f):
 
 def find_user(u):
     user = db.execute("SELECT * FROM users WHERE username=:username", username=u)
-    if user == "":
-        return None
     return user
 
 
