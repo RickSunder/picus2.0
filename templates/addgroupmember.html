@@ -7,14 +7,16 @@
 {% block main %}
     <form action="{{ url_for('addmember') }}" method="post">
         <fieldset>
-            {% for row in count %}
             <div class="form-group">
-                <input class="form-control" name="{{ row }}" placeholder="Add members" type="text"/>
+                <input class="form-control" name="{{ name_group }}" placeholder="{{ name_group }}" type="readonly"/>
             </div>
-            {% endfor %}
+            <div class="form-group">
+                <input class="form-control" name="add_members" placeholder="Member" type="text"/>
+            </div>
             <div class="form-group">
                 <button class="btn btn-default" type="submit">Add Members</button>
             </div>
         </fieldset>
     </form>
+
 {% endblock %}
