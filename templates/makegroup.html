@@ -1,1 +1,21 @@
+{% extends "layout.html" %}
 
+{% block title %}
+    Make group
+{% endblock %}
+
+{% block main %}
+    <form action="{{ url_for('makegroup') }}" method="post">
+        <fieldset>
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" name="name_group" placeholder="Name group" type="text"/>
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="add_members" placeholder="Add members" type="text"/>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" type="submit">Add Members</button>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}
