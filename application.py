@@ -77,12 +77,9 @@ def makegroup():
         add_members = request.form.get("add_members")
 
         user = find_user(add_members)
+        if user == None:
+            return "Username doesn't exist"
         user = tuple(user)
-        # print(user)
-        # if user["username"] != add_members:
-        #     return "Username doesn't exist"
-
-
 
 
         return "bla"
@@ -135,5 +132,5 @@ def login():
 
 @app.route("/groupfeed", methods=["GET", "POST"])
 def groupfeed():
-    return "groupfeed"
+    return render_template("groupfeed.html")
 
