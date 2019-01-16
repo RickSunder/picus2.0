@@ -63,7 +63,7 @@ def register():
         session["user_id"] = geregistreerd
 
         # als alles doorstaan en voltooid is, bevestig registratie
-        return redirect(url_for("index"))
+        return redirect(url_for("groupfeed"))
 
     # opnieuw registerpagina tevoorschijn toveren wanneer geen POST
     else:
@@ -128,8 +128,12 @@ def login():
 
         # redirect user to home page
 
-        return redirect(url_for("login"))
+        return redirect(url_for("groupfeed"))
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+
+@app.route("/groupfeed", methods=["GET", "POST"])
+def groupfeed():
+    return "groupfeed"
 
