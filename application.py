@@ -79,7 +79,10 @@ def makegroup():
 
         db.execute("INSERT INTO groups (name_group) VALUES(:groupname)", groupname=name_group)
 
-        return render_template("addgroupmember.html", groupname = name_group)
+        rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
+        session["group_id"] = rows[0]["group_id"]
+
+        return render_template("addgroupmember.html")
     else:
         return render_template("makegroup.html")
 
@@ -89,19 +92,16 @@ def makegroup():
 def addmember():
     if request.method == "POST":
         add_members = request.form.get("add_members")
+        groupname = request.form.get("groupname")
 
         user = find_user(add_members)
-        print(user)
         if user == []:
             return "Username doesn't exist"
 
         id_user = db.execute("SELECT id FROM users WHERE username=:username", username=add_members)
         id_user = id_user[0]["id"]
 
-        id_group = db.execute("SELECT id FROM groups WHERE name_group=:group", group=name_group)
-        id_group = id_group[0]["group_id"]
-
-        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=id_group)
+        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
 
         return render_template("addgroupmember.html")
 
