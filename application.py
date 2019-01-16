@@ -54,7 +54,7 @@ def register():
         elif not request.form.get("confirmation"):
             return "jammer neef"
 
-        geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), passwords=pwd_context.hash(request.form.get("password")))
+        geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
         if not geregistreerd:
             return apology("Helaas")
@@ -63,7 +63,7 @@ def register():
         session["user_id"] = geregistreerd
 
         # als alles doorstaan en voltooid is, bevestig registratie
-        return render_template("index.html")
+        return redirect(url_for("index"))
 
     # opnieuw registerpagina tevoorschijn toveren wanneer geen POST
     else:
@@ -75,6 +75,13 @@ def makegroup():
     if request.method == "POST":
         name_group = request.form.get("name_group")
         add_members = request.form.get("add_members")
+
+        user = find_user(add_members)
+        user = tuple(user)
+        # print(user)
+        # if user["username"] != add_members:
+        #     return "Username doesn't exist"
+
 
 
 
@@ -125,3 +132,4 @@ def login():
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+
