@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Layout
+{% endblock %}
+
+{% block main %}
+
+    <form action="{{ url_for('homepage') }}" method="post">
+        <fieldset>
+            <div class="invulveld">
+                <input autocomplete="off" autofocus class="form-control" name="email" placeholder="Email adress" type="text"/>
+            </div>
+            <div class="invulveld">
+                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text"/>
+            </div>
+            <div class="invulveld">
+                <input class="form-control" name="password" placeholder="Password" type="password"/>
+            </div>
+            <div class="invulveld">
+                <input class="form-control" name="confirmation" placeholder="Confirm password" type="password"/>
+            </div>
+            <div class="btn-outline-secondary">
+                <button class="btn btn-default" type="submit">Register</button>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}
