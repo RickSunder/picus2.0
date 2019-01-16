@@ -86,12 +86,14 @@ def makegroup():
     else:
         return render_template("makegroup.html")
 
+@app.route("/eventview", methods=["GET", "POST"])
 def eventview():
     if request.method == "POST":
         return "hoi"
     else:
         return render_template("eventview.html")
 
+@app.route("/makeevent", methods=["GET", "POST"])
 def makeevent():
     if request.method == "POST":
         if not request.form.get("makeevent"):
