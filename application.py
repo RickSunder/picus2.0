@@ -132,7 +132,7 @@ def makeevent():
             return redirect(url_for("eventfeed"))
             #session["user_id"] = rows[0]["id"]
     else:
-        return render_template("makeevent")
+        return render_template("makeevent.html")
 
 
 

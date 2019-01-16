@@ -1,32 +1,35 @@
+{% extends "layout.html" %}
 
 {% block title %}
-
+    About us
 {% endblock %}
 
 {% block main %}
-  <body>
-    <div class="partofgroup">
+<div class="aboutus">
+    <form action="{{ url_for('aboutus') }}" method="post">
+            <div class="partofgroup">
         <h1><font size="+15">About us</fontsize></h1>
     </div>
     <div class="laptop">
       <img src="{{url_for('static', filename='laptop.png')}}" style="place: absolute">
     </div>
 
-<div class="aboutus">
+
 <br>
 <br>
 
     <div class="partofgroup2">
-        <h5 style="position: absolute; width: 1073px; height: 309px; left: 80px; top: 475px; font-family: 'Rubik Mono One'; font-style: normal; font-weight: normal; line-height: 25px; font-size: 73px; color: #FFFFFF;"><font size="4">We are a group of hard-working students who put their effort in making <br> a brand new social network, keeping in mind that being part of a group is a big part of life. Even while being part of multiple groups it's important to share your life with the other group members. What would be a better platform than the user-friendly PicUs?</fontsize></h5>
+        <h5 style="position: absolute; width: 1073px; height: 309px; left: 80px; top: 475px; font-family: 'Rubik Mono One'; font-style: normal; font-weight: normal; line-height: 25px; font-size: 73px; color: black;"><font size="4">We are a group of hard-working students who put their effort in making <br> a brand new social network, keeping in mind that being part of a group is a big part of life. Even while being part of multiple groups it's important to share your life with the other group members. What would be a better platform than the user-friendly PicUs?</fontsize></h5>
     </div>
     <br>
         <div class="partofgroup2">
-        <h5 style="position: absolute; width: 1073px; height: 309px; left: 80px; top: 475px; font-family: 'Rubik Mono One'; font-style: normal; font-weight: normal; line-height: 25px; font-size: 73px; color: #FFFFFF;"><font size="4">Sharing pictures or gifs with a group that you're part of, thats what we stand for. The process is simple: make an account, make a closed group and invite others to join it. Then you can share your images with the others. You can also make an open group, called an event. Everyone with the event link can see and post pictures of the event. Just try it out yourself! </fontsize></h5>
+        <h5 style="position: absolute; width: 1073px; height: 309px; left: 80px; top: 475px; font-family: 'Rubik Mono One'; font-style: normal; font-weight: normal; line-height: 25px; font-size: 73px; color: black;"><font size="4">Sharing pictures or gifs with a group that you're part of, thats what we stand for. The process is simple: make an account, make a closed group and invite others to join it. Then you can share your images with the others. You can also make an open group, called an event. Everyone with the event link can see and post pictures of the event. Just try it out yourself! </fontsize></h5>
     </div>
 
 
-</div>
-  </body>
 
+    </form>
+</div>
 {% endblock %}
+
 

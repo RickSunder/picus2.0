@@ -10,7 +10,7 @@ body, html {
     height: 100%;
     margin: 0;
     font-family: 'Montserrat';
-    background-image: url("picus2.0/static/background.png");
+    background-image: url(/static/background.png);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -31,7 +31,7 @@ body, html {
 
 .partofgroup {
     /* Be part of your own group now! */
-position: absolute;
+position: relative;
 width: 1073px;
 height: 309px;
 left: 80px;
@@ -43,15 +43,13 @@ font-weight: normal;
 line-height: 750px;
 font-size: 73px;
 
-color: #FFFFFF;
-
-
-    }
+color: black;
+}
 
 .laptop {
     /* Component */
 
-position: absolute;
+position: relative;
 width: 50%;
 height: 50%;
 left: 1300px;
@@ -118,8 +116,27 @@ h1 {
     height: 100%;
     margin: 0;
     font-family: 'Montserrat';
-    background: "{{url_for('static', filename='background.png')}}" no-repeat;
+    /*background: url('/background.png');*/
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
+}
+.container
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+.aboutus {
+    color: black;
 }
