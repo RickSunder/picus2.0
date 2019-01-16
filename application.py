@@ -74,23 +74,31 @@ def register():
 def makegroup():
     """Make new group"""
     if request.method == "POST":
+        count = request.form.get("count_member")
+
+        return render_template("addgroupmember.html", count=count)
+    else:
+        return render_template("makegroup.html")
+
+@app.route("/addmember", methods=["GET", "POST"])
+@login_required
+def addmember():
+    if request.method == "POST":
+
         name_group = request.form.get("name_group")
         count = request.form.get("count_member")
 
-        for line in range(len(count)):
-            add_members = request.form.get("add_members")
+        for number in range(len(count)):
+            add_members = request.form.get(number)
 
             user = find_user(add_members)
             if user == []:
                 return "Username doesn't exist"
-            user = [user]
 
             db.execute("INSERT INTO groups (groupname, username) VALUES(:groupname, :username)", groupname=name_group, username=add_members)
-            render_template("makegroup.html", member_table=user)
-
-        return "succeded"
+        return render_template("addgroupmember.html", count=count)
     else:
-        return render_template("makegroup.html")
+        return render_template("addgroupmember.html")
 
 @app.route("/eventview", methods=["GET", "POST"])
 def eventview():
