@@ -74,15 +74,20 @@ def makegroup():
     """Make new group"""
     if request.method == "POST":
         name_group = request.form.get("name_group")
-        add_members = request.form.get("add_members")
+        count = request.form.get("count_member")
 
-        user = find_user(add_members)
-        if user == None:
-            return "Username doesn't exist"
-        user = tuple(user)
+        for line in range(len(count)):
+            add_members = request.form.get("add_members")
 
+            user = find_user(add_members)
+            if user == []:
+                return "Username doesn't exist"
+            user = [user]
 
-        return "bla"
+            db.execute("INSERT INTO groups (groupname, username) VALUES(:groupname, :username)", groupname=name_group, username=add_members)
+            render_template("makegroup.html", member_table=user)
+
+        return "succeded"
     else:
         return render_template("makegroup.html")
 
