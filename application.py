@@ -29,12 +29,12 @@ Session(app)
 db = SQL("sqlite:///PicUs.db")
 
 @app.route("/")
-def homepage():
-    """The homepage of the website"""
+def index():
+    """The index of the website"""
     if request.method == "POST":
         return "hoi"
     else:
-        return render_template("homepage.html")
+        return render_template("index.html")
 
 #GINO
 @app.route("/register", methods=["GET", "POST"])
@@ -63,7 +63,7 @@ def register():
         session["user_id"] = geregistreerd
 
         # als alles doorstaan en voltooid is, bevestig registratie
-        return render_template("homepage.html")
+        return render_template("index.html")
 
     # opnieuw registerpagina tevoorschijn toveren wanneer geen POST
     else:
@@ -74,7 +74,7 @@ def make_group():
     if request.method == "POST":
         return "bla"
     else:
-        return "joe"
+        return render_template("makegroup.html")
 
 def eventview():
     if request.method == "POST":
