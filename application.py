@@ -92,6 +92,17 @@ def eventview():
     else:
         return render_template("eventview.html")
 
+def makeevent():
+    if request.method == "POST":
+        if not request.form.get("makeevent"):
+            return "inset eventname"
+
+        if len(db.execute("SELECT * FROM event WHERE event=:event", event=request.form.get("makeevent"))) > 0:
+            return apology("eventname already exists")
+
+    else:
+        return render_template("makeevent")
+
 
 
 #GINO
