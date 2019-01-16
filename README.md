@@ -1,1 +1,1 @@
-# picus2.0
+# PicUs
