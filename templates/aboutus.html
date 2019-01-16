@@ -1,11 +1,13 @@
+{% extends "layout.html" %}
 
 {% block title %}
-
+    About us
 {% endblock %}
 
 {% block main %}
-  <body>
-    <div class="partofgroup">
+    <form action="{{ url_for('aboutus') }}" method="post">
+        <fieldset>
+            <div class="partofgroup">
         <h1><font size="+15">About us</fontsize></h1>
     </div>
     <div class="laptop">
@@ -26,7 +28,8 @@
 
 
 </div>
-  </body>
-
+        </fieldset>
+    </form>
 {% endblock %}
+
 
