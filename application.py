@@ -69,9 +69,15 @@ def register():
     else:
         return render_template("register.html")
 
-def make_group():
+@app.route("/makegroup", methods=["GET", "POST"])
+def makegroup():
     """Make new group"""
     if request.method == "POST":
+        name_group = request.form.get("name_group")
+        add_members = request.form.get("add_members")
+
+
+
         return "bla"
     else:
         return render_template("makegroup.html")
