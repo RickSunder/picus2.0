@@ -6,6 +6,9 @@
 
 {% block main %}
     <form action="{{ url_for('addmember') }}" method="post">
+        <br>
+        <br>
+        <div class="container">
         <fieldset>
             <div class="form-group">
                 <input class="form-control" name="add_members" placeholder="Member" type="text"/>
@@ -13,7 +16,11 @@
             <div class="form-group">
                 <button class="btn btn-default" type="submit">Add Members</button>
             </div>
+            <a href="{{ url_for('index') }}">
+               <input type="button" value="Done" />
+            </a>
         </fieldset>
+        </div>
     </form>
 
 {% endblock %}
