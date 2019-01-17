@@ -1,1 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Settings
+{% endblock %}
+
+{% block main %}
+  <body>
+    <div class="partofgroup">
+        <h1><font size="+15">Settings</fontsize></h1>
+    </div>
+
+
+            <ul style="partofgroup2">
+              <li><a class="tekstje" href="{{url_for('password') }}">Change password</a></li>
+              <li><a class="tekstje" href="{{url_for('profilepicture') }}">Profile Picture</a></li>
+              <li><a class="tekstje" href="{{url_for('aboutus') }}">General</a></li>
+              <li><a class="tekstje" href="{{url_for('aboutus') }}">Log out</a></li>
+            </ul>
+
+
+        </div>
+    <div class="laptop">
+      <img src="{{url_for('static', filename='laptop.png')}}">
+    </div>
+  </body>
+
+{% endblock %}
+
+
 
