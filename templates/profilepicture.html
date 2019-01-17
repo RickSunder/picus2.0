@@ -6,10 +6,76 @@
 
 {% block main %}
   <body>
+<<<<<<< HEAD
+
+    <form action="{{ url_for('aboutus') }}" method="post">
+      <input href="groupfeed" type="file" name="profilepicture" accept="image/*">
+      <input type="submit">
+    </form>
+    <div class="partofgroup">
+        <h1><font size="+15">Settings</fontsize></h1>
+    </div>
+
+
+            <ul style="partofgroup2">
+              <a href="{{url_for('password') }}">Change password</a>
+              <a href="{{url_for('profilepicture') }}">Profile Picture</a>
+              <a href="{{url_for('aboutus') }}">General</a>
+              <a href="{{url_for('aboutus') }}">Log out</a>
+            </ul>
+
+
+        </div>
+    <div class="laptop">
+      <img src="{{url_for('static', filename='laptop.png')}}">
+    </div>
+
     <form action="{{ url_for('settings') }}" method="post">
       <input href="groupfeed" type="file" name="profilepicture" accept="image/*">
       <input type="submit">
     </form>
+{% extends "layout.html" %}
+
+{% block title %}
+    profilepicture
+{% endblock %}
+
+{% block main %}
+  <body>
+
+    <form action="{{ url_for('aboutus') }}" method="post">
+      <input href="groupfeed" type="file" name="profilepicture" accept="image/*">
+      <input type="submit">
+    </form>
+    <div class="partofgroup">
+        <h1><font size="+15">Settings</fontsize></h1>
+    </div>
+
+
+            <ul style="partofgroup2">
+              <a href="{{url_for('password') }}">Change password</a>
+              <a href="{{url_for('profilepicture') }}">Profile Picture</a>
+              <a href="{{url_for('aboutus') }}">General</a>
+              <a href="{{url_for('aboutus') }}">Log out</a>
+            </ul>
+
+
+        </div>
+    <div class="laptop">
+      <img src="{{url_for('static', filename='laptop.png')}}">
+    </div>
+
+=======
+>>>>>>> fca89db946356ba2eb828744eadb807fa2b449e5
+    <form action="{{ url_for('settings') }}" method="post">
+      <input href="groupfeed" type="file" name="profilepicture" accept="image/*">
+      <input type="submit">
+    </form>
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> fca89db946356ba2eb828744eadb807fa2b449e5
   </body>
 
 {% endblock %}
