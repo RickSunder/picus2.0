@@ -106,6 +106,7 @@ def makegroup():
         db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)", groupname=name_group, profile_picture=filename)
         rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
         session["group_id"] = rows[0]["group_id"]
+        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=session["user_id"], group_id=session["group_id"])
 
         return render_template("addgroupmember.html")
     else:
@@ -138,7 +139,21 @@ def addmember():
 
         db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
 
-        return render_template("addgroupmember.html")
+        members = db.execute("SELECT user_id FROM user_groups WHERE group_id=:group_id", group_id=session["group_id"])
+
+        temporary = []
+        temp = []
+        for line in range(len(members)):
+            member = members[line]["user_id"]
+            temp.append(member)
+
+        for row in temp:
+            mem = db.execute("SELECT username FROM users WHERE id=:id_mem", id_mem=row)
+            mem = mem[0]["username"]
+            temporary.append([mem])
+
+
+        return render_template("addgroupmember.html", list_members = temporary)
     else:
         return render_template("addgroupmember.html")
 
@@ -229,8 +244,29 @@ def login():
         return render_template("login.html")
 
 @app.route("/groupfeed", methods=["GET", "POST"])
+@login_required
 def groupfeed():
-    return render_template("groupfeed.html")
+    # if request.method == "POST":
+    group = db.execute("SELECT group_id FROM user_groups WHERE user_id=:user_id", user_id=session["user_id"])
+    temporary = []
+    temp = []
+    for line in range(len(group)):
+        group = group[line]["group_id"]
+        temp.append(group)
+
+    for row in temp:
+        groupname = db.execute("SELECT name_group, profile_picture FROM groups WHERE group_id=:id_group", id_group=session["group_id"])
+        groupname = groupname[0]["username"]
+        profilepic = groupname[0]["profile_picture"]
+        temporary.append([groupname, profile_picture])
+
+    for row in temporary:
+        print(row[0], row[1])
+
+
+    return render_template("groupfeed.html", list_group = temporary)
+    # else:
+    #     return render_template("groupfeed.html")
 
 @app.route("/aboutus", methods=["GET", "POST"])
 def aboutus():
