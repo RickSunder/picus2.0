@@ -94,27 +94,17 @@ def makegroup():
         if name == name_group:
             return "Name of the group already exist"
 
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
         file = request.files['file']
-        # if user does not select file, browser also
-        # submit a empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # return redirect(url_for('uploaded_file',
-            #                         filename=filename))
-            print("joe")
-            db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)", groupname=name_group, profile_picture=filename)
-            rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
-            session["group_id"] = rows[0]["group_id"]
+        filename = str(session["user_id"]) + "_" + file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        # return "file uploaded"
 
-            return render_template("addgroupmember.html")
+        # print("joe")
+        db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)", groupname=name_group, profile_picture=filename)
+        rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
+        session["group_id"] = rows[0]["group_id"]
+
+        return render_template("addgroupmember.html")
     else:
         return render_template("makegroup.html")
 
@@ -159,9 +149,6 @@ def allowed_file(filename):
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
-
-
-
 
 @app.route("/eventview", methods=["GET", "POST"])
 def eventview():
