@@ -14,7 +14,7 @@ from helpers import *
 # configure application
 app = Flask(__name__)
 
-UPLOAD_FOLDER = '/picus2.0/static'
+UPLOAD_FOLDER = '/home/ubuntu/workspace/picus2.0'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 # ensure responses aren't cached
@@ -186,6 +186,21 @@ def makeevent():
             session["event_id"] = rows[0]["event_id"]
             return redirect(url_for("eventfeed"))
             #session["user_id"] = rows[0]["id"]
+            # check if the post request has the file part
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['file']
+            # if user does not select file, browser also
+            # submit an empty part without filename
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                return redirect(url_for('uploaded_file',
+                                        filename=filename))
     else:
         return render_template("makeevent.html")
 
