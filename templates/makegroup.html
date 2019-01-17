@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    <form action="{{ url_for('makegroup') }}" method="post">
+    <form action="{{ url_for('makegroup') }}" method="post" enctype = "multipart/form-data">
         <br>
         <br>
         <div class="container">
@@ -15,10 +15,10 @@
             </div>
             <title>Upload new File</title>
             <h1>Upload new File</h1>
-            <form method=post enctype=multipart/form-data>
-              <p><input type=file name=file>
-                 <input type=submit value=Upload>
-            </form>
+            <div class="form-group">
+                <input type = "file" name = "file" />
+            </div>
+                <!--<input type = "submit"/>-->
             <div class="form-group">
                 <button class="btn btn-default" type="submit">Make <group></group></button>
             </div>
