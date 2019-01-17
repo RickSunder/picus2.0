@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block main %}
-    <form action="{{ url_for('groupfeed') }}" method="post">
-        test
-    </form>
+<table class="table" border=0>
+        {% for row in list_group %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+        {% endfor %}
+          </tr>
+    </table>
 {% endblock %}

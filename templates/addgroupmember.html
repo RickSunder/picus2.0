@@ -22,5 +22,16 @@
         </fieldset>
         </div>
     </form>
-
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Added members of the group</th>
+        </tr>
+      </thead>
+        {% for row in list_members %}
+          <tr>
+            <td>{{ row[0] }}</td>
+        {% endfor %}
+          </tr>
+    </table>
 {% endblock %}
