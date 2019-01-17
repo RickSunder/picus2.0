@@ -279,7 +279,31 @@ def settings():
 
 @app.route("/password", methods=["GET", "POST"])
 def password():
-    return render_template("password.html")
+    if request.method == "POST":
+    # checken voor goede invulling
+        if request.form.get("newpassword") != request.form.get("newconfirmation"):
+            return "jammer neef"
+        if request.form.get("newpassword") == "":
+            return "jammer neef"
+        elif not request.form.get("newpassword"):
+            return "jammer neef"
+        elif not request.form.get("newconfirmation"):
+            return "jammer neef"
+
+        huts = db.execute("UPDATE users SET hash= :newpassword WHERE id= :idnumber", newpassword=pwd_context.hash(request.form.get("newpassword")), idnumber=session["user_id"])
+
+        if not huts:
+            return "Helaas"
+
+        # gebruiker onthouden
+        session["user_id"] = huts
+
+        # als alles doorstaan en voltooid is, bevestig registratie
+        return redirect(url_for("settings"))
+
+    # opnieuw registerpagina tevoorschijn toveren wanneer geen POST
+    else:
+        return render_template("password.html")
 
 @app.route("/profilepicture", methods=["GET", "POST"])
 def profilepicture():
