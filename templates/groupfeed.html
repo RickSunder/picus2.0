@@ -8,8 +8,14 @@
 <table class="table" border=0>
         {% for row in list_group %}
           <tr>
+              <td>
+              <div class="container">
+                  <a href="groupview.html">
+                  <img src="/home/ubuntu/workspace/picus2.0/upload/test_laptop.png" alt="{{ row[0] }}">
+                  </a>
+                </div>
+                </td>
             <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
         {% endfor %}
           </tr>
     </table>

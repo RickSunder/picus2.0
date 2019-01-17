@@ -104,8 +104,10 @@ def makegroup():
 
         # print("joe")
         db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)", groupname=name_group, profile_picture=filename)
+
         rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
         session["group_id"] = rows[0]["group_id"]
+
         db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=session["user_id"], group_id=session["group_id"])
 
         return render_template("addgroupmember.html")
@@ -247,21 +249,23 @@ def login():
 @login_required
 def groupfeed():
     # if request.method == "POST":
-    group = db.execute("SELECT group_id FROM user_groups WHERE user_id=:user_id", user_id=session["user_id"])
+    groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id=:user_id", user_id=session["user_id"])
+
     temporary = []
     temp = []
-    for line in range(len(group)):
-        group = group[line]["group_id"]
+    for line in range(len(groupl)):
+        group = groupl[line]["group_id"]
         temp.append(group)
 
-    for row in temp:
-        groupname = db.execute("SELECT name_group, profile_picture FROM groups WHERE group_id=:id_group", id_group=session["group_id"])
-        groupname = groupname[0]["username"]
+    for number in temp:
+        groupname = db.execute("SELECT name_group, profile_picture FROM groups WHERE group_id=:id_group", id_group=number)
+        groupnamel = groupname[0]["name_group"]
         profilepic = groupname[0]["profile_picture"]
-        temporary.append([groupname, profile_picture])
+        profilepic = open(app.config['UPLOAD_FOLDER'] +"/" + profilepic, 'wb')
+        temporary.append([groupnamel, profilepic])
 
-    for row in temporary:
-        print(row[0], row[1])
+    for rows in temporary:
+        print(rows[0], rows[1])
 
 
     return render_template("groupfeed.html", list_group = temporary)
@@ -279,31 +283,7 @@ def settings():
 
 @app.route("/password", methods=["GET", "POST"])
 def password():
-    if request.method == "POST":
-    # checken voor goede invulling
-        if request.form.get("newpassword") != request.form.get("newconfirmation"):
-            return "jammer neef"
-        if request.form.get("newpassword") == "":
-            return "jammer neef"
-        elif not request.form.get("newpassword"):
-            return "jammer neef"
-        elif not request.form.get("newconfirmation"):
-            return "jammer neef"
-
-        huts = db.execute("UPDATE users SET hash= :newpassword WHERE id= :idnumber", newpassword=pwd_context.hash(request.form.get("newpassword")), idnumber=session["user_id"])
-
-        if not huts:
-            return "Helaas"
-
-        # gebruiker onthouden
-        session["user_id"] = huts
-
-        # als alles doorstaan en voltooid is, bevestig registratie
-        return redirect(url_for("settings"))
-
-    # opnieuw registerpagina tevoorschijn toveren wanneer geen POST
-    else:
-        return render_template("password.html")
+    return render_template("password.html")
 
 @app.route("/profilepicture", methods=["GET", "POST"])
 def profilepicture():
