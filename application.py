@@ -262,3 +262,11 @@ def password():
 @app.route("/profilepicture", methods=["GET", "POST"])
 def profilepicture():
     return render_template("profilepicture.html")
+
+@app.route("/logout")
+def logout():
+    # vergeet de id
+    session.clear()
+
+    # terug bij af
+    return redirect(url_for("index"))
