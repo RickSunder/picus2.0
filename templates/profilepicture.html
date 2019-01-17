@@ -6,10 +6,30 @@
 
 {% block main %}
   <body>
+<<<<<<< HEAD
     <form action="{{ url_for('aboutus') }}" method="post">
       <input href="groupfeed" type="file" name="profilepicture" accept="image/*">
       <input type="submit">
     </form>
+=======
+    <div class="partofgroup">
+        <h1><font size="+15">Settings</fontsize></h1>
+    </div>
+
+
+            <ul style="partofgroup2">
+              <a href="{{url_for('password') }}">Change password</a>
+              <a href="{{url_for('profilepicture') }}">Profile Picture</a>
+              <a href="{{url_for('aboutus') }}">General</a>
+              <a href="{{url_for('aboutus') }}">Log out</a>
+            </ul>
+
+
+        </div>
+    <div class="laptop">
+      <img src="{{url_for('static', filename='laptop.png')}}">
+    </div>
+>>>>>>> 863adac7836f8b4aa9cbf1f9a5e87564fba0b998
   </body>
 
 {% endblock %}

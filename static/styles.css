@@ -59,7 +59,7 @@ top: 250px;
 
 
 @font-face { font-family: Rubik Mono One; src: url(/static/RubikMonoOne-Regular.ttf)}
-h1 {
+h1, h5 {
     font-family: Rubik Mono One;
     src: url('RubikMonoOne-Regular.ttf');
 }
@@ -138,5 +138,19 @@ main .form-control
     width: auto;
 }
 .aboutus {
-    color: black;
+    color: white;
+}
+
+.tekstje {
+    position: absolute;
+    width: 1073px;
+    height: 309px;
+    left: 80px;
+    top: 475px;
+    font-family: 'Rubik Mono One';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 25px;
+    font-size: 73px;
+    color: white;
 }

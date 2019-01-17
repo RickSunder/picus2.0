@@ -4,11 +4,18 @@ from flask_session import Session
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
 import unicodedata
+import os
+from flask import Flask, request, redirect, url_for
+from werkzeug.utils import secure_filename
+from flask import send_from_directory
 
 from helpers import *
 
 # configure application
 app = Flask(__name__)
+
+UPLOAD_FOLDER = '/home/ubuntu/workspace/upload'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 # ensure responses aren't cached
 if app.config["DEBUG"]:
@@ -23,6 +30,7 @@ if app.config["DEBUG"]:
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 Session(app)
 
 # configure CS50 Library to use SQLite database
@@ -77,12 +85,36 @@ def makegroup():
     if request.method == "POST":
         name_group = request.form.get("name_group")
 
-        db.execute("INSERT INTO groups (name_group) VALUES(:groupname)", groupname=name_group)
+        name = db.execute("SELECT name_group FROM groups WHERE name_group=:name", name=name_group)
+        if len(name) > 0:
+            name = name[0]["name_group"]
+        else:
+            name = ""
 
-        rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
-        session["group_id"] = rows[0]["group_id"]
+        if name == name_group:
+            return "Name of the group already exist"
 
-        return render_template("addgroupmember.html")
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # return redirect(url_for('uploaded_file',
+            #                         filename=filename))
+            print("joe")
+            db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)", groupname=name_group, profile_picture=filename)
+            rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
+            session["group_id"] = rows[0]["group_id"]
+
+            return render_template("addgroupmember.html")
     else:
         return render_template("makegroup.html")
 
@@ -101,12 +133,35 @@ def addmember():
         id_user = db.execute("SELECT id FROM users WHERE username=:username", username=add_members)
         id_user = id_user[0]["id"]
 
+        users = db.execute("SELECT user_id FROM user_groups WHERE user_id=:user_id AND group_id=:group_id", user_id=id_user, group_id=session["group_id"])
+
+        if len(users) > 0:
+            users = users[0]["user_id"]
+        else:
+            users = ""
+
+        if users == id_user:
+            return "This user is already part of the group"
+
         db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
 
         return render_template("addgroupmember.html")
-
     else:
         return render_template("addgroupmember.html")
+
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
+
+
 
 @app.route("/eventview", methods=["GET", "POST"])
 def eventview():
@@ -124,13 +179,28 @@ def makeevent():
             return "insert eventname"
 
 
-        if len(db.execute("SELECT * FROM events WHERE event=:event", event=request.form.get("makeevent"))) > 0:
+        if len(db.execute("SELECT * FROM events WHERE eventname=:event", event=request.form.get("makeevent"))) > 0:
             return "eventname already exists"
         else:
             #db.execute("INSERT INTO events (eventname, event_id, username) VALUES(:eventname, :event_id, :username)", eventname=request.form.get("makeevent"), event_id=iets , username=session.get("username")))
-            session["event_id"] = rows[0]["event_id"]
+            session["event_id"] = rows[3]["event_id"]
             return redirect(url_for("eventfeed"))
             #session["user_id"] = rows[0]["id"]
+            # check if the post request has the file part
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['file']
+            # if user does not select file, browser also
+            # submit an empty part without filename
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                return redirect(url_for('uploaded_file',
+                                        filename=filename))
     else:
         return render_template("makeevent.html")
 
@@ -179,3 +249,24 @@ def groupfeed():
 @app.route("/aboutus", methods=["GET", "POST"])
 def aboutus():
     return render_template("aboutus.html")
+
+
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+    return render_template("settings.html")
+
+@app.route("/password", methods=["GET", "POST"])
+def password():
+    return render_template("password.html")
+
+@app.route("/profilepicture", methods=["GET", "POST"])
+def profilepicture():
+    return render_template("profilepicture.html")
+
+@app.route("/logout")
+def logout():
+    # vergeet de id
+    session.clear()
+
+    # terug bij af
+    return redirect(url_for("index"))
