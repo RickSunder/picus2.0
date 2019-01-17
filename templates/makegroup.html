@@ -6,6 +6,9 @@
 
 {% block main %}
     <form action="{{ url_for('makegroup') }}" method="post">
+        <br>
+        <br>
+        <div class="container">
         <fieldset>
             <div class="form-group">
                 <input autocomplete="off" autofocus class="form-control" name="name_group" placeholder="Name group" type="text"/>
@@ -14,5 +17,6 @@
                 <button class="btn btn-default" type="submit">Make <group></group></button>
             </div>
         </fieldset>
+        </div>
     </form>
 {% endblock %}
