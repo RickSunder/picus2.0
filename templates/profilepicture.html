@@ -1,1 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    profilepicture
+{% endblock %}
+
+{% block main %}
+  <body>
+    <form action="{{ url_for('aboutus') }}" method="post">
+      <input href="groupfeed" type="file" name="profilepicture" accept="image/*">
+      <input type="submit">
+    </form>
+  </body>
+
+{% endblock %}
+
+
 
