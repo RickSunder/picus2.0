@@ -197,3 +197,19 @@ def groupfeed():
 @app.route("/aboutus", methods=["GET", "POST"])
 def aboutus():
     return render_template("aboutus.html")
+
+@app.route("/aboutus", methods=["GET", "POST"])
+def aboutus():
+    return render_template("aboutus.html")
+
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+    return render_template("settings.html")
+
+@app.route("/password", methods=["GET", "POST"])
+def password():
+    return render_template("password.html")
+
+@app.route("/profilepicture", methods=["GET", "POST"])
+def profilepicture():
+    return render_template("profilepicture.html")
