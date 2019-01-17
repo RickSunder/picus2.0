@@ -198,9 +198,6 @@ def groupfeed():
 def aboutus():
     return render_template("aboutus.html")
 
-@app.route("/aboutus", methods=["GET", "POST"])
-def aboutus():
-    return render_template("aboutus.html")
 
 @app.route("/settings", methods=["GET", "POST"])
 def settings():
