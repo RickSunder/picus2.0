@@ -14,7 +14,7 @@ from helpers import *
 # configure application
 app = Flask(__name__)
 
-UPLOAD_FOLDER = '/home/ubuntu/workspace/picus2.0'
+UPLOAD_FOLDER = '/home/ubuntu/workspace/upload'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 # ensure responses aren't cached
@@ -179,11 +179,11 @@ def makeevent():
             return "insert eventname"
 
 
-        if len(db.execute("SELECT * FROM events WHERE event=:event", event=request.form.get("makeevent"))) > 0:
+        if len(db.execute("SELECT * FROM events WHERE eventname=:event", event=request.form.get("makeevent"))) > 0:
             return "eventname already exists"
         else:
             #db.execute("INSERT INTO events (eventname, event_id, username) VALUES(:eventname, :event_id, :username)", eventname=request.form.get("makeevent"), event_id=iets , username=session.get("username")))
-            session["event_id"] = rows[0]["event_id"]
+            session["event_id"] = rows[3]["event_id"]
             return redirect(url_for("eventfeed"))
             #session["user_id"] = rows[0]["id"]
             # check if the post request has the file part
