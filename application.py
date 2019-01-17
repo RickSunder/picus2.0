@@ -14,7 +14,7 @@ from helpers import *
 # configure application
 app = Flask(__name__)
 
-UPLOAD_FOLDER = '/home/ubuntu/workspace/upload'
+UPLOAD_FOLDER = '/home/ubuntu/workspace/picus2.0/upload'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 # ensure responses aren't cached
@@ -95,7 +95,10 @@ def makegroup():
             return "Name of the group already exist"
 
         file = request.files['file']
-        filename = str(session["user_id"]) + "_" + file.filename
+        if not allowed_file(file.filename):
+            return "This is not a picture"
+
+        filename =  name_group + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         # return "file uploaded"
 
@@ -145,10 +148,6 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
 
 @app.route("/eventview", methods=["GET", "POST"])
 def eventview():
