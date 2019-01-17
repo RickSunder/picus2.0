@@ -153,3 +153,10 @@ main .form-control
     font-size: 73px;
     color: white;
 }
+
+.gecentreerd {
+
+  margin-left:auto;
+  margin-right:auto;
+  display: table;
+}
