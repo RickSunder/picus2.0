@@ -5,14 +5,12 @@
 {% endblock %}
 
 {% block main %}
-<form action="{{ url_for('makeevent') }}" method="post">
+<form action="{{ url_for('makeevent') }}" method="post" enctype="multipart/form-data">
 <div class="container">
         <fieldset>
             <div class="partofgroup">
             <h1><font size="+15">What is your eventname going to be?</fontsize></h1>
             </div>
-            <br>
-            <br>
             <br>
             <br>
             <br>
@@ -25,6 +23,13 @@
             </div>
         </fieldset>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+
+    <strong>Files:</strong><br>
+    <input id="file-picker" type="file" name="file" accept="image/*" multiple>
+    <div id="msg"></div>
+    <input type="submit" value="Upload!" id="upload-button">
 </form>
 
 {% endblock %}
