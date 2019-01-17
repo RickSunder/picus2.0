@@ -77,6 +77,15 @@ def makegroup():
     if request.method == "POST":
         name_group = request.form.get("name_group")
 
+        name = db.execute("SELECT name_group FROM groups WHERE name_group=:name", name=name_group)
+        if len(name) > 0:
+            name = name[0]["name_group"]
+        else:
+            name = ""
+
+        if name == name_group:
+            return "Name of the group already exist"
+
         db.execute("INSERT INTO groups (name_group) VALUES(:groupname)", groupname=name_group)
 
         rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
@@ -101,10 +110,19 @@ def addmember():
         id_user = db.execute("SELECT id FROM users WHERE username=:username", username=add_members)
         id_user = id_user[0]["id"]
 
+        users = db.execute("SELECT user_id FROM user_groups WHERE user_id=:user_id AND group_id=:group_id", user_id=id_user, group_id=session["group_id"])
+
+        if len(users) > 0:
+            users = users[0]["user_id"]
+        else:
+            users = ""
+
+        if users == id_user:
+            return "This user is already part of the group"
+
         db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
 
         return render_template("addgroupmember.html")
-
     else:
         return render_template("addgroupmember.html")
 
