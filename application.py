@@ -184,26 +184,27 @@ def makeevent():
 
         if len(db.execute("SELECT * FROM events WHERE eventname=:event", event=request.form.get("makeevent"))) > 0:
             return "eventname already exists"
-        else:
-            #db.execute("INSERT INTO events (eventname, event_id, username) VALUES(:eventname, :event_id, :username)", eventname=request.form.get("makeevent"), event_id=iets , username=session.get("username")))
-            session["event_id"] = rows[3]["event_id"]
-            return redirect(url_for("eventfeed"))
-            #session["user_id"] = rows[0]["id"]
-            # check if the post request has the file part
-            if 'file' not in request.files:
-                flash('No file part')
-                return redirect(request.url)
-            file = request.files['file']
-            # if user does not select file, browser also
-            # submit an empty part without filename
-            if file.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                return redirect(url_for('uploaded_file',
-                                        filename=filename))
+
+        rows = db.execute("SELECT event_id FROM user_events WHERE event_id=:event_id", event_id=session["event_id"])
+        #db.execute("INSERT INTO events (eventname, event_id, username) VALUES(:eventname, :event_id, :username)", eventname=request.form.get("makeevent"), event_id=iets , username=session.get("username")))
+
+        #session["user_id"] = rows[0]["id"]
+        # check if the post request has the file part
+        file = request.files['file']
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+
+        session["event_id"] = rows[0]["event_id"]
+
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+        filename =  nmakee + "_" + file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        db.execute("INSERT INTO user_events (eventpicture) VALUES(:eventpicture)", eventpicture=filename)
+        db.execute("INSERT INTO events (eventname, username) VALUES(:eventname, :username)", eventname=request.form.get("makeevent"), username=session["user_id"])
     else:
         return render_template("makeevent.html")
 
