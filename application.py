@@ -61,6 +61,8 @@ def register():
             return "jammer neef"
         elif not request.form.get("confirmation"):
             return "jammer neef"
+        elif len(db.execute("SELECT * FROM users WHERE email=:email", event=request.form.get("email"))) > 0:
+            return "Email already in use"
 
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
