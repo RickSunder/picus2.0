@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory
 from flask_session import Session
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
@@ -8,7 +8,6 @@ import os
 from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
-
 from helpers import *
 
 # configure application
@@ -16,6 +15,7 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = '/home/ubuntu/workspace/picus2.0/upload'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+DOWNLOAD_FOLDER = '/picus2.0/upload'
 
 # ensure responses aren't cached
 if app.config["DEBUG"]:
@@ -262,8 +262,9 @@ def groupfeed():
         groupname = db.execute("SELECT name_group, profile_picture FROM groups WHERE group_id=:id_group", id_group=number)
         groupnamel = groupname[0]["name_group"]
         profilepic = groupname[0]["profile_picture"]
-        profilepic = open(app.config['UPLOAD_FOLDER'] +"/" + profilepic, 'wb')
-        temporary.append([groupnamel, profilepic])
+        profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
+        # profilepic = open(app.config['UPLOAD_FOLDER'] +"/" + profilepic, 'wb')
+        temporary.append([groupnamel, profilepicture])
 
     for rows in temporary:
         print(rows[0], rows[1])
@@ -317,3 +318,7 @@ def logout():
 
     # terug bij af
     return redirect(url_for("index"))
+
+@app.route('/home/ubuntu/workspace/picus2.0/upload/<path:path>')
+def show(path):
+    return send_from_directory('upload', path)
