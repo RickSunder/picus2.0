@@ -194,6 +194,7 @@ def eventview():
 @login_required
 def makeevent():
     if request.method == "POST":
+
         name_event = request.form.get("makeevent")
         if not request.form.get("makeevent"):
             return "insert eventname"
@@ -219,11 +220,12 @@ def makeevent():
 
         db.execute("INSERT INTO event_account (event_picture, event_name) VALUES(:event_picture, :event_name)", event_picture=filename, event_name = name_event)
 
-        rows = db.execute("SELECT event_id FROM event_account WHERE event_id=:event_id", event_id=session["event_id"])
-        session["event_id"] = rows[0]["event_id"]
 
-        db.execute("INSERT INTO user_events (user_id, event_id) VALUES(:user_id, :event_id)", user_id=session["user_id"], event_id=session["event_id"])
+        rows = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name_event)
+        session["event"] = rows[0]["event_id"]
 
+        db.execute("INSERT INTO user_events (user_id, event_id) VALUES(:user_id, :event_id)", user_id=session["user_id"], event_id=session["event"])
+        return redirect(url_for("eventview"))
     else:
         return render_template("makeevent.html")
 
