@@ -1,1 +1,22 @@
+{% extends "layout.html" %}
 
+{% block title %}
+    Search
+{% endblock %}
+
+{% block main %}
+    <form action="{{ url_for('search') }}" method="post">
+        <br>
+        <br>
+        <div class="container">
+        <fieldset>
+            <div>
+                <input autocomplete="off" autofocus class="vulinlog" name="search" placeholder="Search for events" type="text"/>
+            </div>
+            <p></p>
+                <button class="vulinlog" type="submit">Search</button>
+            </div>
+        </fieldset>
+        </div>
+    </form>
+{% endblock %}
