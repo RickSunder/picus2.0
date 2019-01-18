@@ -286,11 +286,6 @@ def groupfeed():
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
         # profilepic = open(app.config['UPLOAD_FOLDER'] +"/" + profilepic, 'wb')
         temporary.append([groupnamel, profilepicture])
-
-    for rows in temporary:
-        print(rows[0], rows[1])
-
-
     return render_template("groupfeed.html", list_group = temporary)
 
 
@@ -342,3 +337,11 @@ def logout():
 @app.route('/home/ubuntu/workspace/picus2.0/upload/<path:path>')
 def show(path):
     return send_from_directory('upload', path)
+
+
+@app.route("/groupview", methods=["GET", "POST"])
+def groupview():
+    if request.method=="POST":
+        return render_template("groupview.html")
+    else:
+        return render_template("groupview.html")
