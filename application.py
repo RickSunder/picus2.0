@@ -345,3 +345,7 @@ def groupview():
         return render_template("groupview.html")
     else:
         return render_template("groupview.html")
+    
+@app.route("/search")
+def search():
+    return render_template("search.html")
