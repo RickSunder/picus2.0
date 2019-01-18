@@ -167,44 +167,63 @@ def allowed_file(filename):
 
 
 @app.route("/eventview", methods=["GET", "POST"])
+@login_required
 def eventview():
-    if request.method == "POST":
-        return "hoi"
-    else:
-        return render_template("eventview.html")
+    event_id1 = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
+
+    temporary = []
+    temp = []
+    for event in range(len(event_id1)):
+        event_id = event_id1[event]["event_id"]
+        temp.append(event_id)
+
+    for number in temp:
+        event_id = db.execute("SELECT event_name, event_picture FROM event_account WHERE event_id=:id_event", id_event=number)
+        event_id1 = event_id[0]["event_name"]
+        profilepic = event_id[0]["event_picture"]
+        profilepic = open(app.config['UPLOAD_FOLDER'] +"/" + profilepic, 'wb')
+        temporary.append([event_id1, profilepic])
+
+    for rows in temporary:
+        print(rows[0], rows[1])
+
+
+    return render_template("eventview.html", list_event_id = temporary)
 
 @app.route("/makeevent", methods=["GET", "POST"])
 @login_required
 def makeevent():
     if request.method == "POST":
-
+        name_event = request.form.get("makeevent")
         if not request.form.get("makeevent"):
             return "insert eventname"
 
 
-        if len(db.execute("SELECT * FROM events WHERE eventname=:event", event=request.form.get("makeevent"))) > 0:
+        if len(db.execute("SELECT * FROM event_account WHERE event_name=:event", event=name_event)) > 0:
             return "eventname already exists"
 
-        rows = db.execute("SELECT event_id FROM user_events WHERE event_id=:event_id", event_id=session["event_id"])
-        #db.execute("INSERT INTO events (eventname, event_id, username) VALUES(:eventname, :event_id, :username)", eventname=request.form.get("makeevent"), event_id=iets , username=session.get("username")))
 
-        #session["user_id"] = rows[0]["id"]
         # check if the post request has the file part
         file = request.files['file']
         if 'file' not in request.files:
             flash('No file part')
             return redirect(request.url)
 
-        session["event_id"] = rows[0]["event_id"]
 
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
             flash('No selected file')
-        filename =  nmakee + "_" + file.filename
+        filename =  name_event + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        db.execute("INSERT INTO user_events (eventpicture) VALUES(:eventpicture)", eventpicture=filename)
-        db.execute("INSERT INTO events (eventname, username) VALUES(:eventname, :username)", eventname=request.form.get("makeevent"), username=session["user_id"])
+
+        db.execute("INSERT INTO event_account (event_picture, event_name) VALUES(:event_picture, :event_name)", event_picture=filename, event_name = name_event)
+
+        rows = db.execute("SELECT event_id FROM event_account WHERE event_id=:event_id", event_id=session["event_id"])
+        session["event_id"] = rows[0]["event_id"]
+
+        db.execute("INSERT INTO user_events (user_id, event_id) VALUES(:user_id, :event_id)", user_id=session["user_id"], event_id=session["event_id"])
+
     else:
         return render_template("makeevent.html")
 
