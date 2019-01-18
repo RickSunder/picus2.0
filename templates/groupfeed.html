@@ -5,18 +5,18 @@
 {% endblock %}
 
 {% block main %}
-<table class="table" border=0>
         {% for row in list_group %}
-          <tr>
-              <td>
-              <div class="container">
-                  <a href="groupview.html">
-                  <img src="/home/ubuntu/workspace/picus2.0/upload/test_laptop.png" alt="{{ row[0] }}">
+         &nbsp;&nbsp;
+         <center>
+              <div >
+                <br>
+                <br>
+                  <p><a href="{{ url_for('addmember') }}">
+                  <img src="{{ row[1] }}" alt="{{ row[0] }}" width="150px" heigth="300px"></img>
                   </a>
-                </div>
-                </td>
-            <td>{{ row[0] }}</td>
+            <center>{{ row[0] }}</center>
+          </center>
+
+            </div>
         {% endfor %}
-          </tr>
-    </table>
 {% endblock %}

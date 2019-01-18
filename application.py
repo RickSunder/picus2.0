@@ -271,8 +271,7 @@ def groupfeed():
 
 
     return render_template("groupfeed.html", list_group = temporary)
-    # else:
-    #     return render_template("groupfeed.html")
+
 
 @app.route("/aboutus", methods=["GET", "POST"])
 def aboutus():
