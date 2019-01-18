@@ -346,6 +346,17 @@ def groupview():
     else:
         return render_template("groupview.html")
     
-@app.route("/search")
+@app.route("/search", methods=["GET", "POST"])
 def search():
-    return render_template("search.html")
+    if request.method=="POST":
+        return "hoi"
+    else:
+        return render_template("search.html")
+    
+    
+@app.route("/eventfeed", methods=["GET", "POST"])
+def eventfeed():
+    if request.method=="POST":
+        return "hoi"
+    else:
+        return render_template("eventfeed.html")
