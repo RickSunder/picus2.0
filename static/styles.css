@@ -32,7 +32,7 @@ body, html {
 .index {
     /* Be part of your own group now! */
 position: relative;
-width: 1073px;
+width: 773px;
 height: 309px;
 left: 80px;
 font-family: 'Rubik Mono One';
@@ -59,16 +59,21 @@ color: white;
     /* Component */
 
 position: relative;
-width: 50%;
-height: 50%;
-left: 1300px;
-top: 250px;
+width: 30%;
+height: 30%;
+left: 900px;
+top: -50px;
 
 }
 
 
 @font-face { font-family: Rubik Mono One; src: url(/static/RubikMonoOne-Regular.ttf)}
-h1, h5 {
+h1 {
+    font-family: Rubik Mono One;
+    src: url('RubikMonoOne-Regular.ttf');
+}
+
+h5 {
     font-family: Rubik Mono One;
     src: url('RubikMonoOne-Regular.ttf');
 }
@@ -96,9 +101,9 @@ h1, h5 {
     border-color: black;
     position: absolute;
     left: 80px;
-    top: 550px;
+    top: 150px;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 50px;
 
 }
 
@@ -106,6 +111,8 @@ h1, h5 {
     color: black;
     background-color: white;
     border-color: white;
+    text-decoration: none;
+
 
 }
 
