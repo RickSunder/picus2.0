@@ -5,18 +5,18 @@
 {% endblock %}
 
 {% block main %}
+<br>
+<br>
+<h1><font size="+15">Groupchats</fontsize></h1>
+<br>
+<br>
         {% for row in list_group %}
-         &nbsp;&nbsp;
          <center>
-              <div >
-                <br>
-                <br>
-                  <p><a href="{{ url_for('addmember') }}">
+                  <a href="{{ url_for('groupview') }}">
                   <img src="{{ row[1] }}" alt="{{ row[0] }}" width="150px" heigth="300px"></img>
                   </a>
             <center>{{ row[0] }}</center>
-          </center>
-
-            </div>
+            </center>
+            <br>
         {% endfor %}
 {% endblock %}
