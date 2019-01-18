@@ -288,7 +288,27 @@ def password():
 
 @app.route("/profilepicture", methods=["GET", "POST"])
 def profilepicture():
-    return render_template("profilepicture.html")
+    if request.method == "POST":
+
+            # check if the post request has the file part
+        file = request.files['file']
+        if 'file' not in request.files:
+            flash('No picture uploaded')
+            return render_template("profilepicture.html")
+
+
+        nummer = str(session["user_id"])
+
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+        filename =  nummer + "_" + file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        db.execute("UPDATE users SET profilepicture = :profilepicture WHERE id = :gebruiksersnaam", profilepicture=filename, gebruikersnaam=session["user_id"])
+        return render_template("settings.html")
+    else:
+        return render_template("profilepicture.html")
 
 @app.route("/logout")
 def logout():

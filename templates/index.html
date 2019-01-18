@@ -7,14 +7,19 @@
 {% block main %}
   <body>
     <div class="index">
-        <h1><font size="+15">Be part of your own group now!</fontsize></h1>
+        <h1 style="width: 300"><font>Be part of your own group now!</fontsize></h1>
     </div>
     <div class="laptop">
       <img src="{{url_for('static', filename='laptop.png')}}">
     </div>
 
 <div>
-<a href="register" type="button" class="btn btn-outline-secondary" style="font-family: Rubik Mono One; border-radius: 10px;"><font size="+6">Register</fontsize></button></a>
+  <style>
+    .btn-outline-secondary {
+      border-radius: 10px;
+    }
+  </style>
+<a href="register" type="button" class="btn-outline-secondary" style="font-family: Rubik Mono One; border-radius: 10px; top: 500px"><font size="+6">Register</fontsize></button></a>
 
 </div>
   </body>
