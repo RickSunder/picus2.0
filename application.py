@@ -61,8 +61,6 @@ def register():
             return "jammer neef"
         elif not request.form.get("confirmation"):
             return "jammer neef"
-        elif len(db.execute("SELECT * FROM users WHERE email=:email", event=request.form.get("email"))) > 0:
-            return "Email already in use"
 
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
@@ -183,8 +181,8 @@ def eventview():
         event_id = db.execute("SELECT event_name, event_picture FROM event_account WHERE event_id=:id_event", id_event=number)
         event_id1 = event_id[0]["event_name"]
         profilepic = event_id[0]["event_picture"]
-        profilepic = open(app.config['UPLOAD_FOLDER'] +"/" + profilepic, 'wb')
-        temporary.append([event_id1, profilepic])
+        profilepicture = os.path.join(app.config["UPLOAD_FOLDER"], profilepic)
+        temporary.append([event_id1, profilepicture])
 
     for rows in temporary:
         print(rows[0], rows[1])
