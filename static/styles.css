@@ -143,7 +143,25 @@ h5 {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+
 }
+
+.vulinlog
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color: white;
+    border-radius: 50px;
+    background: 4px solid white;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+}
+
 
 main .form-control
 {
