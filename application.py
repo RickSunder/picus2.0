@@ -348,7 +348,21 @@ def groupview():
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
-        return render_template("search.html")
+    check = 0
+    zoekopdracht=request.form.get("search")
+    zoeken = db.execute("SELECT * FROM events WHERE eventname LIKE :zoekopdracht ORDER BY eventname ASC", zoekopdracht=str(zoekopdracht)+"%")
+    resultaten = []
+
+    for row in zoeken:
+        resultaten.append(row['eventname'])
+
+    if request.form.get("search") == "":
+        return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=0)
+    if not request.form.get("search"):
+        return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=0)
+
+
+    return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=1)
 
 
 @app.route("/eventfeed", methods=["GET", "POST"])

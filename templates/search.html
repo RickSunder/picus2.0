@@ -18,5 +18,32 @@
             </div>
         </fieldset>
         </div>
+
+        <p>
+
+        </p>
+        <p>
+
+        </p>
+        {% if check > 0 %}
+        <div style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
+        <table class="gecentreerd">
+          <tr>
+            <td style="font-style: normal;">Search results for: {{ zoekopdracht }}</td>
+          </tr>
+              {% for i in resultaten %}
+                  {% if resultaten|length > 0 %}
+                      <tr>
+                        <td class="gecentreerd">{{i}}</td>
+                      </tr>
+                  {% else %}
+                       <tr>
+                        <td class="gecentreerd">No search results for: {{ zoekopdracht }}</td>
+                      </tr>
+                {% endif %}
+        {% endfor %}
+        {% endif %}
+        </table>
+        </div>
     </form>
 {% endblock %}
