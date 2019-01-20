@@ -418,6 +418,10 @@ def search():
 @login_required
 def eventfeed():
     if request.method=="POST":
+        if request.form.get("like") == True:
+            db.execute("INSERT INTO event_feed (likes) VALUES (:likes)", likes = likes + 1)
+        if request.form.get("dislike") == True:
+            db.execute("INSERT INTO event_feed (dislikes) VALUES (:dislikes)", dislikes = dislikes + 1)
         return "hoi"
     else:
         return render_template("eventfeed.html")
@@ -428,9 +432,8 @@ def eventfeed():
 def eventphoto():
     if request.method=="POST":
 
-        eventname = db.execute("SELECT event_name FROM event_account WHERE event_id=:event", event=session["event_id"])
+        eventname = db.execute("SELECT event_feed FROM event_account WHERE event_id=:event", event=session["event_id"])
         name_event = eventname[0]["event_name"]
-        comments = request.form.get("comment")
         caption = request.form.get("caption")
 
         file = request.files['file']
@@ -439,10 +442,10 @@ def eventphoto():
 
         filename =  str(session["user_id"]) + "_" + name_event + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        #if request.form.get("")
 
-        db.execute("INSERT INTO event_feed (user_id, event_id, picture, like, dislike, comment, caption) VALUES(:user_id, :event_id, :picture, :like, :dislike,:comment, :caption)",
-                   user_id=session["user_id"], picture=filename, event_id=session["event_id"], like=0, dislike=0, comment=comments, caption=caption)
+
+        db.execute("INSERT INTO event_feed (user_id, event_id, picture, like, dislike, caption) VALUES(:user_id, :event_id, :picture, :like, :dislike,:caption)",
+                   user_id=session["user_id"], picture=filename, event_id=session["event_id"], like=0, dislike=0, caption=caption)
 
         return render_template("eventfeed.html")
     else:
