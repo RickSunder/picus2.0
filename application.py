@@ -413,7 +413,9 @@ def search():
 
     return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=1)
 
+
 @app.route("/eventfeed", methods=["GET", "POST"])
+@login_required
 def eventfeed():
     if request.method=="POST":
         return "hoi"
@@ -422,8 +424,26 @@ def eventfeed():
 
 
 @app.route("/eventphoto", methods=["GET", "POST"])
+@login_required
 def eventphoto():
     if request.method=="POST":
-        return "wahahouw"
+
+        eventname = db.execute("SELECT event_name FROM event_account WHERE event_id=:event", event=session["event_id"])
+        name_event = eventname[0]["event_name"]
+        comments = request.form.get("comment")
+        caption = request.form.get("caption")
+
+        file = request.files['file']
+        if not allowed_file(file.filename):
+            return "This is not a picture"
+
+        filename =  str(session["user_id"]) + "_" + name_event + "_" + file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        #if request.form.get("")
+
+        db.execute("INSERT INTO event_feed (user_id, event_id, picture, like, dislike, comment, caption) VALUES(:user_id, :event_id, :picture, :like, :dislike,:comment, :caption)",
+                   user_id=session["user_id"], picture=filename, event_id=session["event_id"], like=0, dislike=0, comment=comments, caption=caption)
+
+        return render_template("eventfeed.html")
     else:
         return render_template("eventphoto.html")
