@@ -5,26 +5,76 @@
 {% endblock %}
 
 {% block main %}
+<style>
+    .vulinlogbevestig
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color: black;
+    background: 4px solid black;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+    font-family: 'Rubik Mono One';
+    color: white;
+    border-radius: 50px;
+
+}
+
+.vulinlogbevestig:hover
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color: white;
+    background: 4px solid white;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+    font-family: 'Rubik Mono One';
+    border-radius: 50px;
+    color: black;
+
+}
+</style>
+
+
+
+
+
+
+
+
+
+
     <form action="{{ url_for('search') }}" method="post">
         <br>
         <br>
-        <div class="container">
+        <div style="font-family: 'Rubik Mono One';" class="container">
         <fieldset>
             <div>
                 <input autocomplete="off" autofocus class="vulinlog" name="search" placeholder="Search for events" type="text"/>
             </div>
             <p></p>
-                <button class="vulinlog" type="submit">Search</button>
+            <div>
+                <button class="vulinlogbevestig" type="submit">Search</button>
             </div>
         </fieldset>
         </div>
+    </form>
 
-        <p>
 
-        </p>
-        <p>
+<p></p>
+<p></p>
 
-        </p>
+
         {% if check > 0 %}
         <div style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
         <table class="gecentreerd">
@@ -33,9 +83,11 @@
           </tr>
               {% for i in resultaten %}
                   {% if resultaten|length > 0 %}
+
                       <tr>
-                        <td class="gecentreerd">{{i}}</td>
+                        <td style="margin-left:auto; margin-right:auto; display: table;"class="partofgroup2"><a style="color:#B9B9B9"href="aboutus">{{i}}</a></td>
                       </tr>
+
                   {% else %}
                        <tr>
                         <td class="gecentreerd">No search results for: {{ zoekopdracht }}</td>
