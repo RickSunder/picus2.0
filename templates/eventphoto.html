@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Eventfeed
+{% endblock %}
+
+{% block main %}
+<form action="{{ url_for('eventphoto') }}" method="post" enctype="multipart/form-data">
+  <body>
+    <div class="index">
+        <h1 style="width: 300"><font>Post your images here!</fontsize></h1>
+    </div>
+      <strong>Files:</strong><br>
+    <input id="file-picker" type="file" class="btn-outline-secondary" style="font-family: Rubik Mono One; border-radius: 10px; top: 500px"><font size="+6">search image</fontsize></file>
+    <div class="form-group">
+        <input autocomplete="off" autofocus class="form-control" name="comment" placeholder="Comment" type="text"/>
+    </div>
+  </body>
+</form>
+{% endblock %}

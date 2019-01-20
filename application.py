@@ -65,7 +65,7 @@ def register():
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
         if not geregistreerd:
-            return apology("Helaas")
+            return "Helaas"
 
         # gebruiker onthouden
         session["user_id"] = geregistreerd
@@ -100,9 +100,7 @@ def makegroup():
 
         filename =  name_group + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        # return "file uploaded"
 
-        # print("joe")
         db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)", groupname=name_group, profile_picture=filename)
 
         rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
@@ -271,7 +269,12 @@ def login():
 @login_required
 def groupfeed():
     # if request.method == "POST":
+    groupname = request.form.get("group")
     groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id=:user_id", user_id=session["user_id"])
+
+    for num in range(len(groupl)):
+        if groupname == groupl[num]["group_id"]:
+            session["group_id"] = groupl[num]["group_id"]
 
     temporary = []
     temp = []
@@ -284,7 +287,7 @@ def groupfeed():
         groupnamel = groupname[0]["name_group"]
         profilepic = groupname[0]["profile_picture"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
-        # profilepic = open(app.config['UPLOAD_FOLDER'] +"/" + profilepic, 'wb')
+
         temporary.append([groupnamel, profilepicture])
     return render_template("groupfeed.html", list_group = temporary)
 
@@ -340,11 +343,57 @@ def show(path):
 
 
 @app.route("/groupview", methods=["GET", "POST"])
+@login_required
 def groupview():
+    # if request.method=="POST":
+    groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id=:user_id", user_id=session["user_id"])
+    session["group_id"] = groupl[0]["group_id"]
+
+    temporary = []
+    temp = []
+    # for line in range(len(groupl)):
+    #     group = groupl[line]["group_id"]
+    #     temp.append(group)
+    group = db.execute("SELECT user_id, picture, comment FROM picture_group WHERE group_id=:id_group", id_group=session["group_id"])
+    groupname = db.execute("SELECT name_group FROM groups WHERE group_id=:group_id", group_id=session["group_id"])
+    groupnamel = groupname[0]["name_group"]
+    for number in range(len(group)):
+        user_id = group[number]["user_id"]
+        user = db.execute("SELECT username FROM users WHERE id=:id_user", id_user=user_id)
+        username= user[0]["username"]
+        profilepic = group[number]["picture"]
+        comments = group[number]["comment"]
+        profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
+
+        temporary.append([username, profilepicture, comments])
+    print(temporary)
+    return render_template("groupview.html", list_picture=temporary, name_group=groupnamel)
+    # else:
+    #     return render_template("groupview.html")
+
+@app.route("/upload_photo", methods=["GET", "POST"])
+@login_required
+def upload_photo():
     if request.method=="POST":
+
+        name_group = db.execute("SELECT name_group FROM groups WHERE group_id=:group", group=session["group_id"])
+        name_group = name_group[0]["name_group"]
+        comments = request.form.get("comment")
+
+        file = request.files['file']
+        if not allowed_file(file.filename):
+            return "This is not a picture"
+
+        filename =  str(session["user_id"]) + "_" + name_group + "_" + file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        db.execute("INSERT INTO picture_group (user_id, group_id, picture, like, comment) VALUES(:user_id, :group_id, :picture, :like, :comment)",
+                   user_id=session["user_id"], picture=filename, group_id=session["group_id"], like=0, comment=comments)
+
         return render_template("groupview.html")
     else:
-        return render_template("groupview.html")
+        return render_template("upload_photo.html")
+
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
@@ -364,10 +413,17 @@ def search():
 
     return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=1)
 
-
 @app.route("/eventfeed", methods=["GET", "POST"])
 def eventfeed():
     if request.method=="POST":
         return "hoi"
     else:
         return render_template("eventfeed.html")
+
+
+@app.route("/eventphoto", methods=["GET", "POST"])
+def eventphoto():
+    if request.method=="POST":
+        return "wahahouw"
+    else:
+        return render_template("eventphoto.html")

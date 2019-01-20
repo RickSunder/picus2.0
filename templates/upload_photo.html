@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Make group
+{% endblock %}
+
+{% block main %}
+    <form action="{{ url_for('upload_photo') }}" method="post" enctype = "multipart/form-data">
+        <br>
+        <br>
+        <div class="container">
+        <fieldset>
+            <h1>Upload picture</h1>
+            <div class="form-group">
+                <input type = "file" name = "file" accept="image/*" />
+            </div>
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" name="comment" placeholder="Comment" type="text" height="10%" />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" type="submit">Share <group></group></button>
+            </div>
+        </fieldset>
+        </div>
+    </form>
+{% endblock %}

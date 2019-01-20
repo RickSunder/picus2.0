@@ -7,7 +7,7 @@
 {% block main %}
 <br>
 <br>
-<h1><font size="+15">Groupchats</fontsize></h1>
+<h1><font size="+15">Groupfeed</fontsize></h1>
 <br>
 <br>
         {% for row in list_group %}
@@ -15,7 +15,7 @@
                   <a href="{{ url_for('groupview') }}">
                   <img src="{{ row[1] }}" alt="{{ row[0] }}" width="150px" heigth="300px"></img>
                   </a>
-            <center>{{ row[0] }}</center>
+            <center><input name="group" value="{{ row[0] }}" readonly/></center>
             </center>
             <br>
         {% endfor %}
