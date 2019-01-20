@@ -409,3 +409,11 @@ def eventfeed():
         return "hoi"
     else:
         return render_template("eventfeed.html")
+
+
+@app.route("/eventphoto", methods=["GET", "POST"])
+def eventphoto():
+    if request.method=="POST":
+
+    else:
+        return render_template("eventphoto.html")

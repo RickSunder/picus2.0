@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Eventfeed
+{% endblock %}
+
+{% block main %}
+<form action="{{ url_for('eventfeed') }}" method="post" enctype="multipart/form-data">
+  <div class="eventfeedheader">
+    <h1>Eventfeed</h1>
+  <figure>
+    <img src="http://via.placeholder.com/1500x450?text=Image">
+  </figure>
+    <p>Comment</p>
+</form>
+{% endblock %}
