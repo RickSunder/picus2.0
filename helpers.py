@@ -30,4 +30,5 @@ def find_user(u):
 
 
 
-
+def apology(excuus):
+    return render_template("apology.html", excuus=excuus)
