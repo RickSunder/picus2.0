@@ -50,22 +50,22 @@ def register():
     if request.method == "POST":
         # checken voor goede invulling
         if not request.form.get("email"):
-            return "jammer neef"
+            return apology("Please fill in your email adress!")
         if not request.form.get("username"):
-            return "jammer neef"
+            return apology("Please fill in your username!")
         if request.form.get("password") != request.form.get("confirmation"):
-            return "jammer neef"
+            return apology("Password and confirmation password were not the same!")
         if request.form.get("password") == "":
-            return "jammer neef"
+            return apology("Please fill in your password!")
         elif not request.form.get("password"):
-            return "jammer neef"
+            return apology("Please fill in your password!")
         elif not request.form.get("confirmation"):
-            return "jammer neef"
+            return apology("Please fill in your password!")
 
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
         if not geregistreerd:
-            return "Helaas"
+            return apology("The registration could not happen")
 
         # gebruiker onthouden
         session["user_id"] = geregistreerd
@@ -92,11 +92,11 @@ def makegroup():
             name = ""
 
         if name == name_group:
-            return "Name of the group already exist"
+            return apology("Name of the group already exist")
 
         file = request.files['file']
         if not allowed_file(file.filename):
-            return "This is not a picture"
+            return apology("This is not a picture")
 
         filename =  name_group + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -135,7 +135,7 @@ def addmember():
             users = ""
 
         if users == id_user:
-            return "This user is already part of the group"
+            return apology("This user is already part of the group")
 
         db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
 
@@ -242,18 +242,18 @@ def login():
 
         # username verzekeren
         if not request.form.get("username"):
-            return "must provide username"
+            return apology("Must provide username!")
 
         # wachtwoord verzekeren
         elif not request.form.get("password"):
-            return "must provide password"
+            return apology("must provide password!")
 
         # username database
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
 
         # kijken of username uniek is en wachtwoord klopt
         if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
-            return "invalid username and/or password"
+            return apology("invalid username and/or password!")
 
         # remember which user has logged in
         session["user_id"] = rows[0]["id"]
