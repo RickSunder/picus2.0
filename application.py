@@ -454,7 +454,6 @@ def eventphoto():
             return redirect(url_for("eventfeed.html"))
     else:
         return render_template("eventphoto.html")
-
 @app.route("/get_group/", methods=['POST'])
 def get_group():
     f=request.form.get("groupname")
