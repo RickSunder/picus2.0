@@ -65,7 +65,7 @@ def register():
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
         if not geregistreerd:
-            return apology("Helaas")
+            return "Helaas"
 
         # gebruiker onthouden
         session["user_id"] = geregistreerd
@@ -423,15 +423,56 @@ def upload_photo():
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
-    if request.method=="POST":
-        return "hoi"
-    else:
-        return render_template("search.html")
+    check = 0
+    zoekopdracht=request.form.get("search")
+    zoeken = db.execute("SELECT * FROM events WHERE eventname LIKE :zoekopdracht ORDER BY eventname ASC", zoekopdracht=str(zoekopdracht)+"%")
+    resultaten = []
+
+    for row in zoeken:
+        resultaten.append(row['eventname'])
+
+    if request.form.get("search") == "":
+        return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=0)
+    if not request.form.get("search"):
+        return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=0)
+
+
+    return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=1)
 
 
 @app.route("/eventfeed", methods=["GET", "POST"])
+@login_required
 def eventfeed():
     if request.method=="POST":
+        if request.form.get("like") == True:
+            db.execute("INSERT INTO event_feed (likes) VALUES (:likes)", likes = likes + 1)
+        if request.form.get("dislike") == True:
+            db.execute("INSERT INTO event_feed (dislikes) VALUES (:dislikes)", dislikes = dislikes + 1)
         return "hoi"
     else:
         return render_template("eventfeed.html")
+
+
+@app.route("/eventphoto", methods=["GET", "POST"])
+@login_required
+def eventphoto():
+    if request.method=="POST":
+
+        eventname = db.execute("SELECT event_feed FROM event_account WHERE event_id=:event", event=session["event_id"])
+        name_event = eventname[0]["event_name"]
+        caption = request.form.get("caption")
+
+        file = request.files['file']
+        if not allowed_file(file.filename):
+            return "This is not a picture"
+
+        filename =  str(session["user_id"]) + "_" + name_event + "_" + file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+
+        db.execute("INSERT INTO event_feed (user_id, event_id, picture, like, dislike, caption) VALUES(:user_id, :event_id, :picture, :like, :dislike,:caption)",
+                   user_id=session["user_id"], picture=filename, event_id=session["event_id"], like=0, dislike=0, caption=caption)
+
+        return render_template("eventfeed.html")
+    else:
+        return render_template("eventphoto.html")

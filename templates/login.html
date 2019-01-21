@@ -5,6 +5,47 @@
 {% endblock %}
 
 {% block main %}
+<style>
+    .vulinlogbevestig
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color: black;
+    background: 4px solid black;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+    font-family: 'Rubik Mono One';
+    color: white;
+    border-radius: 50px;
+
+}
+
+.vulinlogbevestig:hover
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color: white;
+    background: 4px solid white;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+    font-family: 'Rubik Mono One';
+    border-radius: 50px;
+    color: black;
+
+}
+
+</style>
+
     <form action="{{ url_for('login') }}" method="post">
         <br>
         <br>
@@ -17,7 +58,7 @@
             <div class="form-group">
                 <input class="vulinlog" name="password" placeholder="Password" type="password"/>
             </div>
-            <div class="form-group">
+            <div>
                 <button class="vulinlogbevestig" type="submit">Log In</button>
             </div>
         </fieldset>

@@ -5,24 +5,67 @@
 {% endblock %}
 
 {% block main %}
+<style>
+    .vulinlogbevestig
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color: black;
+    background: 4px solid black;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+    font-family: 'Rubik Mono One';
+    color: white;
+    border-radius: 50px;
 
+}
+
+.vulinlogbevestig:hover
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color: white;
+    background: 4px solid white;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+    font-family: 'Rubik Mono One';
+    border-radius: 50px;
+    color: black;
+
+}
+
+</style>
+<p></p>
+<p></p>
     <form action="{{ url_for('register') }}" method="post">
-        <fieldset class="container">
-            <div class="invulveld">
-                <input autocomplete="off" autofocus class="form-control" name="email" placeholder="Email adress" type="text"/>
+        <fieldset>
+        <div style="font-family: 'Rubik Mono One';" class="container">
+            <div class="form-group">
+                <input class="vulinlog"autocomplete="off" autofocus class="form-control" name="email" placeholder="Email adress" type="text"/>
             </div>
-            <div class="invulveld">
-                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text"/>
+            <div class="form-group">
+                <input class="vulinlog"autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text"/>
             </div>
-            <div class="invulveld">
-                <input class="form-control" name="password" placeholder="Password" type="password"/>
+            <div class="form-group">
+                <input class="vulinlog" name="password" placeholder="Password" type="password"/>
             </div>
-            <div class="invulveld">
-                <input class="form-control" name="confirmation" placeholder="Confirm password" type="password"/>
+            <div class="form-group">
+                <input class="vulinlog" name="confirmation" placeholder="Confirm password" type="password"/>
             </div>
-            <div class="btn-outline-secondary">
-                <button class="btn btn-default" type="submit">Register</button>
+            <div>
+                <button class="vulinlogbevestig" type="submit">Register</button>
             </div>
+        </div>
         </fieldset>
     </form>
 {% endblock %}
