@@ -21,10 +21,12 @@
 
 
         {% for row in list_picture %}
-        <input name="user" value="{{ row[0] }}" readonly/>
+        {{ row[0] }}
+        <!--<input name="user" value="{{ row[0] }}" readonly/>-->
          <center>
-                  <img src="{{ row[1] }}" alt="picture" width="150px" heigth="300px"></img>
-            <center><input name="user" value="{{ row[2] }}" readonly/></center>
+                  <img src="{{ row[1] }}" alt="picture" width="150px" heigth="300px"></img><br>
+            <!--<center><input name="user" value="{{ row[2] }}" readonly/></center>-->
+            {{ row[2] }}
             </center>
             <br>
         {% endfor %}

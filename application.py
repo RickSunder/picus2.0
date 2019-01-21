@@ -9,6 +9,11 @@ from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from helpers import *
+import urllib.parse as urlparse
+from django.utils.deprecation import MiddlewareMixin
+
+# from urlparse import urlparse
+
 
 # configure application
 app = Flask(__name__)
@@ -293,14 +298,8 @@ def groupfeed():
 
         return render_template("groupview.html", list_picture=temporary, name_group=request.form.get("group"), group=temp)
     else:
-        # groupname = request.form.get("group")
+
         groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id=:id_user", id_user=session["user_id"])
-
-        # for num in range(len(groupl)):
-        #     if groupname == groupl[num]["group_id"]:
-        #         session["group_id"] = groupl[num]["group_id"]
-
-        # print(session["group_id"])
 
         temporary = []
         temp = []
@@ -372,15 +371,20 @@ def show(path):
 @login_required
 def groupview():
     # if request.method=="POST":
-    groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id=:user_id", user_id=session["user_id"])
-    session["group_id"] = groupl[0]["group_id"]
 
+    # id_g = db.execute("SELECT groups.group_id FROM user_groups, groups WHERE user_id=:user_id AND groups.name_group=:name_group", user_id=session["user_id"], name_group=groupname)
+    # groupl = db.execute("SELECT group_id FROM user_groups, groups WHERE user_id=:user_id, name_group=", user_id=session["user_id"])
+    # session["group_id"] = groupl[0]["group_id"]
+    url = os.environ["REQUEST_URI"]
+    # parsed = urlparse.urlparse(url)
+
+    parsed = urlparse.urlparse(url)
+    name = urlparse.parse_qs(parsed.query)['value']
+    group_idd = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name)
     temporary = []
     temp = []
-    # for line in range(len(groupl)):
-    #     group = groupl[line]["group_id"]
-    #     temp.append(group)
-    group = db.execute("SELECT user_id, picture, comment FROM picture_group WHERE group_id=:id_group", id_group=session["group_id"])
+    get_group()
+    group = db.execute("SELECT user_id, picture, comment FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
     groupname = db.execute("SELECT name_group FROM groups WHERE group_id=:group_id", group_id=session["group_id"])
     groupnamel = groupname[0]["name_group"]
     for number in range(len(group)):
@@ -476,3 +480,12 @@ def eventphoto():
         return render_template("eventfeed.html")
     else:
         return render_template("eventphoto.html")
+
+@app.route("/get_group/", methods=['POST'])
+def get_group():
+    f=request.form.get("groupname")
+    group = db.execute("SELECT group_id FROM groups WHERE name_group=:name_group", name_group=f)
+    group_idd = group[0]["group_id"]
+    return group_idd
+
+
