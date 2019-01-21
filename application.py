@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory
+from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory, jsonify
 from flask_session import Session
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
@@ -9,6 +9,9 @@ from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from helpers import *
+from pusher import Pusher
+import uuid
+
 
 # configure application
 app = Flask(__name__)
@@ -268,28 +271,54 @@ def login():
 @app.route("/groupfeed", methods=["GET", "POST"])
 @login_required
 def groupfeed():
-    # if request.method == "POST":
-    groupname = request.form.get("group")
-    groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id=:user_id", user_id=session["user_id"])
+    if request.method == "POST":
+        groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id = :user_id", user_id=session["user_id"])
 
-    for num in range(len(groupl)):
-        if groupname == groupl[num]["group_id"]:
-            session["group_id"] = groupl[num]["group_id"]
+        temporary = []
+        temp = []
 
-    temporary = []
-    temp = []
-    for line in range(len(groupl)):
-        group = groupl[line]["group_id"]
-        temp.append(group)
+        for num in range(len(groupl)):
+            group = groupl[num]["group_id"]
+            groupname = db.execute("SELECT name_group FROM groups WHERE group_id=:group_id", group_id=group)
+            temp.append([group, groupname])
 
-    for number in temp:
-        groupname = db.execute("SELECT name_group, profile_picture FROM groups WHERE group_id=:id_group", id_group=number)
-        groupnamel = groupname[0]["name_group"]
-        profilepic = groupname[0]["profile_picture"]
-        profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
+        group = db.execute("SELECT user_id, picture, comment FROM picture_group WHERE group_id=:id_group", id_group=group_id)
 
-        temporary.append([groupnamel, profilepicture])
-    return render_template("groupfeed.html", list_group = temporary)
+        for number in range(len(group)):
+            user_id = group[number]["user_id"]
+            user = db.execute("SELECT username FROM users WHERE id=:id_user", id_user=user_id)
+            username= user[0]["username"]
+            profilepic = group[number]["picture"]
+            comments = group[number]["comment"]
+            profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
+
+            temporary.append([username, profilepicture, comments])
+
+        return render_template("groupview.html", list_picture=temporary, name_group=request.form.get("group"), group=temp)
+    else:
+        # groupname = request.form.get("group")
+        groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id=:id_user", id_user=session["user_id"])
+
+        # for num in range(len(groupl)):
+        #     if groupname == groupl[num]["group_id"]:
+        #         session["group_id"] = groupl[num]["group_id"]
+
+        # print(session["group_id"])
+
+        temporary = []
+        temp = []
+        for line in range(len(groupl)):
+            group = groupl[line]["group_id"]
+            temp.append(group)
+
+        for number in temp:
+            groupname = db.execute("SELECT name_group, profile_picture FROM groups WHERE group_id=:id_group", id_group=number)
+            groupnamel = groupname[0]["name_group"]
+            profilepic = groupname[0]["profile_picture"]
+            profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
+
+            temporary.append([groupnamel, profilepicture])
+        return render_template("groupfeed.html", list_group = temporary)
 
 
 @app.route("/aboutus", methods=["GET", "POST"])
@@ -436,6 +465,8 @@ def eventphoto():
         name_event = eventname[0]["event_name"]
         caption = request.form.get("caption")
 
+        if not caption:
+            return "Insert a caption"
         file = request.files['file']
         if not allowed_file(file.filename):
             return "This is not a picture"
@@ -447,6 +478,6 @@ def eventphoto():
         db.execute("INSERT INTO event_feed (user_id, event_id, picture, like, dislike, caption) VALUES(:user_id, :event_id, :picture, :like, :dislike,:caption)",
                    user_id=session["user_id"], picture=filename, event_id=session["event_id"], like=0, dislike=0, caption=caption)
 
-        return render_template("eventfeed.html")
+        return redirect(url_for("eventfeed"))
     else:
         return render_template("eventphoto.html")
