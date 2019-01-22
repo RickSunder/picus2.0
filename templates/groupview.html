@@ -5,13 +5,23 @@
 {% endblock %}
 
 {% block main %}
+
+<script>
+    function get_group(pass_to_python) {
+        // var pass_to_python = document.getElementById("group").value;
+        var url = 'https://ide50-britt1212.legacy.cs50.io:8080/upload_photo?value='+pass_to_python;
+        return window.open(url, "_self");
+    }
+    </script>
+
 <br>
 <br>
 <center> <div class="aboutus">
     <!--<form action="{{ url_for('groupview') }}" method="post">-->
-        <a href="{{ url_for('upload_photo') }}">
-        <button class="w3-button w3-round">Upload photo</button>
-        </a>
+        <!--<a href="{{ url_for('upload_photo') }}">-->
+        <!--<button class="w3-button w3-round">Upload photo</button>-->
+        <input type="button" id="group" value="Upload photo" onclick="get_group('{{group}}')"/>
+        <!--</a>-->
 
         <br>
 <br>

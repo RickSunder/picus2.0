@@ -376,25 +376,18 @@ def show(path):
 @app.route("/groupview", methods=["GET", "POST"])
 @login_required
 def groupview():
-    # if request.method=="POST":
 
-    # id_g = db.execute("SELECT groups.group_id FROM user_groups, groups WHERE user_id=:user_id AND groups.name_group=:name_group", user_id=session["user_id"], name_group=groupname)
-    # groupl = db.execute("SELECT group_id FROM user_groups, groups WHERE user_id=:user_id, name_group=", user_id=session["user_id"])
-    # session["group_id"] = groupl[0]["group_id"]
-    url = browser.current_url
-    # parsed = urlparse.urlparse(url)
-
+    url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
     group_idd = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name)
     group_idd = group_idd[0]["group_id"]
     session["group_id"] = group_idd
     temporary = []
-    temp = []
-    # get_group()
+
+
     group = db.execute("SELECT user_id, picture, comment FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
-    # groupname = db.execute("SELECT name_group FROM groups WHERE group_id=:group_id", group_id=session["gr)
-    # groupnamel = groupname[0]["name_group"]
+
     for number in range(len(group)):
         user_id = group[number]["user_id"]
         user = db.execute("SELECT username FROM users WHERE id=:id_user", id_user=user_id)
@@ -404,11 +397,37 @@ def groupview():
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
 
         temporary.append([username, profilepicture, comments])
-    print(temporary)
-    return render_template("groupview.html", list_picture=temporary, group=name[0])
-    # else:
-    #     return render_template("groupview.html")
 
+    return render_template("groupview.html", list_picture=temporary, group=name[0])
+
+@app.route("/upload_photo", methods=["GET", "POST"])
+@login_required
+def upload_photo():
+    if request.method=="POST":
+
+        # url = request.url
+        # parsed = urlparse.urlparse(url)
+        # name = urlparse.parse_qs(parsed.query)['value']
+        group_name = db.execute("SELECT name_group FROM groups WHERE group_id=:group", group=session["group_id"])
+        group = group_name[0]["name_group"]
+
+        comments = request.form.get("comment")
+
+        file = request.files['file']
+        if not allowed_file(file.filename):
+            return "This is not a picture"
+
+        filename =  str(session["user_id"]) + "_" + str(session["group_id"]) + "_" + file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        db.execute("INSERT INTO picture_group (user_id, group_id, picture, like, comment) VALUES(:user_id, :group_id, :picture, :like, :comment)",
+                   user_id=session["user_id"], picture=filename, group_id=session["group_id"], like=0, comment=comments)
+
+        # return redirect(url_for("groupview"))
+        return render_template("upload_photo.html", groupname=group)
+    else:
+
+        return render_template("upload_photo.html")
 
 
 
