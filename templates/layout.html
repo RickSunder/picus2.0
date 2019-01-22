@@ -12,7 +12,9 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='RubikMonoOne-Regular.ttf') }}">
-        <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='balletje-01.png') }}"
+        <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='balletje-01.png') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='functions.js') }}"></script>
+        <script src="static/functions.js"></script>
 </head>
       <title>PicUs</title>
     <body>
@@ -53,9 +55,6 @@
                                               <a class="dropdown-item" href="#">Bewaar deze even</a>
                                             </div>
 
-           <li class="nav-item active">
-        <a class="nav-link" href="{{url_for('search') }}">Search</a>
-        </li>
          <li class="nav-item active">
         <a class="nav-link" href="{{url_for('settings') }}">Settings</a>
         </li>
@@ -78,10 +77,13 @@
            <li class="nav-item active">
             <a class="nav-link" href="{{url_for('login') }}">Login</a>
           </li>
+          <li class="nav-item">
+        <li class="nav-item active">
+        <a class="nav-link" href="{{url_for('search') }}">Search</a>
+        </li>
           <li class="nav-item active">
             <a class="nav-link" href="{{url_for('aboutus') }}">About (Pic)Us</a>
           </li>
-          <li class="nav-item">
     </ul>
   </div>
 </nav>
