@@ -5,15 +5,38 @@
 {% endblock %}
 
 {% block main %}
-<form action="{{ url_for('eventphoto') }}" method="post" enctype="multipart/form-data">
-  <body>
+<form id="upload-form" action="{{ url_for('eventphoto') }}" method="POST" enctype="multipart/form-data">
+    <body>
     <div class="gecentreerd">
-        <h1 style="width: 300"><font>Post your images here!</fontsize></h1>
-    <input id="file-picker" type="file" class="btn-outline-secondary" accept="image/*" style="font-family: Rubik Mono One; border-radius: 10px; top: 500px"><font size="+6">search image</fontsize> </file>
+    <h1 style="width: 300"><font>Post your images here!</fontsize></h1>
+    <strong>Files:</strong><br>
+    <input id="file-picker" type="file" name="file" accept="image/*" multiple>
     <div class="form-group">
         <input autocomplete="off" autofocus class="form-control" name="caption" placeholder="Caption" type="text"/>
-    </div>
-    </div>
-  </body>
+        </div>
+    <div id="msg"></div>
+    <input type="submit" value="Upload!" id="upload-button">
+    </div
+    </body>
 </form>
+
+<script>
+    $("#file-picker").change(function(){
+        var input = document.getElementById('file-picker');
+        for (var i=0; i<input.files.length; i++)
+        {
+        //koala.jpg, koala.JPG substring(index) lastIndexOf('a') koala.1.jpg
+            var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase();
+            if ((ext == 'jpg') || (ext == 'png'))
+            {
+                $("#msg").text("Files are supported");
+            }
+            else
+            {
+                $("#msg").text("Files are NOT supported");
+                document.getElementById("file-picker").value ="";
+            }
+        }
+    } );
+</script>
 {% endblock %}

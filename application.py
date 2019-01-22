@@ -43,6 +43,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 Session(app)
 
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 # configure CS50 Library to use SQLite database
 db = SQL("sqlite:///PicUs.db")
 
@@ -408,28 +409,7 @@ def groupview():
     # else:
     #     return render_template("groupview.html")
 
-@app.route("/upload_photo", methods=["GET", "POST"])
-@login_required
-def upload_photo():
-    if request.method=="POST":
 
-        name_group = db.execute("SELECT name_group FROM groups WHERE group_id=:group", group=session["group_id"])
-        name_group = name_group[0]["name_group"]
-        comments = request.form.get("comment")
-
-        file = request.files['file']
-        if not allowed_file(file.filename):
-            return "This is not a picture"
-
-        filename =  str(session["user_id"]) + "_" + name_group + "_" + file.filename
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-        db.execute("INSERT INTO picture_group (user_id, group_id, picture, like, comment) VALUES(:user_id, :group_id, :picture, :like, :comment)",
-                   user_id=session["user_id"], picture=filename, group_id=session["group_id"], like=0, comment=comments)
-
-        return render_template("groupview.html")
-    else:
-        return render_template("upload_photo.html")
 
 
 @app.route("/search", methods=["GET", "POST"])
@@ -451,44 +431,32 @@ def search():
     return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=1)
 
 
-@app.route("/eventfeed", methods=["GET", "POST"])
-@login_required
-def eventfeed():
-    if request.method=="POST":
-        if request.form.get("like") == True:
-            db.execute("INSERT INTO event_feed (likes) VALUES (:likes)", likes = likes + 1)
-        if request.form.get("dislike") == True:
-            db.execute("INSERT INTO event_feed (dislikes) VALUES (:dislikes)", dislikes = dislikes + 1)
-        return "hoi"
-    else:
-        return render_template("eventfeed.html")
 
 
-@app.route("/eventphoto", methods=["GET", "POST"])
+
+@app.route("/eventphoto", methods=["GET, POST"])
 @login_required
 def eventphoto():
-    if request.method=="POST":
-
-        eventname = db.execute("SELECT event_feed FROM event_account WHERE event_id=:event", event=session["event_id"])
-        name_event = eventname[0]["event_name"]
-        caption = request.form.get("caption")
-
-        if not caption:
-            return "Insert a caption"
-        file = request.files['file']
-        if not allowed_file(file.filename):
-            return "This is not a picture"
-
-        filename =  str(session["user_id"]) + "_" + name_event + "_" + file.filename
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-
-        db.execute("INSERT INTO event_feed (user_id, event_id, picture, like, dislike, caption) VALUES(:user_id, :event_id, :picture, :like, :dislike,:caption)",
-                   user_id=session["user_id"], picture=filename, event_id=session["event_id"], like=0, dislike=0, caption=caption)
-
-        return redirect(url_for("eventfeed"))
+    if request.method == 'POST':
+        target = os.path.join(APP_ROOT, 'images/')
+        print(target)
+        if not os.path.isdir(target):
+            os.mkdir(target)
+        else:
+            print("Couldn't create upload directory: {}".format(target))
+        print(request.files.getlist("file"))
+        for upload in request.files.getlist("file"):
+            print(upload)
+            print("{} is the file name".format(upload.filename))
+            filename = upload.filename
+            destination = "/".join([target, filename])
+            print ("Accept incoming file:", filename)
+            print ("Save it to:", destination)
+            upload.save(destination)
+            return redirect(url_for("eventfeed.html"))
     else:
         return render_template("eventphoto.html")
+
 
 # @app.route("/get_group/", methods=['POST'])
 # def get_group():
@@ -497,4 +465,20 @@ def eventphoto():
 #     group_idd = group[0]["group_id"]
 #     return group_idd
 
+@app.route("/get_group/", methods=['POST'])
+def get_group():
+    f=request.form.get("groupname")
+    group = db.execute("SELECT group_id FROM groups WHERE name_group=:name_group", name_group=f)
+    group_idd = group[0]["group_id"]
+    return group_idd
 
+
+@app.route('/upload/<filename>')
+def send_image(filename):
+    return send_from_directory("images", filename)
+
+@app.route('/eventfeed')
+def eventfeed():
+    image_names = os.listdir('./images')
+    print(image_names)
+    return render_template("eventfeed.html", image_names=image_names)
