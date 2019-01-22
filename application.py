@@ -9,10 +9,14 @@ from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from helpers import *
-
+import time
+import giphy_client
+from giphy_client.rest import ApiException
+from pprint import pprint
 import urllib.parse as urlparse
 from django.utils.deprecation import MiddlewareMixin
-
+import urllib
+import json
 # from urlparse import urlparse
 
 from pusher import Pusher
@@ -436,12 +440,15 @@ def search():
 @login_required
 def eventphoto():
     if request.method == 'POST':
+        imagecaption = request.form.get("caption")
+        photo = request.form.get("file")
         target = os.path.join(APP_ROOT, 'images/')
         print(target)
         if not os.path.isdir(target):
             os.mkdir(target)
         else:
             print("Couldn't create upload directory: {}".format(target))
+        db.execute("INSERT INTO event_feed (images, caption, user_id, event_id) VALUES(:images, :caption, :user_id, :event_id)", images=photo, caption = imagecaption, user_id = session.get("user_id"), event_id = session.get("event_id"))
         print(request.files.getlist("file"))
         for upload in request.files.getlist("file"):
             print(upload)
@@ -451,6 +458,7 @@ def eventphoto():
             print ("Accept incoming file:", filename)
             print ("Save it to:", destination)
             upload.save(destination)
+            return send_from_directory("images", filename)
             return redirect(url_for("eventfeed.html"))
     else:
         return render_template("eventphoto.html")
@@ -461,12 +469,17 @@ def get_group():
     group_idd = group[0]["group_id"]
     return group_idd
 
-@app.route('/upload/<filename>')
-def send_image(filename):
-    return send_from_directory("images", filename)
-
 @app.route('/eventfeed')
+@login_required
 def eventfeed():
+
     image_names = os.listdir('./images')
     print(image_names)
     return render_template("eventfeed.html", image_names=image_names)
+
+@app.route('/eventfee d', methods=["GET, POST"])
+@login_required
+def comment():
+    if request.method == 'POST':
+        data = json.loads(urllib.urlopen(url).read())
+        print (json.dumps(data, sort_keys=True, indent=4))
