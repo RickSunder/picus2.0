@@ -503,17 +503,20 @@ def get_group():
     return group_idd
 
 
-@app.route('/eventfeed')
+@app.route('/eventfeed/')
 @login_required
 def eventfeed():
-
-    image_names = os.listdir('./images')
-    print(image_names)
-    return render_template("eventfeed.html", image_names=image_names)
-
-@app.route('/eventfee d', methods=["GET, POST"])
-@login_required
-def comment():
     if request.method == 'POST':
-        data = json.loads(urllib.urlopen(url).read())
-        print (json.dumps(data, sort_keys=True, indent=4))
+        if request.form.get("comment") != None:
+            data = json.loads(urllib.urlopen(url).read())
+            print (json.dumps(data, sort_keys=True, indent=4))
+        if request.form.get("like") == True:
+            db.execute("INSERT INTO event_feed (likes) VALUES (:likes)", likes = likes + 1)
+        if request.form.get("dislike") == True:
+            db.execute("INSERT INTO event_feed (dislikes) VALUES (:dislikes)", dislikes = dislikes + 1)
+        image_names = os.listdir('./images')
+        print(image_names)
+    else:
+        return render_template("eventfeed.html", image_names=image_names)
+
+
