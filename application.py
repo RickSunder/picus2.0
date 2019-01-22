@@ -187,7 +187,7 @@ def allowed_file(filename):
 def eventview():
     event_id1 = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
 
-    temporary = []
+    temporaryview = []
     temp = []
     for event in range(len(event_id1)):
         event_id = event_id1[event]["event_id"]
@@ -198,13 +198,13 @@ def eventview():
         event_id1 = event_id[0]["event_name"]
         profilepic = event_id[0]["event_picture"]
         profilepicture = os.path.join(app.config["UPLOAD_FOLDER"], profilepic)
-        temporary.append([event_id1, profilepicture])
+        temporaryview.append([event_id1, profilepicture])
 
-    for rows in temporary:
+    for rows in temporaryview:
         print(rows[0], rows[1])
 
 
-    return render_template("eventview.html", list_event_id = temporary)
+    return render_template("eventview.html", list_event_id = temporaryview)
 
 @app.route("/makeevent", methods=["GET", "POST"])
 @login_required
@@ -464,36 +464,25 @@ def search():
 @login_required
 def eventphoto():
     if request.method == 'POST':
-        imagecaption = request.form.get("caption")
-        photo = request.form.get("file")
-        target = os.path.join(APP_ROOT, 'images/')
-        print(target)
-        if not os.path.isdir(target):
-            os.mkdir(target)
-        else:
-            print("Couldn't create upload directory: {}".format(target))
-        db.execute("INSERT INTO event_feed (images, caption, user_id, event_id) VALUES(:images, :caption, :user_id, :event_id)", images=photo, caption = imagecaption, user_id = session.get("user_id"), event_id = session.get("event_id"))
-        print(request.files.getlist("file"))
-        for upload in request.files.getlist("file"):
-            print(upload)
-            print("{} is the file name".format(upload.filename))
-            filename = upload.filename
-            destination = "/".join([target, filename])
-            print ("Accept incoming file:", filename)
-            print ("Save it to:", destination)
-            upload.save(destination)
-            return send_from_directory("images", filename)
-            return redirect(url_for("eventfeed.html"))
+
+        event_name = db.execute("SELECT event_name FROM event_account WHERE event_id=:event", event=session["event_id"])
+        event = event_name[0]["event_name"]
+
+        caption = request.form.get("caption")
+
+        file = request.files['file']
+        if not allowed_file(file.filename):
+            return "This is not a picture"
+
+        filename =  str(session["user_id"]) + "_" + str(session["event_id"]) + "_" + file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        db.execute("INSERT INTO event_feed (images, caption, user_id, event_id) VALUES(:images, :caption, :user_id, :event_id)",
+                   images=filename, caption = caption, user_id = session.get("user_id"), event_id = session.get("event_id"))
+
+        return render_template("eventphoto.html", eventname=event)
     else:
         return render_template("eventphoto.html")
-
-
-# @app.route("/get_group/", methods=['POST'])
-# def get_group():
-#     f=request.form.get("groupname")
-#     group = db.execute("SELECT group_id FROM groups WHERE name_group=:name_group", name_group=f)
-#     group_idd = group[0]["group_id"]
-#     return group_idd
 
 @app.route("/get_group/", methods=['POST'])
 def get_group():
@@ -502,45 +491,49 @@ def get_group():
     group_idd = group[0]["group_id"]
     return group_idd
 
+@app.route("/get_event/", methods=['POST'])
+def get_event():
+    f=request.form.get("eventname")
+    event = db.execute("SELECT event_id FROM event_account WHERE event_name=:name_event", name_event=f)
+    event_idd = event[0]["event_id"]
+    return event_idd
 
 @app.route('/eventfeed/')
 @login_required
 def eventfeed():
-    if request.method == 'POST':
-        url = request.url
-        parsed = urlparse.urlparse(url)
-        name = urlparse.parse_qs(parsed.query)['value']
-        event_idd = db.execute("SELECT event_id FROM event_account WHERE name_event=:event", event=name)
-        event_idd = group_idd[0]["event_id"]
-        session["group_id"] = event_idd
-        temporary = []
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    name = urlparse.parse_qs(parsed.query)['value']
+    event_idd = db.execute("SELECT event_id FROM event_account WHERE name_event=:event", event=name)
+    event_idd = event_idd[0]["event_id"]
+    session["event_id"] = event_idd
+    temporary = []
 
 
-        event = db.execute("SELECT user_id, images, caption FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
+    event = db.execute("SELECT user_id, images, caption FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
 
-        for number in range(len(event)):
-            user_id = event[number]["user_id"]
-            user = db.execute("SELECT username FROM users WHERE id=:id_user", id_user=user_id)
-            username= user[0]["username"]
-            profilepicevent = event[number]["images"]
-            captions = event[number]["caption"]
-            profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
+    for number in range(len(event)):
+        user_id = event[number]["user_id"]
+        user = db.execute("SELECT username FROM users WHERE id=:id_user", id_user=user_id)
+        username= user[0]["username"]
+        profilepicevent = event[number]["images"]
+        captions = event[number]["caption"]
+        profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
 
-        temporary.append([username, profilepicture, captions])
-        if request.form.get("comment") != None:
-            #gif = request.get_json(url)
-            #data = json.loads(urllib.urlopen(gif).read())
-            #print (json.dumps(data, sort_keys=True, indent=4))
-            return "hoi"
-        if request.form.get("like") == True:
-            db.execute("UPDATE event_feed SET likes =: likes WHERE id =: image_id", likes = likes + 1, image_id = session["image_id"])
-        if request.form.get("dislike") == True:
-            db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislikes + 1, image_id = session["image_id"])
+    temporary.append([username, profilepicture, captions])
+    if request.form.get("comment") != None:
+        #gif = request.get_json(url)
+        #data = json.loads(urllib.urlopen(gif).read())
+        #print (json.dumps(data, sort_keys=True, indent=4))
+        return "hoi"
+    like_count = db.execute("SELECT likes FROM event_feed WHERE likes=:like", like = 0)
+    if request.form.get("like") == True:
+        db.execute("UPDATE event_feed SET likes =: likes WHERE id =: image_id", likes = like_count + 1, image_id = session["image_id"])
 
-        image_names = os.listdir('./images')
-        print(image_names)
-    else:
-        image_names = os.listdir('./images')
-        return render_template("eventfeed.html", list_picture=temporary, event=name[0])
+    dislike_count = db.execute("SELECT dislikes FROM event_feed WHERE dislikes=:dislike", dislike= 0)
+    if request.form.get("dislike") == True:
+        db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislike_count + 1, image_id = session["image_id"])
 
-
+    image_names = os.listdir('./images')
+    print(image_names)
+    return render_template("eventfeed.html", list_picture=temporary, event=name[0])
