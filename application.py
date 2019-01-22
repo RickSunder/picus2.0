@@ -18,8 +18,8 @@ from django.utils.deprecation import MiddlewareMixin
 import urllib
 import json
 import urllib.parse as urlparse
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+#from selenium import webdriver
+#from selenium.webdriver.common.keys import Keys
 
 
 
@@ -507,16 +507,40 @@ def get_group():
 @login_required
 def eventfeed():
     if request.method == 'POST':
+        url = request.url
+        parsed = urlparse.urlparse(url)
+        name = urlparse.parse_qs(parsed.query)['value']
+        event_idd = db.execute("SELECT event_id FROM event_account WHERE name_event=:event", event=name)
+        event_idd = group_idd[0]["event_id"]
+        session["group_id"] = event_idd
+        temporary = []
+
+
+        event = db.execute("SELECT user_id, images, caption FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
+
+        for number in range(len(event)):
+            user_id = event[number]["user_id"]
+            user = db.execute("SELECT username FROM users WHERE id=:id_user", id_user=user_id)
+            username= user[0]["username"]
+            profilepicevent = event[number]["images"]
+            captions = event[number]["caption"]
+            profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
+
+        temporary.append([username, profilepicture, captions])
         if request.form.get("comment") != None:
-            data = json.loads(urllib.urlopen(url).read())
-            print (json.dumps(data, sort_keys=True, indent=4))
+            #gif = request.get_json(url)
+            #data = json.loads(urllib.urlopen(gif).read())
+            #print (json.dumps(data, sort_keys=True, indent=4))
+            return "hoi"
         if request.form.get("like") == True:
-            db.execute("INSERT INTO event_feed (likes) VALUES (:likes)", likes = likes + 1)
+            db.execute("UPDATE event_feed SET likes =: likes WHERE id =: image_id", likes = likes + 1, image_id = session["image_id"])
         if request.form.get("dislike") == True:
-            db.execute("INSERT INTO event_feed (dislikes) VALUES (:dislikes)", dislikes = dislikes + 1)
+            db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislikes + 1, image_id = session["image_id"])
+
         image_names = os.listdir('./images')
         print(image_names)
     else:
-        return render_template("eventfeed.html", image_names=image_names)
+        image_names = os.listdir('./images')
+        return render_template("eventfeed.html", list_picture=temporary, event=name[0])
 
 

@@ -5,53 +5,72 @@
 {% endblock %}
 
 {% block main %}
+<script>
+  function get_group(pass_to_python) {
+        // var pass_to_python = document.getElementById("group").value;
+        var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventphoto?value='+pass_to_python;
+        return window.open(url, "_self");
+    }
+</script>
 <form action="{{ url_for('eventfeed') }}" method="post" enctype="multipart/form-data">
-<div class="container">
-  <div class="row">
-    <div class="col-md-4">
-        <a href="eventview" type="button" class="btn-outline-secondary" style="font-family: Rubik Mono One; border-radius: 20px; top: 500px"><font size="+6">my events</fontsize></button></a>
-    </div>
-
-    <div class="col-md-4 offset-md-4">
-        <a href="eventphoto" type="button" class="btn-outline-secondary" style="font-family: Rubik Mono One; border-radius: 20px; top: 500px"><font size="+6">upload image</fontsize></button></a>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-3 offset-md-3">.{{ eventname}}</div>
-    <div class="col-md-3 offset-md-3">
-        <a type="text" class="btn-outline-secondary" style="font-family: Rubik Mono One; border-radius: 20px; top: 500px"><font size="+6">url</fontsize></button></a>
-    </div>
-  </div>
-  {% for image_name in image_names %}
-  <div class="row">
-    <div class="col-md-6 offset-md-3">
-        <img class="img-responsive" src="{{url_for('send_image', filename=image_name)}}" alt="MaterialImg">
-        <div class="form-group">
-             <button class="btn btn-default" name="like" type="submit">Like</button>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-default" name="dislike" type="submit">Dislike</button>
-        </div>
+<div class="gecntreerd">
+<div class="header">
+  <h2>Eventfeed</h2>
+</div>
+{% for row in list_picture %}
+        {{ row[0] }}
+<div class="row">
+  <div class="leftcolumn">
+    <div class="card">
+      <h2>{{ eventname }}</h2>
+      <h5>datum</h5>
+   <img class="fakeimg" style="height:200px;" src="{{ row[1] }}" alt="MaterialImg">
+      <div class="form-group">
+        {{ row[2] }}
+                <input id = "comment" autocomplete="off" autofocus class="form-control" name="comment" placeholder="comment" type="text"/>
+      </div>
+      <p>{{ comment }}<br></p>
+      <form id="like" action="/application.py">
+      <button name="like" type="submit">Like</button>
+      </form>
+      <form id="dislike" action="/application.py">
+      <button name="dislike" type="submit">Dislike</button>
+      </form>
     </div>
   </div>
 </div>
-  {% endfor %}
+{% endfor %}
+<div class="row">
+  <div class="rightcolumn">
+    <div class="card">
+      <h2>My events</h2>
+      <div href="eventphoto" type="button" class="fakeimg" style="height:100px;">My events</div>
+    </div>
+    <div class="card">
+      <h3>upload image</h3>
 
-
-
-
-
-
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-        crossorigin="anonymous"></script>
-
-
-
-
-
-
-
+      <div class="fakeimg">Image</div><br>
+    </div>
+    <div class="card">
+      <h3>Follow Me</h3>
+      <p>Some text..</p>
+    </div>
+  </div>
+</div>
 </form>
+<div class="footer">
+  <h2>Footer</h2>
+</div>
+</div>
+</form>
+<script>
+    var api = "api.giphy.com/v1/gifs/search";
+    var apikey = "&api_key=fxVVpisTMf7gev7hUdH22OjTT5Axp7z9";
+    var query = "&q=" + document.getElementById("comment").value;
+    function setup() {
+        var url = api + apikey + query;
+    }
+
+</script>
 {% endblock %}
+
