@@ -10,8 +10,8 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from helpers import *
 import time
-import giphy_client
-from giphy_client.rest import ApiException
+# import giphy_client
+# from giphy_client.rest import ApiException
 from pprint import pprint
 import urllib.parse as urlparse
 from django.utils.deprecation import MiddlewareMixin
@@ -380,10 +380,10 @@ def show(path):
     return send_from_directory('upload', path)
 
 
-@app.route("/groupview", methods=["GET", "POST"])
+@app.route("/groupview")
 @login_required
 def groupview():
-
+    # if request.method == "POST":
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
@@ -406,6 +406,8 @@ def groupview():
         temporary.append([username, profilepicture, comments])
 
     return render_template("groupview.html", list_picture=temporary, group=name[0])
+    # else:
+    #     return render_template("groupview.html")
 
 @app.route("/upload_photo", methods=["GET", "POST"])
 @login_required
@@ -481,12 +483,12 @@ def eventphoto():
     else:
         return render_template("eventphoto.html")
 
-@app.route("/get_group/", methods=['POST'])
-def get_group():
-    f=request.form.get("groupname")
-    group = db.execute("SELECT group_id FROM groups WHERE name_group=:name_group", name_group=f)
-    group_idd = group[0]["group_id"]
-    return group_idd
+# @app.route("/get_group/", methods=['POST'])
+# def get_group():
+#     f=request.form.get("groupname")
+#     group = db.execute("SELECT group_id FROM groups WHERE name_group=:name_group", name_group=f)
+#     group_idd = group[0]["group_id"]
+#     return group_idd
 
 @app.route("/get_event/", methods=['POST'])
 def get_event():
@@ -534,3 +536,17 @@ def eventfeed():
     image_names = os.listdir('./images')
     print(image_names)
     return render_template("eventfeed.html", list_picture=temporary, event=name[0])
+
+
+
+
+@app.route('/leave_group/')
+@login_required
+def leave_group():
+
+    db.execute("DELETE FROM user_groups WHERE user_id = :user_id AND group_id = :group_id", user_id=session["user_id"], group_id = session["group_id"])
+
+
+    group_name = db.execute("SELECT name_group FROM groups WHERE group_id=:group", group=session["group_id"])
+    group = group_name[0]["name_group"]
+    return render_template("leave_group.html", groupname=group)
