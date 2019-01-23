@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from helpers import *
 import time
-
+global request
 # import giphy_client
 # from giphy_client.rest import ApiException
 
@@ -514,8 +514,8 @@ def eventphoto():
         filename =  str(session["user_id"]) + "_" + str(session["event_id"]) + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        db.execute("INSERT INTO event_feed (images, caption, user_id, event_id) VALUES(:images, :caption, :user_id, :event_id)",
-                   images=filename, caption = caption, user_id = session.get("user_id"), event_id = session.get("event_id"))
+        db.execute("INSERT INTO event_feed (images, likes, dislikes, comments, caption, user_id, event_id) VALUES(:images, :likes, :dislikes, :comments, :caption, :user_id, :event_id)"
+                   ,images=filename, likes = 0, dislikes = 0, comments = "hi does this work?", caption = caption, user_id = session["user_id"], event_id = session["event_id"])
 
         return render_template("eventphoto.html", event = event_name[0]["event_name"])
     else:

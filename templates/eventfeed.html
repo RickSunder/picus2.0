@@ -45,7 +45,8 @@
         // Change the input to suit the API (ie change spaces to +)
         userInput = userInput.replace(/ /g, "+");
 
-      var queryURL = 'http://api.giphy.com/v1/gifs/search?q=' + userInput + '&api_key=dc6zaTOxFJmzC';
+       var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + userInput + '&api_key=fxVVpisTMf7gev7hUdH22OjTT5Axp7z9';
+       //request.open('GET', 'queryURL');
 
       // Part 2 - Use AJAX to call GIPHY API (note that the .done() function waits for the API to respond)
         $.ajax({url: queryURL, method: 'GET'}).done(function(response){
