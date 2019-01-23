@@ -57,8 +57,8 @@ db = SQL("sqlite:///PicUs.db")
 def index():
     """The index of the website"""
     if request.method == "POST":
-        return "hoi"
-    else:
+        return render_template("groupfeed.html")
+    if request.method == "GET":
         return render_template("index.html")
 
 #GINO
@@ -172,7 +172,7 @@ def addmember():
 
         return render_template("addgroupmember.html", list_members = temporary)
     else:
-        return render_template("addgroupmember.html")
+        return render_template("index.html")
 
 
 
