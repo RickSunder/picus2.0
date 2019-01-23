@@ -12,6 +12,7 @@
         return window.open(url, "_self");
     }
     </script>
+
 <form id="upload-form" action="{{ url_for('eventphoto') }}" method="POST" enctype="multipart/form-data">
     <body>
     <div class="gecentreerd">
@@ -20,13 +21,11 @@
     <input id="file-picker" type="file" name="file" accept="image/*" multiple>
     <div class="form-group">
         <input autocomplete="off" autofocus class="form-control" name="caption" placeholder="Caption" type="text"/>
-        </div>
-    <div id="msg"></div>
-    <input type="button" id="event" value="Upload image" onclick="get_event('{{event}}')"/>
-    </div
+         <button class="btn btn-default" type="submit" >Upload Photo <group></group></button>
+         </div>
     </body>
 </form>
-
+<input type="button" id="event" value="Upload image" onclick="get_event('{{ event }}')"/>
 <script>
 
 </script>
