@@ -8,36 +8,32 @@
 <script>
     function get_group(pass_to_python)
     {
-        var url = 'https://ide50-britt1212.legacy.cs50.io:8080/upload_photo?value='+pass_to_python;
+        var url = 'https://ide50-gi-no.legacy.cs50.io:8080/upload_photo?value='+pass_to_python;
         return window.open(url, "_self");
     }
 
     function leave_group(python)
     {
-        var url_leave = 'https://ide50-britt1212.legacy.cs50.io:8080/leave_group?value='+python;
+        var url_leave = 'https://ide50-gi-no.legacy.cs50.io:8080/leave_group?value='+python;
         return window.open(url_leave, "_self");
     }
 
     function like(photo, name)
     {
-        var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/like_photo?value=' +photo + '&q=' +name;
+        var url_like = 'https://ide50-gi-no.legacy.cs50.io:8080/like_photo?value=' +photo + '&q=' +name;
         return window.open(url_like, "_self");
     }
 
 </script>
 <br>
-<br>
-<center><div class="aboutus">
-            <input type="button" id="group" value="Upload photo" onclick="get_group('{{group}}')"/>
-        <br>
-        <br>
-            <input type="button" id="group" value="Leave group" onclick="leave_group('{{group}}')"/>
-        <br>
-        <br>
-        <br>
-    <h1><font size="+15">{{ group }}</fontsize></h1>
+
+<h1 class="gecentreerd"style="color:white;"><font size="+15">{{ group }}</fontsize></h1>
 <br>
 <br>
+
+&nbsp;&nbsp;<input class="vulinlogbevestig" style="font-size:15px; padding:10px; top:-225px" type="button" id="group" value="Upload photo" onclick="get_group('{{group}}')"/>
+<input class="vulinlog" style="font-size:15px; padding:10px; top:-225px"type="button" id="group" value="Leave group" onclick="leave_group('{{group}}')"/>
+
     {% for row in list_picture %}
         Posted by: {{ row[0] }}
             <center>
