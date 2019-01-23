@@ -10,8 +10,7 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from helpers import *
 import time
-import giphy_client
-from giphy_client.rest import ApiException
+import re
 from pprint import pprint
 import urllib.parse as urlparse
 from django.utils.deprecation import MiddlewareMixin
@@ -336,11 +335,45 @@ def aboutus():
 
 
 @app.route("/settings", methods=["GET", "POST"])
+@login_required
 def settings():
     return render_template("settings.html")
 
 @app.route("/password", methods=["GET", "POST"])
+@login_required
 def password():
+    if request.method == "POST":
+
+        password = request.form.get("newpassword")
+        if len(password) < 8:
+            return apology("Make sure your password is at least 8 letters")
+        if re.search('[0-9]',password) is None:
+            return apology("Make sure your password has a number in it")
+        if re.search('[A-Z]',password) is None:
+            return apology("Make sure your password has a capital letter in it")
+
+        if request.form.get("newpassword") != request.form.get("newconfirmation"):
+            return apology("Password and confirmation password were not the same!")
+        if request.form.get("newpassword") == "":
+            return apology("Please fill in your password!")
+        if request.form.get("newconfirmation") == "":
+            return apology("Please fill in your password!")
+        elif not request.form.get("newpassword"):
+            return apology("Please fill in your password!")
+        elif not request.form.get("newconfirmation"):
+            return apology("Please fill in your password!")
+
+        wwupdate = db.execute("UPDATE users SET hash = :password WHERE id = :ide", ide=session["user_id"], password=pwd_context.hash(request.form.get("newpassword")))
+
+        if not wwupdate:
+            return apology("The password change could not happen")
+
+        # gebruiker onthouden
+        session["user_id"] = wwupdate
+
+        # als alles doorstaan en voltooid is, bevestig registratie
+        return redirect(url_for("settings"))
+
     return render_template("password.html")
 
 @app.route("/profilepicture", methods=["GET", "POST"])
