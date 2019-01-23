@@ -480,11 +480,11 @@ def upload_photo():
 def search():
     check = 0
     zoekopdracht=request.form.get("search")
-    zoeken = db.execute("SELECT * FROM events WHERE eventname LIKE :zoekopdracht ORDER BY eventname ASC", zoekopdracht=str(zoekopdracht)+"%")
+    zoeken = db.execute("SELECT * FROM event_account WHERE event_name LIKE :zoekopdracht ORDER BY event_name ASC", zoekopdracht=str(zoekopdracht)+"%")
     resultaten = []
 
     for row in zoeken:
-        resultaten.append(row['eventname'])
+        resultaten.append(row['event_name'])
 
     if request.form.get("search") == "":
         return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=0)
