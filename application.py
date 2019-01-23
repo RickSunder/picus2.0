@@ -431,7 +431,7 @@ def groupview():
     temporary = []
 
 
-    group = db.execute("SELECT user_id, picture, comment FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
+    group = db.execute("SELECT user_id, picture, comment, like FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
 
     for number in range(len(group)):
         user_id = group[number]["user_id"]
@@ -439,11 +439,12 @@ def groupview():
         username= user[0]["username"]
         profilepic = group[number]["picture"]
         comments = group[number]["comment"]
+        like = group[number]["like"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
 
-        temporary.append([username, profilepicture, comments])
+        temporary.append([username, profilepicture, comments, profilepic, like])
 
-    return render_template("groupview.html", list_picture=temporary, group=name[0])
+    return render_template("groupview.html", list_picture=temporary, group=name[0] )
     # else:
     #     return render_template("groupview.html")
 
@@ -585,3 +586,25 @@ def leave_group():
     group_name = db.execute("SELECT name_group FROM groups WHERE group_id=:group", group=session["group_id"])
     group = group_name[0]["name_group"]
     return render_template("leave_group.html", groupname=group)
+
+@app.route('/like_photo/')
+@login_required
+def like_photo():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    name = urlparse.parse_qs(parsed.query)['value']
+    view = urlparse.parse_qs(parsed.query)['q']
+    link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+    link += view[0]
+    db.execute("INSERT INTO like_group (user_id, picture_user, groupname) VALUES(:user_id, :picture_user, :groupname)", user_id=session["user_id"], picture_user=name, groupname=view)
+    check = db.execute("SELECT id FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname", user_id=session["user_id"], picture_user=name, groupname=view)
+
+    if len(check) != 1:
+        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname", user_id=session["user_id"], picture_user=name, groupname=view)
+        return apology("You have already liked this picture")
+    else:
+        likes = db.execute("SELECT like FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+        likes = likes[0]["like"]
+        db.execute("UPDATE picture_group SET like=:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", like = likes + 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+
+    return redirect(link)
