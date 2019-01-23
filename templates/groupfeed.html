@@ -5,33 +5,30 @@
 {% endblock %}
 
 {% block main %}
+<br>
+<br>
+<h1 class="gecentreerd" style="font-family: Rubik Mono One; color: white;"><font size="+15">My groups</fontsize></h1>
+<br>
 
-
-
-<br>
-<br>
-<h1><font size="+15">Groupfeed</fontsize></h1>
-<br>
-<br>
             <script>
     function get_group(pass_to_python) {
         // var pass_to_python = document.getElementById("group").value;
         var url = 'https://ide50-britt1212.legacy.cs50.io:8080/groupview?value='+pass_to_python;
         return window.open(url, "_self");
     }
-    </script>
-
+            </script>
 
         {% for row in list_group %}
          <center>
                   <!--<a href="{{ url_for('groupview') }}">-->
-                  <img src="{{ row[1] }}" alt="{{ row[0] }}" width="150px" heigth="300px"></img>
+                  <img src="{{ row[1] }}" alt="{{ row[0] }}" width="300px" heigth="300px" style="border-radius:50px;"></img>
                   <!--</a>-->
             <form action="/get_group/" method="post">
                 <!--<input type="button" onclick='get_group({{row[0]}})' value="{{ row[0] }}"><br>-->
-            <center><input type="button" id="group" value="{{ row[0] }}" onclick="get_group('{{row[0]}}')"/></center>
-            </center>
-            </form>
+<input class="vulinlogbevestig" type="button" id="group" value="{{ row[0] }}" onclick="get_group('{{row[0]}}')"/>
+                </form>
+         </center>
+
             <br>
 
         {% endfor %}
