@@ -477,7 +477,7 @@ def eventphoto():
         db.execute("INSERT INTO event_feed (images, caption, user_id, event_id) VALUES(:images, :caption, :user_id, :event_id)",
                    images=filename, caption = caption, user_id = session.get("user_id"), event_id = session.get("event_id"))
 
-        return render_template("eventphoto.html", eventname=event)
+        return render_template("eventphoto.html", event= event)
     else:
         return render_template("eventphoto.html")
 
@@ -495,13 +495,13 @@ def get_event():
     event_idd = event[0]["event_id"]
     return event_idd
 
-@app.route('/eventfeed/')
+@app.route('/eventfeed/', methods=["GET", "POST"])
 @login_required
 def eventfeed():
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
-    event_idd = db.execute("SELECT event_id FROM event_account WHERE name_event=:event", event=name)
+    event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
     event_idd = event_idd[0]["event_id"]
     session["event_id"] = event_idd
     temporary = []
@@ -516,8 +516,7 @@ def eventfeed():
         profilepicevent = event[number]["images"]
         captions = event[number]["caption"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
-
-    temporary.append([username, profilepicture, captions])
+        temporary.append([username, profilepicture, captions])
     if request.form.get("comment") != None:
         #gif = request.get_json(url)
         #data = json.loads(urllib.urlopen(gif).read())
@@ -531,6 +530,4 @@ def eventfeed():
     if request.form.get("dislike") == True:
         db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislike_count + 1, image_id = session["image_id"])
 
-    image_names = os.listdir('./images')
-    print(image_names)
     return render_template("eventfeed.html", list_picture=temporary, event=name[0])

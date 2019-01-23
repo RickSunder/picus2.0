@@ -6,71 +6,39 @@
 
 {% block main %}
 <script>
-  function get_group(pass_to_python) {
+  function get_event(pass_to_python) {
         // var pass_to_python = document.getElementById("group").value;
         var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventphoto?value='+pass_to_python;
         return window.open(url, "_self");
     }
 </script>
-<form action="{{ url_for('eventfeed') }}" method="post" enctype="multipart/form-data">
-<div class="gecntreerd">
-<div class="header">
-  <h2>Eventfeed</h2>
-</div>
+  <input type="button" id="event" value="Upload image" onclick="get_event('{{event}}')"/>
+  <h2>{{ event }}</h2>
 {% for row in list_picture %}
-        {{ row[0] }}
-<div class="row">
-  <div class="leftcolumn">
-    <div class="card">
-      <h2>{{ eventname }}</h2>
-      <h5>datum</h5>
-   <img class="fakeimg" style="height:200px;" src="{{ row[1] }}" alt="MaterialImg">
-      <div class="form-group">
-        {{ row[2] }}
-                <input id = "comment" autocomplete="off" autofocus class="form-control" name="comment" placeholder="comment" type="text"/>
-      </div>
+  {{ row[0] }}
+  <div class="row">
+    <div class="leftcolumn">
+      <div class="card">
+        <center>
+            <img src="{{ row[1] }}" alt="picture" width="150px" heigth="300px"></img><br>
+            <!--<center><input name="user" value="{{ row[2] }}" readonly/></center>-->
+            {{ row[2] }}
+            </center>
+        <div class="form-group">
+          <input id = "comment" autocomplete="off" autofocus class="form-control" name="comment" placeholder="comment" type="text"/>
+        </div>
       <p>{{ comment }}<br></p>
+
       <form id="like" action="/application.py">
       <button name="like" type="submit">Like</button>
       </form>
       <form id="dislike" action="/application.py">
       <button name="dislike" type="submit">Dislike</button>
       </form>
+
     </div>
   </div>
 </div>
 {% endfor %}
-<div class="row">
-  <div class="rightcolumn">
-    <div class="card">
-      <h2>My events</h2>
-      <div href="eventphoto" type="button" class="fakeimg" style="height:100px;">My events</div>
-    </div>
-    <div class="card">
-      <h3>upload image</h3>
-
-      <div class="fakeimg">Image</div><br>
-    </div>
-    <div class="card">
-      <h3>Follow Me</h3>
-      <p>Some text..</p>
-    </div>
-  </div>
-</div>
-</form>
-<div class="footer">
-  <h2>Footer</h2>
-</div>
-</div>
-</form>
-<script>
-    var api = "api.giphy.com/v1/gifs/search";
-    var apikey = "&api_key=fxVVpisTMf7gev7hUdH22OjTT5Axp7z9";
-    var query = "&q=" + document.getElementById("comment").value;
-    function setup() {
-        var url = api + apikey + query;
-    }
-
-</script>
 {% endblock %}
 
