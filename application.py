@@ -10,12 +10,7 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from helpers import *
 import time
-
-# import giphy_client
-# from giphy_client.rest import ApiException
-
 import re
-
 from pprint import pprint
 import urllib.parse as urlparse
 from django.utils.deprecation import MiddlewareMixin
@@ -191,7 +186,7 @@ def allowed_file(filename):
 def eventview():
     event_id1 = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
 
-    temporary = []
+    temporaryview = []
     temp = []
     for event in range(len(event_id1)):
         event_id = event_id1[event]["event_id"]
@@ -202,13 +197,13 @@ def eventview():
         event_id1 = event_id[0]["event_name"]
         profilepic = event_id[0]["event_picture"]
         profilepicture = os.path.join(app.config["UPLOAD_FOLDER"], profilepic)
-        temporary.append([event_id1, profilepicture])
+        temporaryview.append([event_id1, profilepicture])
 
-    for rows in temporary:
+    for rows in temporaryview:
         print(rows[0], rows[1])
 
 
-    return render_template("eventview.html", list_event_id = temporary)
+    return render_template("eventview.html", list_event_id = temporaryview)
 
 @app.route("/makeevent", methods=["GET", "POST"])
 @login_required
@@ -418,10 +413,10 @@ def show(path):
     return send_from_directory('upload', path)
 
 
-@app.route("/groupview")
+@app.route("/groupview", methods=["GET", "POST"])
 @login_required
 def groupview():
-    # if request.method == "POST":
+
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
@@ -444,8 +439,6 @@ def groupview():
         temporary.append([username, profilepicture, comments])
 
     return render_template("groupview.html", list_picture=temporary, group=name[0])
-    # else:
-    #     return render_template("groupview.html")
 
 @app.route("/upload_photo", methods=["GET", "POST"])
 @login_required
@@ -517,16 +510,16 @@ def eventphoto():
         db.execute("INSERT INTO event_feed (images, caption, user_id, event_id) VALUES(:images, :caption, :user_id, :event_id)",
                    images=filename, caption = caption, user_id = session.get("user_id"), event_id = session.get("event_id"))
 
-        return render_template("eventphoto.html", event= event)
+        return render_template("eventphoto.html", eventname=event)
     else:
         return render_template("eventphoto.html")
 
-# @app.route("/get_group/", methods=['POST'])
-# def get_group():
-#     f=request.form.get("groupname")
-#     group = db.execute("SELECT group_id FROM groups WHERE name_group=:name_group", name_group=f)
-#     group_idd = group[0]["group_id"]
-#     return group_idd
+@app.route("/get_group/", methods=['POST'])
+def get_group():
+    f=request.form.get("groupname")
+    group = db.execute("SELECT group_id FROM groups WHERE name_group=:name_group", name_group=f)
+    group_idd = group[0]["group_id"]
+    return group_idd
 
 @app.route("/get_event/", methods=['POST'])
 def get_event():
@@ -535,13 +528,13 @@ def get_event():
     event_idd = event[0]["event_id"]
     return event_idd
 
-@app.route('/eventfeed/', methods=["GET", "POST"])
+@app.route('/eventfeed/')
 @login_required
 def eventfeed():
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
-    event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
+    event_idd = db.execute("SELECT event_id FROM event_account WHERE name_event=:event", event=name)
     event_idd = event_idd[0]["event_id"]
     session["event_id"] = event_idd
     temporary = []
@@ -556,7 +549,8 @@ def eventfeed():
         profilepicevent = event[number]["images"]
         captions = event[number]["caption"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
-        temporary.append([username, profilepicture, captions])
+
+    temporary.append([username, profilepicture, captions])
     if request.form.get("comment") != None:
         #gif = request.get_json(url)
         #data = json.loads(urllib.urlopen(gif).read())
@@ -570,18 +564,6 @@ def eventfeed():
     if request.form.get("dislike") == True:
         db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislike_count + 1, image_id = session["image_id"])
 
+    image_names = os.listdir('./images')
+    print(image_names)
     return render_template("eventfeed.html", list_picture=temporary, event=name[0])
-
-
-
-
-@app.route('/leave_group/')
-@login_required
-def leave_group():
-
-    db.execute("DELETE FROM user_groups WHERE user_id = :user_id AND group_id = :group_id", user_id=session["user_id"], group_id = session["group_id"])
-
-
-    group_name = db.execute("SELECT name_group FROM groups WHERE group_id=:group", group=session["group_id"])
-    group = group_name[0]["name_group"]
-    return render_template("leave_group.html", groupname=group)
