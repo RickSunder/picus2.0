@@ -440,7 +440,7 @@ def groupview():
 
     return render_template("groupview.html", list_picture=temporary, group=name[0])
 
-@app.route("/upload_photo", methods=["GET", "POST"])
+@app.route("/upload_photo")
 @login_required
 def upload_photo():
     if request.method=="POST":
@@ -490,7 +490,7 @@ def search():
 
 
 
-@app.route("/eventphoto", methods=["GET, POST"])
+@app.route("/eventphoto")
 @login_required
 def eventphoto():
     if request.method == 'POST':
@@ -510,7 +510,7 @@ def eventphoto():
         db.execute("INSERT INTO event_feed (images, caption, user_id, event_id) VALUES(:images, :caption, :user_id, :event_id)",
                    images=filename, caption = caption, user_id = session.get("user_id"), event_id = session.get("event_id"))
 
-        return render_template("eventphoto.html", event= event)
+        return render_template("eventphoto.html", event = event)
     else:
         return render_template("eventphoto.html")
 
