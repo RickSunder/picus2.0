@@ -187,7 +187,7 @@ def allowed_file(filename):
 def eventview():
     event_id1 = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
 
-    temporaryview = []
+    temporary = []
     temp = []
     for event in range(len(event_id1)):
         event_id = event_id1[event]["event_id"]
@@ -198,13 +198,13 @@ def eventview():
         event_id1 = event_id[0]["event_name"]
         profilepic = event_id[0]["event_picture"]
         profilepicture = os.path.join(app.config["UPLOAD_FOLDER"], profilepic)
-        temporaryview.append([event_id1, profilepicture])
+        temporary.append([event_id1, profilepicture])
 
-    for rows in temporaryview:
+    for rows in temporary:
         print(rows[0], rows[1])
 
 
-    return render_template("eventview.html", list_event_id = temporaryview)
+    return render_template("eventview.html", list_event_id = temporary)
 
 @app.route("/makeevent", methods=["GET", "POST"])
 @login_required
