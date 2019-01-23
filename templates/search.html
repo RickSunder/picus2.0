@@ -60,7 +60,7 @@
         <div style="font-family: 'Rubik Mono One';" class="container">
         <fieldset>
             <div>
-                <input autocomplete="on" autofocus class="vulinlog" name="search" placeholder="Search for events" type="text"/>
+                <input autocomplete="on" autofocus class="vulinlog" name="search" placeholder="Search for events" type="text"oninvalid="this.setCustomValidity('Please enter a search term')" oninput="this.setCustomValidity('')" required/>
             </div>
             <p></p>
             <div>

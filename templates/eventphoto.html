@@ -5,6 +5,13 @@
 {% endblock %}
 
 {% block main %}
+<script>
+    function get_event(pass_to_python) {
+        // var pass_to_python = document.getElementById("group").value;
+        var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value='+pass_to_python;
+        return window.open(url, "_self");
+    }
+    </script>
 <form id="upload-form" action="{{ url_for('eventphoto') }}" method="POST" enctype="multipart/form-data">
     <body>
     <div class="gecentreerd">
@@ -15,28 +22,12 @@
         <input autocomplete="off" autofocus class="form-control" name="caption" placeholder="Caption" type="text"/>
         </div>
     <div id="msg"></div>
-    <input type="submit" value="Upload!" id="upload-button">
+    <input type="button" id="event" value="Upload image" onclick="get_event('{{event}}')"/>
     </div
     </body>
 </form>
 
 <script>
-    $("#file-picker").change(function(){
-        var input = document.getElementById('file-picker');
-        for (var i=0; i<input.files.length; i++)
-        {
-        //koala.jpg, koala.JPG substring(index) lastIndexOf('a') koala.1.jpg
-            var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase();
-            if ((ext == 'jpg') || (ext == 'png'))
-            {
-                $("#msg").text("Files are supported");
-            }
-            else
-            {
-                $("#msg").text("Files are NOT supported");
-                document.getElementById("file-picker").value ="";
-            }
-        }
-    } );
+
 </script>
 {% endblock %}

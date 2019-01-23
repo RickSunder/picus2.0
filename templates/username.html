@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Username
+{% endblock %}
+
+{% block main %}
+<p>
+    <p>
+
+    </p>
+</p>
+    <form action="{{ url_for('username') }}" method="post" class="gecentreerd">
+        <fieldset>
+            <div class="form-group">
+                <input class="vulinlog" name="newusername" placeholder="New username" type="text"/>
+            </div>
+            <div class="form-group">
+                <button class="vulinlogbevestig" type="submit">Change your username</button>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

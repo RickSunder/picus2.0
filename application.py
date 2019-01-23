@@ -10,8 +10,12 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from helpers import *
 import time
+
 # import giphy_client
 # from giphy_client.rest import ApiException
+
+import re
+
 from pprint import pprint
 import urllib.parse as urlparse
 from django.utils.deprecation import MiddlewareMixin
@@ -58,8 +62,8 @@ db = SQL("sqlite:///PicUs.db")
 def index():
     """The index of the website"""
     if request.method == "POST":
-        return "hoi"
-    else:
+        return render_template("groupfeed.html")
+    if request.method == "GET":
         return render_template("index.html")
 
 #GINO
@@ -173,7 +177,7 @@ def addmember():
 
         return render_template("addgroupmember.html", list_members = temporary)
     else:
-        return render_template("addgroupmember.html")
+        return render_template("index.html")
 
 
 
@@ -187,7 +191,7 @@ def allowed_file(filename):
 def eventview():
     event_id1 = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
 
-    temporaryview = []
+    temporary = []
     temp = []
     for event in range(len(event_id1)):
         event_id = event_id1[event]["event_id"]
@@ -198,13 +202,13 @@ def eventview():
         event_id1 = event_id[0]["event_name"]
         profilepic = event_id[0]["event_picture"]
         profilepicture = os.path.join(app.config["UPLOAD_FOLDER"], profilepic)
-        temporaryview.append([event_id1, profilepicture])
+        temporary.append([event_id1, profilepicture])
 
-    for rows in temporaryview:
+    for rows in temporary:
         print(rows[0], rows[1])
 
 
-    return render_template("eventview.html", list_event_id = temporaryview)
+    return render_template("eventview.html", list_event_id = temporary)
 
 @app.route("/makeevent", methods=["GET", "POST"])
 @login_required
@@ -336,11 +340,45 @@ def aboutus():
 
 
 @app.route("/settings", methods=["GET", "POST"])
+@login_required
 def settings():
     return render_template("settings.html")
 
 @app.route("/password", methods=["GET", "POST"])
+@login_required
 def password():
+    if request.method == "POST":
+
+        password = request.form.get("newpassword")
+        if len(password) < 8:
+            return apology("Make sure your password is at least 8 letters")
+        if re.search('[0-9]',password) is None:
+            return apology("Make sure your password has a number in it")
+        if re.search('[A-Z]',password) is None:
+            return apology("Make sure your password has a capital letter in it")
+
+        if request.form.get("newpassword") != request.form.get("newconfirmation"):
+            return apology("Password and confirmation password were not the same!")
+        if request.form.get("newpassword") == "":
+            return apology("Please fill in your password!")
+        if request.form.get("newconfirmation") == "":
+            return apology("Please fill in your password!")
+        elif not request.form.get("newpassword"):
+            return apology("Please fill in your password!")
+        elif not request.form.get("newconfirmation"):
+            return apology("Please fill in your password!")
+
+        wwupdate = db.execute("UPDATE users SET hash = :password WHERE id = :ide", ide=session["user_id"], password=pwd_context.hash(request.form.get("newpassword")))
+
+        if not wwupdate:
+            return apology("The password change could not happen")
+
+        # gebruiker onthouden
+        session["user_id"] = wwupdate
+
+        # als alles doorstaan en voltooid is, bevestig registratie
+        return redirect(url_for("settings"))
+
     return render_template("password.html")
 
 @app.route("/profilepicture", methods=["GET", "POST"])
@@ -479,7 +517,7 @@ def eventphoto():
         db.execute("INSERT INTO event_feed (images, caption, user_id, event_id) VALUES(:images, :caption, :user_id, :event_id)",
                    images=filename, caption = caption, user_id = session.get("user_id"), event_id = session.get("event_id"))
 
-        return render_template("eventphoto.html", eventname=event)
+        return render_template("eventphoto.html", event= event)
     else:
         return render_template("eventphoto.html")
 
@@ -497,13 +535,13 @@ def get_event():
     event_idd = event[0]["event_id"]
     return event_idd
 
-@app.route('/eventfeed/')
+@app.route('/eventfeed/', methods=["GET", "POST"])
 @login_required
 def eventfeed():
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
-    event_idd = db.execute("SELECT event_id FROM event_account WHERE name_event=:event", event=name)
+    event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
     event_idd = event_idd[0]["event_id"]
     session["event_id"] = event_idd
     temporary = []
@@ -518,8 +556,7 @@ def eventfeed():
         profilepicevent = event[number]["images"]
         captions = event[number]["caption"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
-
-    temporary.append([username, profilepicture, captions])
+        temporary.append([username, profilepicture, captions])
     if request.form.get("comment") != None:
         #gif = request.get_json(url)
         #data = json.loads(urllib.urlopen(gif).read())
@@ -533,8 +570,6 @@ def eventfeed():
     if request.form.get("dislike") == True:
         db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislike_count + 1, image_id = session["image_id"])
 
-    image_names = os.listdir('./images')
-    print(image_names)
     return render_template("eventfeed.html", list_picture=temporary, event=name[0])
 
 
