@@ -405,9 +405,6 @@ def groupview():
 def upload_photo():
     if request.method=="POST":
 
-        # url = request.url
-        # parsed = urlparse.urlparse(url)
-        # name = urlparse.parse_qs(parsed.query)['value']
         group_name = db.execute("SELECT name_group FROM groups WHERE group_id=:group", group=session["group_id"])
         group = group_name[0]["name_group"]
 
@@ -423,7 +420,7 @@ def upload_photo():
         db.execute("INSERT INTO picture_group (user_id, group_id, picture, like, comment) VALUES(:user_id, :group_id, :picture, :like, :comment)",
                    user_id=session["user_id"], picture=filename, group_id=session["group_id"], like=0, comment=comments)
 
-        # return redirect(url_for("groupview"))
+
         return render_template("upload_photo.html", groupname=group)
     else:
 
