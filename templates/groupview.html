@@ -12,6 +12,12 @@
         var url = 'https://ide50-britt1212.legacy.cs50.io:8080/upload_photo?value='+pass_to_python;
         return window.open(url, "_self");
     }
+
+    function leave_group(python) {
+        // var pass_to_python = document.getElementById("group").value;
+        var url_leave = 'https://ide50-britt1212.legacy.cs50.io:8080/leave_group?value='+python;
+        return window.open(url_leave, "_self");
+    }
     </script>
 
 <br>
@@ -22,7 +28,14 @@
         <!--<button class="w3-button w3-round">Upload photo</button>-->
         <input type="button" id="group" value="Upload photo" onclick="get_group('{{group}}')"/>
         <!--</a>-->
+    <br>
+        <br>
+<input type="button" id="group" value="Leave group" onclick="leave_group('{{group}}')"/>
 
+
+        <!--<a href="leave_group"> <input type="button" id="group" value="Leave group" /></a>-->
+        <br>
+        <!--<input type="button" id="group" value="Add members" onclick="get_group('{{group}}')"/>-->
         <br>
 <br>
 <h1><font size="+15">{{ group }}</fontsize></h1>
