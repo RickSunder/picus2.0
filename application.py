@@ -609,3 +609,35 @@ def like_photo():
         db.execute("UPDATE picture_group SET like=:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", like = likes + 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
 
     return redirect(link)
+
+
+
+
+@app.route("/username", methods=["GET", "POST"])
+@login_required
+def username():
+    if request.method == "POST":
+
+        if request.form.get("newusername") != request.form.get("newusernameconfirmation"):
+            return apology("Username and confirmation username were not the same!")
+        if request.form.get("newusername") == "":
+            return apology("Please fill in your username!")
+        if request.form.get("newusernameconfirmation") == "":
+            return apology("Please fill in your username!")
+        elif not request.form.get("newusername"):
+            return apology("Please fill in your username!")
+        elif not request.form.get("newusernameconfirmation"):
+            return apology("Please fill in your username!")
+
+        usupdate = db.execute("UPDATE users SET username = :username WHERE id = :ide", ide=session["user_id"], username=request.form.get("newusername"))
+
+        if not usupdate:
+            return apology("The username change could not happen")
+
+        # gebruiker onthouden
+        session["user_id"] = usupdate
+
+        # als alles doorstaan en voltooid is, bevestig registratie
+        return redirect(url_for("settings"))
+
+    return render_template("username.html")
