@@ -179,6 +179,56 @@ def addmember():
     else:
         return render_template("index.html")
 
+@app.route("/add_member", methods=["GET", "POST"])
+@login_required
+def add_member():
+    if request.method == "POST":
+        add_members = request.form.get("add_members")
+        groupname = request.form.get("name")
+
+        user = find_user(add_members)
+        if user == []:
+            return "Username doesn't exist"
+
+        id_user = db.execute("SELECT id FROM users WHERE username=:username", username=add_members)
+        id_user = id_user[0]["id"]
+
+        users = db.execute("SELECT user_id FROM user_groups WHERE user_id=:user_id AND group_id=:group_id", user_id=id_user, group_id=session["group_id"])
+
+        if len(users) > 0:
+            users = users[0]["user_id"]
+        else:
+            users = ""
+
+        if users == id_user:
+            return apology("This user is already part of the group")
+
+        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
+
+        members = db.execute("SELECT user_id FROM user_groups WHERE group_id=:group_id", group_id=session["group_id"])
+
+        temporary = []
+        temp = []
+        for line in range(len(members)):
+            member = members[line]["user_id"]
+            temp.append(member)
+
+        for row in temp:
+            mem = db.execute("SELECT username FROM users WHERE id=:id_mem", id_mem=row)
+            mem = mem[0]["username"]
+            temporary.append([mem])
+
+        links = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+        links += groupname
+
+
+        return redirect(links)
+    else:
+        url = request.url
+        parsed = urlparse.urlparse(url)
+        name = urlparse.parse_qs(parsed.query)['value']
+        groupname = name[0]
+        return render_template("add_member.html", name = groupname)
 
 
 def allowed_file(filename):
@@ -448,7 +498,7 @@ def groupview():
     # else:
     #     return render_template("groupview.html")
 
-@app.route("/upload_photo")
+@app.route("/upload_photo", methods=["GET", "POST"])
 @login_required
 def upload_photo():
     if request.method=="POST":
@@ -606,6 +656,28 @@ def like_photo():
     else:
         likes = db.execute("SELECT like FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
         likes = likes[0]["like"]
-        db.execute("UPDATE picture_group SET like=:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", like = likes + 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+        db.execute("UPDATE picture_group SET like =:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", like = likes + 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+
+    return redirect(link)
+
+@app.route('/dislike_photo/')
+@login_required
+def dislike_photo():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    name = urlparse.parse_qs(parsed.query)['value']
+    view = urlparse.parse_qs(parsed.query)['q']
+    link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+    link += view[0]
+    db.execute("INSERT INTO like_group (user_id, picture_user, groupname) VALUES(:user_id, :picture_user, :groupname)", user_id=session["user_id"], picture_user=name, groupname=view)
+    check = db.execute("SELECT id FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname", user_id=session["user_id"], picture_user=name, groupname=view)
+
+    if len(check) != 1:
+        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname", user_id=session["user_id"], picture_user=name, groupname=view)
+        return apology("You have already liked this picture")
+    else:
+        likes = db.execute("SELECT like FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+        likes = likes[0]["like"]
+        db.execute("UPDATE picture_group SET like =:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", like = likes - 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
 
     return redirect(link)

@@ -8,19 +8,31 @@
 <script>
     function get_group(pass_to_python)
     {
-        var url = 'https://ide50-gi-no.legacy.cs50.io:8080/upload_photo?value='+pass_to_python;
+        var url = 'https://ide50-britt1212.legacy.cs50.io:8080/upload_photo?value='+pass_to_python;
         return window.open(url, "_self");
     }
 
     function leave_group(python)
     {
-        var url_leave = 'https://ide50-gi-no.legacy.cs50.io:8080/leave_group?value='+python;
+        var url_leave = 'https://ide50-britt1212.legacy.cs50.io:8080/leave_group?value='+python;
         return window.open(url_leave, "_self");
     }
 
     function like(photo, name)
     {
-        var url_like = 'https://ide50-gi-no.legacy.cs50.io:8080/like_photo?value=' +photo + '&q=' +name;
+        var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/like_photo?value=' +photo + '&q=' +name;
+        return window.open(url_like, "_self");
+    }
+
+    function dislike(photo, name)
+    {
+        var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/dislike_photo?value=' +photo + '&q=' +name;
+        return window.open(url_like, "_self");
+    }
+
+    function add_group(groupl)
+    {
+        var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/add_member?value=' +groupl;
         return window.open(url_like, "_self");
     }
 
@@ -33,13 +45,15 @@
 
 &nbsp;&nbsp;<input class="vulinlogbevestig" style="font-size:15px; padding:10px; top:-225px" type="button" id="group" value="Upload photo" onclick="get_group('{{group}}')"/>
 <input class="vulinlog" style="font-size:15px; padding:10px; top:-225px"type="button" id="group" value="Leave group" onclick="leave_group('{{group}}')"/>
+<input class="vulinlog" style="font-size:15px; padding:10px; top:-225px"type="button" id="group" value="Add member" onclick="add_group('{{group}}')"/>
 
     {% for row in list_picture %}
         Posted by: {{ row[0] }}
             <center>
                 <img src="{{ row[1] }}" alt="picture" width="150px" heigth="300px"></img><br>
-                    <input type="button" id="group" onclick="like('{{row[3]}}', '{{ group}}')" type="image" src="/static/LIKE.png" height="1%" width="1%" alt="img" />
-
+                    <!--<input type="button" id="group" onclick="like('{{row[3]}}', '{{ group}}')" type="image" src="/static/LIKE.png" height="1%" width="1%" alt="img" />-->
+                    <button onclick="like('{{row[3]}}', '{{ group}}')" id = "group" STYLE="width: 10%; height: 10%s"><img src="/static/LIKE.png" height="20%" width="20%" alt="img"></button>
+                    <button onclick="dislike('{{row[3]}}', '{{ group}}')" id = "group" STYLE="width: 10%; height: 10%s"><img src="/static/DISLIKE.png" height="20%" width="20%" alt="img"></button>
                Comment: {{ row[2] }}
                Likes: {{ row[4] }}
             </center>

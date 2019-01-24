@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add member
+{% endblock %}
+
+{% block main %}
+    <form action="{{ url_for('add_member') }}" method="post">
+        <br>
+        <br>
+        <div class="container">
+        <fieldset>
+            <div class="form-group">
+                <input class="form-control" name="add_members" placeholder="Member" type="text"/>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" type="submit">Add Members</button>
+            </div>
+                <input type="hidden" value="{{ name }}" name="name" />
+            <!--<a href="{{ link }}">-->
+            <!--   <input type="button" value="Done" />-->
+            <!--</a>-->
+        </fieldset>
+        </div>
+    </form>
+    <!--<table class="table">-->
+    <!--  <thead class="thead-dark">-->
+    <!--    <tr>-->
+    <!--      <th scope="col">Added members of the group</th>-->
+    <!--    </tr>-->
+    <!--  </thead>-->
+    <!--    {% for row in list_members %}-->
+    <!--      <tr>-->
+    <!--        <td>{{ row[0] }}</td>-->
+    <!--    {% endfor %}-->
+    <!--      </tr>-->
+    <!--</table>-->
+{% endblock %}
