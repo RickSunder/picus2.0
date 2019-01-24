@@ -287,6 +287,7 @@ main .form-control
         to {-moz-transform: scale(0.9);}
     }
 
+<<<<<<< HEAD
 /* css for the eventfeed and/or groupfeed */
 /* css for the eventfeed and/or groupfeed */
 /* css for the eventfeed and/or groupfeed */
@@ -507,4 +508,13 @@ main .form-control
 {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
     background-color: #555;
+
+
+
+
+
+
+.onderschrift {
+    border-bottom: black 50px outset;
+    border-radius: 10px;
 }

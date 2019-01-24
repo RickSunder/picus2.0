@@ -1,21 +1,31 @@
 # Technisch Ontwerp
 ## Controllers
-* login.html (POST)
-* register.html (POST)
-* groups.html (POST)(Homepage)
-* makegroup.html (POST (idk))
-* groupfeed.html(https://PicUs.com/groups/desbetreffende_groep)(POST)
-* settings.html(POST)
-* account.html(POST)
-* password.html(POST)
-* profilepicture.html(POST)
-* aboutUs.html(GET)
-* makeevent.html(POST)
-* index.html(GET)
-* event.html(POST/GET)
-* eventplus.html(POST)
-* addmembers.html(POST)
-* search.html(GET/POST)
+1. login.html (POST)
+* De gebruiker moet kunnen inloggen om bij de functie in een besloten groep zitten te komen of om een event aan te maken.
+2. register.html (POST)
+* De gebruiker moet zich kunnen registreren, waarbij checks zijn of de gebruikersnaam al bestaat, het wachtwoord overeenkomt en of het een geldig e-mailadres is.
+3. groupfeed.html (POST)(Homepage)
+* Homepage als je ingelogd bent. Hierop kan je je besloten groepen zien en daar naartoe gaan.
+4. makegroup.html / addgroupmember.html (POST (idk))
+* Hierbij moet je een groep kunnen aanmaken en gebruikers kunnen toevoegen
+5. groupview.html(https://PicUs.com/groups/desbetreffende_groep)(POST)
+* Dit is de homepage van een groep waarbij je allemaal foto's kunt zien, kunt liken en disliken. Daarnaast kan je een groep verlaten en mensen toevoegen aan de groep.
+6. settings.html(POST)
+* Link naar je wachtwoord veranderen en je username veranderen. Daarnaast kun je meer over onze website lezen en uitloggen.
+7. password.html(POST)
+* Hierbij kan je je wachtwoord veranderen.
+8. aboutUs.html(GET)
+* Hier lees je meer informatie over onze website.
+9. makeevent.html(POST)
+* Hierbij kan je als je ingelogd bent een event aanmaken.
+10. index.html(GET)
+* De index is de homepage van onze website als je nog niet bent ingelogd. Hierbij wordt je doorverwezen naar de registratie.
+11. event.html(POST/GET)
+* Homepage van de event waarbij niet-gebruikers van onze website alsnog de foto's van het event kunnen zien.
+12. addmembers.html(POST)
+* Functie om gebruikers toe te voegen aan een groep.
+13. search.html(GET/POST)
+* Hierbij kun je zoeken naar een evenement.
 
 ## Views:
 ![schets](doc/IMG_2173.jpg)
@@ -25,8 +35,13 @@
 ![schets](doc/IMG_2177.jpg)
 
 ## Models:
-* Pop-up bij verkeerde gegevens - Gebruiker wordt teruggestuurd naar de pagina met een melding dat bijvoorbeeld de inloggevens niet kloppen door middel van een pop-up
-* Like-functie - Automatische functie die het aantal likes weergeeft onder een foto
+* Het opzoeken van een user
+* Het opzoeken van een groep
+* De foto van een groep geplaatst door iemand opzoeken
+* Login vereist
+* Het aantal likes ophalen
+* De foto's ophalen
+* De profielfoto ophalen
 
 ## Framework:
 * [Bootstrap navigatie bar](https://bootsnipp.com/snippets/Vm7d)
