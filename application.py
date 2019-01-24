@@ -548,7 +548,7 @@ def eventfeed():
     temporary = []
 
 
-    event = db.execute("SELECT user_id, images, caption FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
+    event = db.execute("SELECT user_id, images, caption, likes, dislikes FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
 
 
     for number in range(len(event)):
@@ -557,6 +557,8 @@ def eventfeed():
         username= user[0]["username"]
         profilepicevent = event[number]["images"]
         captions = event[number]["caption"]
+        like = event[number]["likes"]
+        dislike = event[number]["dislikes"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
         temporary.append([username, profilepicture, captions])
     if request.form.get("comment") != None:
@@ -564,13 +566,12 @@ def eventfeed():
         #data = json.loads(urllib.urlopen(gif).read())
         #print (json.dumps(data, sort_keys=True, indent=4))
         return "hoi"
-    like_count = db.execute("SELECT likes FROM event_feed WHERE likes=:like", like = 0)
     if request.form.get("like") == True:
-        db.execute("UPDATE event_feed SET likes =: likes WHERE id =: image_id", likes = like_count + 1, image_id = session["image_id"])
+        db.execute("UPDATE event_feed SET likes =: likes WHERE id =: image_id", likes = like + 1, image_id = session["image_id"])
 
     dislike_count = db.execute("SELECT dislikes FROM event_feed WHERE dislikes=:dislike", dislike= 0)
     if request.form.get("dislike") == True:
-        db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislike_count + 1, image_id = session["image_id"])
+        db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislike + 1, image_id = session["image_id"])
 
     return render_template("eventfeed.html", list_picture=temporary, event=name[0])
 
@@ -607,5 +608,27 @@ def like_photo():
         likes = db.execute("SELECT like FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
         likes = likes[0]["like"]
         db.execute("UPDATE picture_group SET like=:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", like = likes + 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+
+    return redirect(link)
+
+@app.route('/event_like_photo/')
+@login_required
+def event_like_photo():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    name = urlparse.parse_qs(parsed.query)['value']
+    view = urlparse.parse_qs(parsed.query)['q']
+    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    link += view[0]
+    db.execute("INSERT INTO like_event (user_id, picture_user, eventname) VALUES(:user_id, :picture_user, :eventname)", user_id=session["user_id"], picture_user=name, eventname=view)
+    check = db.execute("SELECT id FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname", user_id=session["user_id"], picture_user=name, eventname=view)
+
+    if len(check) != 1:
+        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname", user_id=session["user_id"], picture_user=name, eventname=view)
+        return apology("You have already liked this picture")
+    else:
+        likes = db.execute("SELECT like FROM event_feed WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
+        likes = likes[0]["likes"]
+        db.execute("UPDATE event_feed SET likes=:like WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", like = likes + 1, user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
 
     return redirect(link)

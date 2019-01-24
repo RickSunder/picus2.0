@@ -11,29 +11,74 @@
         var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventphoto?value='+pass_to_python;
         return window.open(url, "_self");
     }
+    function like(photo, name)
+    {
+        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/like_photo?value=' +photo + '&q=' +name;
+        return window.open(url_like, "_self");
+    }
 </script>
-  <input type="button" id="event" value="Upload image" onclick="get_event('{{event}}')"/>
-  <h2>{{ event }}</h2>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<h1 class="gecentreerd"style="color:white;"><fontsize="+15">{{ event }}</fontsize></h1>
+<br>
+<br>
+&nbsp;&nbsp;<input class="vulinlogbevestig" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Upload photo" onclick="get_event('{{event}}')"/>
+
 {% for row in list_picture %}
-  {{ row[0] }}
-  <div class="row">
-    <div class="leftcolumn">
-      <div class="card">
-        <center>
-            <img src="{{ row[1] }}" alt="picture" width="150px" heigth="300px"></img><br>
-            <!--<center><input name="user" value="{{ row[2] }}" readonly/></center>-->
-            {{ row[2] }}
-            </center>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-        <div class="form-group">
-          <input id = "comment" autocomplete="off" autofocus class="form-control" name="comment" placeholder="comment" type="text"/>
-          <input type = "text" id = "form-value"autocomplete="off" placeholder="search for gif" type="text"/>
-          <button type="submit" class="search_button"> search </button>
-          <input type="reset" id="reset_button" value="Reset">
-          <img id="here_is_gif" src=""/>
+<div class="containerfeed" style="margin-top: 30px;">
+	<div class="row form-group">
+        <div class="col-xs-12 col-md-offset-2 col-lg-offset-2 col-md-8 col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i>{{ row[0] }}</i>
+                </div>
+                <div class="panel-image">
+                    <img src="{{ row[1] }}" style ="border: 1px solid #000; max-width:300px; max-height:400px display: block; margin-left: auto; margin-right: auto; text-align: center;"/>
+                    <!--<label for="toggle-1"></label>-->
+                    <h4>{{ row[2] }}</h4>
+                    <h5><span><img style="max-width:15px; max-height:15px" src="http://images.clipartpanda.com/like-clipart-noun-project-330.png"></span> {{ row[4] }}</h5>
+                </div>
+                <!--<input type="checkbox" id="toggle-1" class="panel-image-toggle">-->
+                <div class="panel-body hide" style="padding: 0;">
+                    <p>this is another paragraph, this is another paragraph, this is another paragraph, this is another paragraph, this is another paragraph, this is another paragraph,</p>
+                    <p>this is another paragraph, this is another paragraph, this is another paragraph, this is another paragraph, this is another paragraph, this is another paragraph,</p>
+                    <p>this is another paragraph, this is another paragraph, this is another paragraph, this is another paragraph, this is another paragraph, this is another paragraph,</p>
+                </div>
+                <div class="panel-footer clearfix">
+                    <a href="#download" class="btn btn-primary btn-sm btn-hover pull-left">Comment <span class="fa fa-bookmark"></span></a>
+                    <a href="#facebook" class="btn btn-success btn-sm btn-hover pull-left" style="margin-left: 5px;">like </a>
+                    <a class="btn comsys btn-danger btn-sm btn-hover pull-left" style="margin-left: 5px;">dislike <span class="fa fa-comment"></span></a>
+                    <a href="#share" class="btn btn-warning btn-sm btn-hover pull-left" style="margin-left: 5px;">Comment with GIF <span class="fa fa-thumbs-up"></span></a>
+                    <span class="toggler fa fa-chevron-down pull-right"></span>
+                </div>
+            </div>
         </div>
-      <p>{{ comment }}<br></p>
-      <script>
+    </div>
+</div>
+<script>
+$('.toggler').click(function() {
+    var tog = $(this);
+    var secondDiv = tog.parent().prev();
+    var firstDiv = secondDiv.prev();
+    firstDiv.children('p').toggleClass('hide');
+    secondDiv.toggleClass('hide');
+    //tog.parent().find('.first > p').toggleClass('hide');
+    //tog.parent().find('.second').toggleClass('hide');
+    //$('.first > .main').toggleClass('hide');
+    tog.toggleClass('fa fa-chevron-up fa fa-chevron-down');
+    return false;
+});
+
+$('.comsys').click(function() {
+    var togCmt = $(this);
+    togCmt.toggleClass('active');
+    var panelFooterDiv = togCmt.parent();
+    var panelDefaultDiv = panelFooterDiv.parent();
+    var panelCmtsDiv = panelDefaultDiv.next();
+    panelCmtsDiv.slideToggle('hide');
+    return false;
+});
       $( document ).ready(function(){
 
       // Part 1 - Collect User Input Using jQuery Click Listener note we use the class (.) of search_button
@@ -76,23 +121,24 @@
 
 
     });
+</script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <div class="form-group">
+          <input id = "comment" autocomplete="off" autofocus class="form-control" name="comment" placeholder="comment" type="text"/>
+          <input type = "text" id = "form-value"autocomplete="off" placeholder="search for gif" type="text"/>
+          <button type="submit" class="search_button"> search </button>
+          <input type="reset" id="reset_button" value="Reset">
+          <button type="submit"> send </button>
+          <input id = "gif" name = "gif" <img id="here_is_gif" src=""/>
+        </div>
+      <p>{{ comment }}<br></p>
 
-
-
-
-
-      </script>
-
-      <form id="like" action="/application.py">
-      <button name="like" type="submit">Like</button>
-      </form>
-      <form id="dislike" action="/application.py">
-      <button name="dislike" type="submit">Dislike</button>
-      </form>
-
-    </div>
-  </div>
-</div>
+<form id="like" action="/application.py">
+  <button name="like" type="submit">Like</button>
+</form>
+<form id="dislike" action="/application.py">
+  <button name="dislike" type="submit">Dislike</button>
+</form>
 {% endfor %}
 {% endblock %}
 
