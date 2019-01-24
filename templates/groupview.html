@@ -48,14 +48,25 @@
 <input class="vulinlog" style="font-size:15px; padding:10px; top:-225px"type="button" id="group" value="Add member" onclick="add_group('{{group}}')"/>
 
     {% for row in list_picture %}
-        Posted by: {{ row[0] }}
-            <center>
-                <img src="{{ row[1] }}" alt="picture" width="150px" heigth="300px"></img><br>
+        <div style="font-size: 34px; font-family: Rubik Mono One; color: black; background-color:white; padding: 11px; border-top-left-radius: 15px; border-top-right-radius: 15px; left:-300px;" width="1350px" class="gecentreerd">
+        <i>{{ row[0] }}</i> : {{ row[2] }}
+        </div>
+
+        <center>
+                <img src="{{ row[1] }}" alt="picture" width="775px" heigth="1350px"></img><br>
                     <!--<input type="button" id="group" onclick="like('{{row[3]}}', '{{ group}}')" type="image" src="/static/LIKE.png" height="1%" width="1%" alt="img" />-->
-                    <button onclick="like('{{row[3]}}', '{{ group}}')" id = "group" STYLE="width: 10%; height: 10%s"><img src="/static/LIKE.png" height="20%" width="20%" alt="img"></button>
-                    <button onclick="dislike('{{row[3]}}', '{{ group}}')" id = "group" STYLE="width: 10%; height: 10%s"><img src="/static/DISLIKE.png" height="20%" width="20%" alt="img"></button>
-               Comment: {{ row[2] }}
-               Likes: {{ row[4] }}
+
+
+
+
+        <div style="font-size: 34px; font-family: Rubik Mono One; color: black; background-color:white; padding: 11px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; left:-300px;" width="1350px" class="gecentreerd">
+                            <button onclick="like('{{row[3]}}', '{{ group}}')" id = "group" STYLE="width: 40%; height: 40%;background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;outline:none;float:left;"><img src="/static/LIKE.png" height="20%" width="20%" alt="img"></button>
+                    <button onclick="dislike('{{row[3]}}', '{{ group}}')" id = "group" STYLE="width: 40%; height: 40%;background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;outline:none;float:left;"><img src="/static/DISLIKE.png" height="20%" width="20%" alt="img"></button>
+        <i>Likes:</i> : {{ row[4] }}
+        </div>
+
+
+
             </center>
         <br>
     {% endfor %}

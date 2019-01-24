@@ -286,3 +286,13 @@ main .form-control
         65% {-moz-transform: scale(1.0);}
         to {-moz-transform: scale(0.9);}
     }
+
+
+
+
+
+
+.onderschrift {
+    border-bottom: black 50px outset;
+    border-radius: 10px;
+}
