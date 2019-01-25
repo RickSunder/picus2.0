@@ -241,7 +241,7 @@ def allowed_file(filename):
 def eventview():
     event_id1 = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
     if len(event_id1) <= 0:
-        return redirect(url_for("makeevent"))
+        return redirect(url_for("noevent"))
     temporary = []
     temp = []
     for event in range(len(event_id1)):
@@ -779,3 +779,7 @@ def comment():
     link += groupnamel
 
     return redirect(link)
+
+@app.route("/noevent")
+def noevent():
+    return render_template("noevent.html")

@@ -13,49 +13,6 @@
     }
     </script>
 
-<form id="upload-form" action="{{ url_for('eventphoto') }}" method="POST" enctype="multipart/form-data">
-    <body>
-    <div class="gecentreerd">
-    <h1 style="width: 300; color:white;"><font>Post your images here!</fontsize></h1>
-    </div>
-     <style>
-        input[type="file"] {
-    display: none;
-}
-.custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-}
-
-       </style>
-
-    <label class="vulinlog">
-        <input class="custom-file-upload" type = "file" name = "file" accept="image/*"/>
-        <i class="fa fa-cloud-upload"></i> Choose your picture
-    </label>
-
-    <div class="form-group">
-        <input autocomplete="off" autofocus class="vulinlog" name="caption" placeholder="Place a caption" type="text"/><br>
-         <button class="vulinlogbevestig" type="submit" >Upload picture <group></group></button>
-         </div>
-        <div class="form-group">
-                <button class="vulinlogbevestig" type="submit">Back to timeline <group></group></button>
-            </div>
-    </body>
-</form>
-<input class="bulinlogbevestig" type="button" id="event" value="Back to timeline!" onclick="get_event('{{ event }}')"/>
-<script>
-
-</script>
-
-
-
-
-
-
-
     <form action="{{ url_for('eventphoto') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;">
         <br>
         <br>

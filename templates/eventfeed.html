@@ -22,7 +22,8 @@
         return window.open(url_like, "_self");
     }
   function render(data) {
-    var html = "<div class='commentbox'
+    var html = "<div class='comment-box'><div class='rightpanel'<span>"
+    $('#commentsection').append(html);
   }
 </script>
 <h1 class="gecentreerd"style="color:white;"><fontsize="+15">{{ event }}</fontsize></h1>
@@ -69,7 +70,7 @@
 			 <div class="cardbox-base">
 			  <ul class="fa fa-thumbs-up">
 			   <li><a><i class="fa fa-comments"></i></a></li>
-			   <li><a><em class="mr-5">aantal comments</em></a></li>
+			   <li><button><a><em id="comments" class="mr-5">aantal comments</em></a></button></li>
 			   <li><a><i class="fa fa-thumbs-up"></i></a></li>
 			   <li><a><span>likes: {{ row[4] }}</span></a></li>
 			  </ul>
@@ -108,6 +109,9 @@
 <form id="dislike" action="/application.py">
   <button name="dislike" type="submit">Dislike</button>
 </form>
+<div id="commentsection">
+
+</div>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
       $( document ).ready(function(){
@@ -125,8 +129,21 @@
       console.log(addObj);
       comment.push(addObj);
       render(addObj);
+      $('#name')val('');
+      $('#date')val('');
+      $('#comment-box')val('');
       });
     });
+    $( document ).ready(function(){
+      var comment = commentaantal
+
+      $('#comments').click(function(){
+         for(var i=0; i < commentaantal; i++){
+        var addObj = {
+          "name" = $('#name').val();
+          "date" = $('#date').val();
+          "comment-box" = $('#comment-box').val();
+        };
       $( document ).ready(function(){
 
       // Part 1 - Collect User Input Using jQuery Click Listener note we use the class (.) of search_button
