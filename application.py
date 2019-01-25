@@ -484,6 +484,7 @@ def groupview():
     group = db.execute("SELECT user_id, picture, comment, like FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
 
     for number in range(len(group)):
+        temp = []
         user_id = group[number]["user_id"]
         user = db.execute("SELECT username FROM users WHERE id=:id_user", id_user=user_id)
         username= user[0]["username"]
@@ -492,7 +493,16 @@ def groupview():
         like = group[number]["like"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
 
-        temporary.append([username, profilepicture, comments, profilepic, like])
+        comment_group = db.execute("SELECT comment, user_id FROM comment_group WHERE picture=:picture AND group_id=:group_id", picture = profilepic, group_id = session["group_id"])
+        for num in range(len(comment_group)):
+            us = comment_group[num]["user_id"]
+            user = db.execute("SELECT username FROM users WHERE id=:user_id", user_id=us)
+            usern = user[0]["username"]
+            com = comment_group[num]["comment"]
+            temp.append([usern, com])
+        temporary.append([username, profilepicture, comments, profilepic, like, temp])
+
+
 
     return render_template("groupview.html", list_picture=temporary, group=name[0] )
     # else:
@@ -598,7 +608,7 @@ def eventfeed():
     temporary = []
 
 
-    event = db.execute("SELECT user_id, images, caption FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
+    event = db.execute("SELECT user_id, images, caption, likes, dislikes FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
 
 
     for number in range(len(event)):
@@ -607,6 +617,8 @@ def eventfeed():
         username= user[0]["username"]
         profilepicevent = event[number]["images"]
         captions = event[number]["caption"]
+        like = event[number]["likes"]
+        dislike = event[number]["dislikes"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
         temporary.append([username, profilepicture, captions])
     if request.form.get("comment") != None:
@@ -614,13 +626,12 @@ def eventfeed():
         #data = json.loads(urllib.urlopen(gif).read())
         #print (json.dumps(data, sort_keys=True, indent=4))
         return "hoi"
-    like_count = db.execute("SELECT likes FROM event_feed WHERE likes=:like", like = 0)
     if request.form.get("like") == True:
-        db.execute("UPDATE event_feed SET likes =: likes WHERE id =: image_id", likes = like_count + 1, image_id = session["image_id"])
+        db.execute("UPDATE event_feed SET likes =: likes WHERE id =: image_id", likes = like + 1, image_id = session["image_id"])
 
     dislike_count = db.execute("SELECT dislikes FROM event_feed WHERE dislikes=:dislike", dislike= 0)
     if request.form.get("dislike") == True:
-        db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislike_count + 1, image_id = session["image_id"])
+        db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislike + 1, image_id = session["image_id"])
 
     return render_template("eventfeed.html", list_picture=temporary, event=name[0])
 
@@ -649,9 +660,10 @@ def like_photo():
     link += view[0]
     db.execute("INSERT INTO like_group (user_id, picture_user, groupname) VALUES(:user_id, :picture_user, :groupname)", user_id=session["user_id"], picture_user=name, groupname=view)
     check = db.execute("SELECT id FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname", user_id=session["user_id"], picture_user=name, groupname=view)
+    check_id = check[0]["id"]
 
     if len(check) != 1:
-        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname", user_id=session["user_id"], picture_user=name, groupname=view)
+        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, groupname=view)
         return apology("You have already liked this picture")
     else:
         likes = db.execute("SELECT like FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
@@ -671,9 +683,10 @@ def dislike_photo():
     link += view[0]
     db.execute("INSERT INTO like_group (user_id, picture_user, groupname) VALUES(:user_id, :picture_user, :groupname)", user_id=session["user_id"], picture_user=name, groupname=view)
     check = db.execute("SELECT id FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname", user_id=session["user_id"], picture_user=name, groupname=view)
+    check_id = check[0]["id"]
 
     if len(check) != 1:
-        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname", user_id=session["user_id"], picture_user=name, groupname=view)
+        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, groupname=view)
         return apology("You have already liked this picture")
     else:
         likes = db.execute("SELECT like FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
@@ -683,7 +696,17 @@ def dislike_photo():
     return redirect(link)
 
 
-
+@app.route('/bin/')
+@login_required
+def bin():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    name = urlparse.parse_qs(parsed.query)['value']
+    view = urlparse.parse_qs(parsed.query)['q']
+    link_back = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+    link_back += view[0]
+    db.execute("DELETE FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+    return redirect(link_back)
 
 @app.route("/username", methods=["GET", "POST"])
 @login_required
@@ -712,4 +735,46 @@ def username():
         # als alles doorstaan en voltooid is, bevestig registratie
         return redirect(url_for("settings"))
 
+
+    return redirect(link)
+
+@app.route('/event_like_photo/')
+@login_required
+def event_like_photo():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    name = urlparse.parse_qs(parsed.query)['value']
+    view = urlparse.parse_qs(parsed.query)['q']
+    link = "https://ide50-britt1212.legacy.cs50.io:8080/eventfeed?value="
+    link += view[0]
+    db.execute("INSERT INTO like_event (user_id, picture_user, eventname) VALUES(:user_id, :picture_user, :eventname)", user_id=session["user_id"], picture_user=name, eventname=view)
+    check = db.execute("SELECT id FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname", user_id=session["user_id"], picture_user=name, eventname=view)
+
+    if len(check) != 1:
+        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname", user_id=session["user_id"], picture_user=name, eventname=view)
+        return apology("You have already liked this picture")
+    else:
+        likes = db.execute("SELECT like FROM event_feed WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
+        likes = likes[0]["likes"]
+        db.execute("UPDATE event_feed SET likes=:like WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", like = likes + 1, user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
+
+    return redirect(link)
+
     return render_template("username.html")
+
+
+@app.route('/comment/')
+@login_required
+def comment():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    comm = urlparse.parse_qs(parsed.query)['comments']
+    pica = urlparse.parse_qs(parsed.query)['pic']
+    db.execute("INSERT INTO comment_group (user_id, group_id, picture, comment) VALUES(:user_id, :group_id, :picture, :comment)", user_id=session["user_id"], group_id = session["group_id"], picture=pica, comment=comm)
+
+    groupname = db.execute("SELECT name_group FROM groups WHERE group_id=:group_id", group_id=session["group_id"])
+    groupnamel = groupname[0]["name_group"]
+    link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+    link += groupnamel
+
+    return redirect(link)
