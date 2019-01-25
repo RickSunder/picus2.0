@@ -60,7 +60,9 @@
 <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <br>
-&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Upload photo" onclick="get_event('{{event}}')"/>
+&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Upload photo" onclick="get_group('{{group}}')"/>
+&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Leave group" onclick="leave_group('{{group}}')"/>
+&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Add member" onclick="add_group('{{group}}')"/>
 
 {% for row in list_picture %}
 <section class="hero">
@@ -78,7 +80,7 @@
 				<em class="fa fa-ellipsis-h"></em>
 			   </button>
 			   <div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
-				<a class="dropdown-item" href="#">Hide post</a>
+				<a class="dropdown-item" onclick="bin('{{row[3]}}', '{{ group}}')">Delete post</a>
 				<a class="dropdown-item" href="#">Stop following</a>
 				<a class="dropdown-item" href="#">Report</a>
 			   </div>
@@ -99,9 +101,10 @@
 			 </div><!--/ cardbox-item -->
 			 <div class="cardbox-base">
 			  <ul class="fa fa-thumbs-up">
-			   <li><a><i class="fa fa-comments"></i></a></li>
+			   <li><a><i class="fa fa-comments" data-target="#comment_appear" type="button" data-toggle="modal"></i></a></li>
 			   <li><a><em class="mr-5">aantal comments</em></a></li>
-			   <li><a><i class="fa fa-thumbs-up"></i></a></li>
+			   <li><a><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ group}}')"></i></a></li>
+			   <li><a><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ group}}')"></i></a></li>
 			   <li><a><span>likes: {{ row[4] }}</span></a></li>
 			  </ul>
 			 </div><!--/ cardbox-base -->
@@ -124,10 +127,7 @@
                     </fieldset>
                     </form>
 			   <!--<span><button><i id = "gifsearch"class="fa fa-camera"></i></button> <button><i id="submit-comment"></i></button></span>-->
-                {% for line in row[5] %}-->
-        <i>{{ line[0] }}: </i>{{ line[1] }}
-        </div>
-        {% endfor %}
+
 			  </div><!--/. Search -->
 			 </div><!--/ cardbox-like -->
 
@@ -202,5 +202,42 @@
 
     });
 </script>
+
+
+<div class="modal fade" id="comment_appear" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Comments</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <table border="0">
+{% for line in row[5] %}
+            <tr>
+
+                <td colspan="20%">
+                    <b>{{ line[0] }}:
+                </td>
+                <td colspan="80%">
+                    {{ line[1] }}
+                </td>
+               {% endfor %}
+            </tr>
+
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endfor %}
+
 {% endblock %}
