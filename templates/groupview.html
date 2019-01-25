@@ -30,6 +30,21 @@
         return window.open(url_like, "_self");
     }
 
+    function bin(photo, name)
+    {
+        var user_choice = window.confirm('Are you sure you want to delete this ?');
+
+
+        if(user_choice==true) {
+
+        var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/bin?value=' +photo + '&q=' +name;
+        return window.open(url_like, "_self");
+        } else {
+            return false;
+        }
+    }
+
+
     function add_group(groupl)
     {
         var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/add_member?value=' +groupl;
@@ -62,9 +77,26 @@
         <div style="font-size: 34px; font-family: Rubik Mono One; color: black; background-color:white; padding: 11px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; left:-300px;" width="1350px" class="gecentreerd">
                             <button onclick="like('{{row[3]}}', '{{ group}}')" id = "group" STYLE="width: 40%; height: 40%;background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;outline:none;float:left;"><img src="/static/LIKE.png" height="20%" width="20%" alt="img"></button>
                     <button onclick="dislike('{{row[3]}}', '{{ group}}')" id = "group" STYLE="width: 40%; height: 40%;background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;outline:none;float:left;"><img src="/static/DISLIKE.png" height="20%" width="20%" alt="img"></button>
-        <i>Likes:</i> : {{ row[4] }}
-        </div>
+                    <button onclick="bin('{{row[3]}}', '{{ group}}')" id = "group" STYLE="width: 40%; height: 40%;background-color: Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;outline:none;float:left; filter: brightness(0%);"><img src="/static/PRULLENBAK.png" height="20%" width="20%" alt="img"></button>
 
+                    <form action="{{ url_for('comment') }}">
+                    <fieldset>
+                        <div class="form-group">
+                            <input class="form-control" name="comments" placeholder="Comment" type="text"/>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-default" type="submit">Place comment</button>
+                        </div>
+                    </fieldset>
+                    </form>
+        <i>Likes:</i>  {{ row[4] }}
+        {% for line in row[5] %}
+        <i>{{ line[0] }}: </i>{{ line[1] }}
+        </div>
+        {% endfor %}
 
 
             </center>
