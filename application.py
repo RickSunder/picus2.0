@@ -188,7 +188,7 @@ def add_member():
 
         user = find_user(add_members)
         if user == []:
-            return "Username doesn't exist"
+            return apology("Username doesn't exist")
 
         id_user = db.execute("SELECT id FROM users WHERE username=:username", username=add_members)
         id_user = id_user[0]["id"]
@@ -481,7 +481,7 @@ def groupview():
     temporary = []
 
 
-    group = db.execute("SELECT user_id, picture, comment, like FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
+    group = db.execute("SELECT user_id, picture, comment, like, time FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
 
     for number in range(len(group)):
         temp = []
@@ -491,16 +491,23 @@ def groupview():
         profilepic = group[number]["picture"]
         comments = group[number]["comment"]
         like = group[number]["like"]
+        tim = group[number]["time"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
 
         comment_group = db.execute("SELECT comment, user_id FROM comment_group WHERE picture=:picture AND group_id=:group_id", picture = profilepic, group_id = session["group_id"])
-        for num in range(len(comment_group)):
-            us = comment_group[num]["user_id"]
-            user = db.execute("SELECT username FROM users WHERE id=:user_id", user_id=us)
-            usern = user[0]["username"]
-            com = comment_group[num]["comment"]
-            temp.append([usern, com])
-        temporary.append([username, profilepicture, comments, profilepic, like, temp])
+        # comm = comment_group[0]["comment"]
+        if len(comment_group) == 0:
+            temp.append(["", "No comments yet"])
+        else:
+            for num in range(len(comment_group)):
+                us = comment_group[num]["user_id"]
+                user = db.execute("SELECT username FROM users WHERE id=:user_id", user_id=us)
+                usern = user[0]["username"]
+                com = comment_group[num]["comment"]
+                temp.append([usern, com])
+        print(temp)
+        temporary.append([username, profilepicture, comments, profilepic, like, temp, tim])
+    print(temporary)
 
 
 
