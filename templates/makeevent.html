@@ -5,26 +5,58 @@
 {% endblock %}
 
 {% block main %}
-<form action="{{ url_for('makeevent') }}" method="post" enctype="multipart/form-data">
-<div class="container">
+    <form action="{{ url_for('makeevent') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;">
+        <br>
+        <br>
+        <div class="container">
         <fieldset>
-            <div class="partofgroup">
-            <h1><font size="+15">What is your eventname going to be?</fontsize></h1>
-            </div>
+            <title>Upload new File</title>
+            <h1 style="color:white;">Make a new event</h1>
+<label class="vulinlog">
+    <input class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
+    <i class="fa fa-cloud-upload"></i> Give your event a profile picture
+</label>
+
+
             <div class="form-group">
-                <input autocomplete="off" autofocus class="form-control" name="makeevent" placeholder="Make Event" type="text"/>
-                <br>
-                <br>
-<title>Upload image</title>
-            <h1>Upload image</h1
-            <a><h4><input id="file-picker" type="file" name="file" accept="image/*"></h4></a>
+                <input class="vulinlog" autocomplete="off" autofocus class="form-control" name="makeevent" placeholder="Name your event" type="text"/>
             </div>
+                <!--<input type = "submit"/>-->
             <div class="form-group">
-                <button class="btn btn-default" type="submit">Make event</button>
+                <button class="vulinlogbevestig" type="submit">Make event <event></event></button>
             </div>
+
+
+     <style>
+        input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+       </style>
+
+
+
+
         </fieldset>
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
