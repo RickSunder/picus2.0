@@ -13,7 +13,7 @@
 <script>
   function get_event(pass_to_python) {
         // var pass_to_python = document.getElementById("group").value;
-        var url = 'https://ide50-britt1212.legacy.cs50.io:8080/eventphoto?value='+pass_to_python;
+        var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventphoto?value='+pass_to_python;
         return window.open(url, "_self");
     }
     function like(photo, name)
@@ -21,6 +21,9 @@
         var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/like_photo?value=' +photo + '&q=' +name;
         return window.open(url_like, "_self");
     }
+  function render(data) {
+    var html = "<div class='commentbox'
+  }
 </script>
 <h1 class="gecentreerd"style="color:white;"><fontsize="+15">{{ event }}</fontsize></h1>
 <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
@@ -54,8 +57,8 @@
 			   </div>
 			   <div class="media-body">
 			    <p class="m-0">{{ row[0] }}</p>
-				<small><span><i class="icon ion-md-pin"></i> {{ row[2] }}</span></small><br>
-				<small><span><i class="icon ion-md-time"></i> time </span></small>
+				<small><span><i id = "name" class="icon ion-md-pin"></i> {{ row[2] }}</span></small><br>
+				<small><span><i id = "date" class="icon ion-md-time"></i> time </span></small>
 			   </div>
 			  </div><!--/ media -->
 			 </div><!--/ cardbox-heading -->
@@ -76,7 +79,7 @@
 			  </span>
 			  <div class="search">
 			   <input placeholder="Write a comment" id="comment-box" type="text">
-			   <span><button><i id = "gifsearch"class="fa fa-camera"></i></button> <button><i id="submit-comment"></i></button></span>
+			   <span><button><i id = "gifsearch"class="fa fa-camera"></i></button> <button><i id="submit-comment"></i> Comment</button></span>
 
 			  </div><!--/. Search -->
 			 </div><!--/ cardbox-like -->
@@ -92,7 +95,7 @@
 <img src="{{ row[1] }}" style ="border: 1px solid #000; max-width:300px; max-height:400px display: block; margin-left: auto; margin-right: auto; text-align: center;"/>
 <!--<label for="toggle-1"></label>-->
 <h4>{{ row[2] }}</h4>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
 <div class="form-group">
 <input id = "comment" autocomplete="off" autofocus class="form-control" name="comment" placeholder="comment" type="text"/>
 <input type = "text" id = "form-value"autocomplete="off" placeholder="search for gif" type="text"/>
@@ -105,7 +108,25 @@
 <form id="dislike" action="/application.py">
   <button name="dislike" type="submit">Dislike</button>
 </form>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
+      $( document ).ready(function(){
+      var comment = [{"name": "tanuj gupta", "date: 25 jan 2019", "body": "this is a comment"}];
+
+      for (var i = 0;i < comment.length; i++){
+          render(comment[i]);
+      }
+      $('#submit-comment').click(function(){
+        var addObj = {
+          "name" = $('#name').val();
+          "date" = $('#date').val();
+          "comment-box" = $('#comment-box').val();
+        };
+      console.log(addObj);
+      comment.push(addObj);
+      render(addObj);
+      });
+    });
       $( document ).ready(function(){
 
       // Part 1 - Collect User Input Using jQuery Click Listener note we use the class (.) of search_button
@@ -151,4 +172,3 @@
 </script>
 {% endfor %}
 {% endblock %}
-
