@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Eventfeed
+{% endblock %}
+
+{% block main %}
+<script>
+    function get_event(pass_to_python) {
+        // var pass_to_python = document.getElementById("group").value;
+        var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value='+pass_to_python;
+        return window.open(url, "_self");
+    }
+    </script>
+    <form action="{{ url_for('noevent') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;">
+        <br>
+        <br>
+        <div class="container">
+        <fieldset>
+            <title>You have no events yet...</title>
+            <h1 style="color:white;">You have no events yet...</h1>
+        <div class="form-group">
+            <button href="{{ url_for('makeevent') }}" class="vulinlogbevestig" type="submit">Make your first event here!</button>
+        </div>
+<style>
+    input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+</style>
+
+
+
+
+        </fieldset>
+        </div>
+    </form>
+{% endblock %}

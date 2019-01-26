@@ -267,7 +267,7 @@ def allowed_file(filename):
 def eventview():
     event_id1 = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
     if len(event_id1) <= 0:
-        return redirect(url_for("makeevent"))
+        return redirect(url_for("noevent"))
     temporary = []
     temp = []
     for event in range(len(event_id1)):
@@ -369,7 +369,8 @@ def login():
 def groupfeed():
     if request.method == "POST":
         groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id = :user_id", user_id=session["user_id"])
-
+        if len(groupl) <= 0:
+            return redirect(url_for("nogroup"))
         temporary = []
         temp = []
 
@@ -394,7 +395,8 @@ def groupfeed():
     else:
 
         groupl = db.execute("SELECT group_id FROM user_groups WHERE user_id=:id_user", id_user=session["user_id"])
-
+        if len(groupl) <= 0:
+            return redirect(url_for("nogroup"))
         temporary = []
         temp = []
         for line in range(len(groupl)):
@@ -811,7 +813,17 @@ def comment():
 
     return redirect(link)
 
-# app.route('/flash')
-# def flash():
-#   message = request.args.get("msg")
-#   return render_template("flash.html", msg=message)
+@app.route("/noevent", methods=["GET", "POST"])
+def noevent():
+    if request.method == "POST":
+        return redirect(url_for("makegroup"))
+    else:
+        return render_template("noevent.html")
+
+@app.route("/nogroup", methods=["GET", "POST"])
+def nogroup():
+    if request.method == "POST":
+        return redirect(url_for("makeevent"))
+    else:
+        return render_template("nogroup.html")
+
