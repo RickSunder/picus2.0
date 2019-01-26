@@ -105,33 +105,51 @@ def register():
 def makegroup():
     """Make new group"""
     if request.method == "POST":
-        name_group = request.form.get("name_group")
+        # Get name of the group from makegroup.html
+        namegroup = request.form.get("name_group")
 
-        name = db.execute("SELECT name_group FROM groups WHERE name_group=:name", name=name_group)
+        # Check the name of the group
+        name = nam_group(namegroup)
         if len(name) > 0:
             name = name[0]["name_group"]
         else:
             name = ""
 
-        if name == name_group:
-            return apology("Name of the group already exist")
+        # Check if groupname already exist
+        if name == namegroup:
+            flash("Name of the group already exist")
+            return redirect(url_for("makegroup"))
 
+        # Get profile picture
         file = request.files['file']
-        if not allowed_file(file.filename):
-            return apology("This is not a picture")
 
-        filename =  name_group + "_" + file.filename
+        # Check if picture is uploaded
+        if file == "":
+            flash("Upload photo")
+            return redirect(url_for("makegroup"))
+
+        if not allowed_file(file.filename):
+            flash("This is not a picture")
+            return redirect(url_for("makegroup"))
+
+
+        # Upload profile picture
+        filename =  namegroup + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)", groupname=name_group, profile_picture=filename)
+        # Upload info group into database groups
+        db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)", groupname=namegroup, profile_picture=filename)
 
-        rows = db.execute("SELECT group_id FROM groups WHERE name_group=:group", group=name_group)
-        session["group_id"] = rows[0]["group_id"]
+        # Make session for the group
+        session["group_id"] = ses_group(namegroup)
 
+        # Put users into database user_groups
         db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=session["user_id"], group_id=session["group_id"])
 
-        return render_template("addgroupmember.html")
+        # Redirect to adding group members
+        return redirect(url_for("addmember"))
     else:
+        # Reload make group
         return render_template("makegroup.html")
 
 
@@ -139,45 +157,53 @@ def makegroup():
 @login_required
 def addmember():
     if request.method == "POST":
+        # Get username and groupname from html
         add_members = request.form.get("add_members")
         groupname = request.form.get("groupname")
 
+        # Check if user exist
         user = find_user(add_members)
         if user == []:
-            return "Username doesn't exist"
+            flash("Username doesn't exist")
+            return redirect(url_for("addmember"))
 
-        id_user = db.execute("SELECT id FROM users WHERE username=:username", username=add_members)
-        id_user = id_user[0]["id"]
+        # Get user id from helpers.py
+        id_user = userse(add_members)
 
-        users = db.execute("SELECT user_id FROM user_groups WHERE user_id=:user_id AND group_id=:group_id", user_id=id_user, group_id=session["group_id"])
+        # Get members of the group
+        users = add_user(id_user)
 
+        # Check user if it is already part of the group
         if len(users) > 0:
             users = users[0]["user_id"]
         else:
             users = ""
 
+        # Notification if user is already part of the group
         if users == id_user:
-            return apology("This user is already part of the group")
+            flash("This user is already part of the group")
+            return redirect(url_for("addmember"))
 
+        # Add member to the group
         db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
 
-        members = db.execute("SELECT user_id FROM user_groups WHERE group_id=:group_id", group_id=session["group_id"])
-
+        # Get other members and put it in a list
+        members = get_members()
         temporary = []
         temp = []
         for line in range(len(members)):
             member = members[line]["user_id"]
             temp.append(member)
-
         for row in temp:
             mem = db.execute("SELECT username FROM users WHERE id=:id_mem", id_mem=row)
             mem = mem[0]["username"]
             temporary.append([mem])
 
-
+        # Reload page with updated list of members
         return render_template("addgroupmember.html", list_members = temporary)
     else:
-        return render_template("index.html")
+        # Reload page
+        return render_template("addgroupmember.html")
 
 @app.route("/add_member", methods=["GET", "POST"])
 @login_required
@@ -481,7 +507,6 @@ def groupview():
     session["group_id"] = group_idd
     temporary = []
 
-
     group = db.execute("SELECT user_id, picture, comment, like, time FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
 
     for number in range(len(group)):
@@ -498,7 +523,7 @@ def groupview():
         comment_group = db.execute("SELECT comment, user_id FROM comment_group WHERE picture=:picture AND group_id=:group_id", picture = profilepic, group_id = session["group_id"])
         # comm = comment_group[0]["comment"]
         if len(comment_group) == 0:
-            temp.append(["", "No comments yet"])
+            temp.append(["", ""])
         else:
             for num in range(len(comment_group)):
                 us = comment_group[num]["user_id"]
@@ -506,13 +531,12 @@ def groupview():
                 usern = user[0]["username"]
                 com = comment_group[num]["comment"]
                 temp.append([usern, com])
-        print(temp)
         temporary.append([username, profilepicture, comments, profilepic, like, temp, tim])
     print(temporary)
 
 
 
-    return render_template("groupview.html", list_picture=temporary, group=name[0] )
+    return render_template("groupview.html", list_picture=temporary, group=name[0])
     # else:
     #     return render_template("groupview.html")
 
@@ -786,3 +810,8 @@ def comment():
     link += groupnamel
 
     return redirect(link)
+
+# app.route('/flash')
+# def flash():
+#   message = request.args.get("msg")
+#   return render_template("flash.html", msg=message)
