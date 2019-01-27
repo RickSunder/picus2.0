@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!doctype html>
+
 
 <html lang="en" background="{{url_for('static', filename='background.png')}}">
-
     <head>
 
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -91,9 +91,22 @@
 </body>
 </nav>
 <body background="/static/background.png"></body>
-
+<div class="container">
+{% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+    <div class="alert alert-warning">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      {{ message }}
+      </div>
+    {% endfor %}
+{% endwith %}
+{% block body %}
+</div>
+{% endblock %}
             <main>
-                {% block main %}{% endblock %}
+              {% block main %}
+                {% endblock %}
+
             </main>
 
         </div cx>
