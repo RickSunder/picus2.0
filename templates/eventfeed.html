@@ -30,8 +30,11 @@
 <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <br>
+{% if session.user_id %}
 &nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Upload photo" onclick="get_event('{{event}}')"/>
-
+{% else %}
+&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px"  type="button" id="event" value="Upload photo" onclick="url_for('{{register}}')">
+{% endif %}
 {% for row in list_picture %}
 <section class="hero">
          <div class="container">
@@ -102,7 +105,7 @@
 <input type = "text" id = "form-value"autocomplete="off" placeholder="search for gif" type="text"/>
 <button type="submit" class="search_button"> search </button>
 <input type="reset" id="reset_button" value="Reset">
-<input id = "gif" name = "gif" <img id="here_is_gif" src=""/>
+<img id="here_is_gif" src="giphyURL"/>
 <form id="like" action="/application.py">
   <button name="like" type="submit">Like</button>
 </form>
@@ -114,36 +117,6 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-      $( document ).ready(function(){
-      var comment = [{"name": "tanuj gupta", "date: 25 jan 2019", "body": "this is a comment"}];
-
-      for (var i = 0;i < comment.length; i++){
-          render(comment[i]);
-      }
-      $('#submit-comment').click(function(){
-        var addObj = {
-          "name" = $('#name').val();
-          "date" = $('#date').val();
-          "comment-box" = $('#comment-box').val();
-        };
-      console.log(addObj);
-      comment.push(addObj);
-      render(addObj);
-      $('#name')val('');
-      $('#date')val('');
-      $('#comment-box')val('');
-      });
-    });
-    $( document ).ready(function(){
-      var comment = commentaantal
-
-      $('#comments').click(function(){
-         for(var i=0; i < commentaantal; i++){
-        var addObj = {
-          "name" = $('#name').val();
-          "date" = $('#date').val();
-          "comment-box" = $('#comment-box').val();
-        };
       $( document ).ready(function(){
 
       // Part 1 - Collect User Input Using jQuery Click Listener note we use the class (.) of search_button
@@ -166,7 +139,7 @@
 
           // For simplicity, we will take the first gif (ie. at postion 0)
           var giphyURL = response.data[0].images.fixed_height.url;
-          console.log(giphyURL)
+          console.log(giphyURL);
 
           // Now you can pass that into your "here_is_gif" <img> tag using its id (#)
           $('#here_is_gif').attr('src', giphyURL);
@@ -183,8 +156,6 @@
         // If using a jQuery click listner on a Submit button, you need to return false to prevent the default page refresh
         return false;
       })
-
-
     });
 </script>
 {% endfor %}

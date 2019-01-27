@@ -19,7 +19,7 @@
         <div class="container">
         <fieldset>
             <title>Upload your picture</title>
-            <h1 style="color:white;">Make a new group</h1>
+            <h1 style="color:white;">Upload your picture</h1>
 <label class="vulinlog">
     <input class="custom-file-upload" type = "file" name = "file" accept="image/*"/>
     <i class="fa fa-cloud-upload"></i>Upload your picture
@@ -27,11 +27,11 @@
 
 
             <div class="form-group">
-                <input class="vulinlog" autocomplete="off" autofocus class="form-control" name="name_group" placeholder="Name your group" type="text"/>
+                <input class="vulinlog" autocomplete="off" autofocus class="form-control" name="caption" placeholder="Caption" type="text"/>
             </div>
                 <!--<input type = "submit"/>-->
             <div class="form-group">
-                <button class="vulinlogbevestig" type="submit">Back to timeline <group></group></button>
+                <button class="vulinlogbevestig" onclick="get_event('{{event}}')"type="submit">Back to timeline </button>
             </div>
 
 

@@ -12,9 +12,6 @@
 
    <script>
     function get_event(pass_to_python) {
-        // var pass_to_python = document.getElementById("event").value;
-        var url = 'https://ide50-gi-no.legacy.cs50.io:8080/eventfeed?value='+pass_to_python;
-
         // var pass_to_python = document.getElementById("group").value;
         var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value='+pass_to_python;
         return window.open(url, "_self");
@@ -34,23 +31,7 @@
          </center>
 
             <br>
-
-
-          <center>
-
-
-              <td>
-              <div class="container">
-                  <img src="{{ row[1] }}" alt="{{ row[0] }}" width="300px" heigth = "300px" style="border-radius:50px;"></img>
-                </div>
-            <br>
-            <form action="/get_event/" method="post">
-                <!--<input type="button" onclick='get_group({{row[0]}})' value="{{ row[0] }}"><br>-->
-            <input class="vulinlogbevestig" type="button" id="event" value="{{ row[0] }}" onclick="get_event('{{row[0]}}')"/>
-            </form>
-            </center>
-            <br>
-        {% endfor %}
+{% endfor %}
 {% endblock %}
 
 
