@@ -18,13 +18,27 @@
     }
     function like(photo, name)
     {
-        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/like_photo?value=' +photo + '&q=' +name;
+        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/event_like_photo?value=' +photo + '&q=' +name;
         return window.open(url_like, "_self");
     }
-  function render(data) {
-    var html = "<div class='comment-box'><div class='rightpanel'<span>"
-    $('#commentsection').append(html);
-  }
+   function dislike(photo, name)
+    {
+        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/event_dislike_photo?value=' +photo + '&q=' +name;
+        return window.open(url_like, "_self");
+    }
+    function bin(photo, name)
+    {
+        var user_choice = window.confirm('Are you sure you want to delete this ?');
+
+
+        if(user_choice==true) {
+
+        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/eventbin?value=' +photo + '&q=' +name;
+        return window.open(url_like, "_self");
+        } else {
+            return false;
+        }
+    }
 </script>
 <p></p>
 <h1 class="gecentreerd"style="color:white;font-family:Rubik Mono One"><fontsize="+15">{{ event }}</fontsize></h1>
@@ -39,13 +53,15 @@
 {% endif %}
 
 {% for row in list_picture %}
+<br>
+<br>
 <section class="hero">
          <div class="container">
           <div class="row">
 
 		   <div class="col-lg-6 offset-lg-3">
 
-			<div class="cardbox shadow-lg bg-white">
+			<div class="cardbox shadow-lg bg-white" opacity="0.5">
 
 			 <div class="cardbox-heading">
 			  <!-- START dropdown-->
@@ -54,7 +70,7 @@
 				<em class="fa fa-ellipsis-h"></em>
 			   </button>
 			   <div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
-				<a class="dropdown-item" href="#">Hide post</a>
+				<a class="dropdown-item" onclick="bin('{{row[3]}}', '{{ event }}')">Delete post</a>
 				<a class="dropdown-item" href="#">Stop following</a>
 				<a class="dropdown-item" href="#">Report</a>
 			   </div>
@@ -64,8 +80,8 @@
 			   </div>
 			   <div class="media-body">
 			    <p class="m-0">{{ row[0] }}</p>
-				<small><span><i id = "name" class="icon ion-md-pin"></i> {{ row[2] }}</span></small><br>
-				<small><span><i id = "date" class="icon ion-md-time"></i> time </span></small>
+
+				<small><span><i class="icon ion-md-time"></i> {{ row[6] }} </span></small>
 			   </div>
 			  </div><!--/ media -->
 			 </div><!--/ cardbox-heading -->
@@ -73,20 +89,49 @@
 			 <div class="cardbox-item">
 			  <img class="img-fluid" src="{{ row[1] }}" alt="Image">
 			 </div><!--/ cardbox-item -->
-			 <div class="cardbox-base">
-			  <ul class="fa fa-thumbs-up">
-			   <li><a><i class="fa fa-comments"></i></a></li>
-			   <li><button><a><em id="comments" class="mr-5">aantal comments</em></a></button></li>
-			   <li><a><i class="fa fa-thumbs-up"></i></a></li>
-			   <li><a><span>likes: {{ row[4] }}</span></a></li>
-			  </ul>
+			 <div class="cardbox-base" align="left">
+			  <!--<ul class="fa fa-thumbs-up">-->
+			   <a ><i class="fa fa-comments" data-target="#comment_appear" type="button" data-toggle="modal"> <em class="mr-5">View comments</em></i></a>
+			   <!--<li><a></a></li>--
+			  <!--</ul>-->
 			 </div><!--/ cardbox-base -->
+			 <div align="right">
+    			 <a><span>likes: {{ row[4] }}</span></a>
+    			   <a><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ group}}')"></i></a>
+    			   <a><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ group}}')"></i></a>
+    		 </div>
 			 <div class="cardbox-comments">
 			  <span class="comment-avatar float-left">
 			  </span>
+			  <small><span><i class="icon ion-md-pin"></i> {{ row[2] }}</span></small><br>
 			  <div class="search">
-			   <input placeholder="Write a comment" id="comment-box" type="text">
-			   <span><button><i id = "gifsearch"class="fa fa-camera"></i></button> <button><i id="submit-comment"></i> Comment</button></span>
+			   <!--<input placeholder="Write a comment" id="comment-box" type="text">-->
+			   <form action="{{ url_for('comment') }}">
+                    <fieldset>
+                        <div class="form-group">
+                            <input class="form-control" name="comments" placeholder="Write a comment" type="text"/>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-default" type="submit">Post comment</button>
+                        </div>
+                        <table border="0">
+                            {% for line in row[5] %}
+                            <tr>
+                                <td colspan="20%">
+                                    <b>  {{ line[0] }}:
+                                </td>
+                                <td colspan="80%" align="left">
+                                    {{ line[1] }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </fieldset>
+                    </form>
+			   <!--<span><button><i id = "gifsearch"class="fa fa-camera"></i></button> <button><i id="submit-comment"></i></button></span>-->
 
 			  </div><!--/. Search -->
 			 </div><!--/ cardbox-like -->
