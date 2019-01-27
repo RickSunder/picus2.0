@@ -98,7 +98,7 @@ def nam(user_id):
 
 # Used in groupview()
 def comm_group(profilepic):
-    comment_group = db.execute("SELECT comment, user_id FROM comment_group WHERE picture=:picture AND group_id=:group_id", picture = profilepic, group_id = session["group_id"])
+    comment_group = db.execute("SELECT comment, user_id FROM comment_group WHERE picture=:picture AND group_id=:group_id ORDER BY id desc", picture = profilepic, group_id = session["group_id"])
     return comment_group
 
 # Used in upload_photo()
@@ -122,3 +122,9 @@ def get_like(namel):
     like_pic = db.execute("SELECT like FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=namel, groupname=session["group_id"])
     likes = like_pic[0]["like"]
     return likes
+
+# Used in bin()
+def bin_check(name):
+    pic = db.execute("SELECT user_id FROM picture_group WHERE picture=:picture AND group_id=:group", picture = name, group=session["group_id"])
+    user = pic[0]["user_id"]
+    return user

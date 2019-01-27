@@ -218,10 +218,15 @@ def add_member():
         add_members = request.form.get("add_members")
         groupname = request.form.get("name")
 
+        # Get link to redirect
+        links = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+        links += groupname
+
         # Check username
         user = find_user(add_members)
         if user == []:
-            return apology("Username doesn't exist")
+            flash("Username doesn't exist")
+            return redirect(url_for("add_member"))
 
         # Get user id from helpers.py
         id_user = userse(add_members)
@@ -236,14 +241,13 @@ def add_member():
             users = ""
 
         if users == id_user:
-            return apology("This user is already part of the group")
+            flash("This user is already part of the group")
+            return redirect(url_for("add_member"))
 
         # Add user to database
         db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
 
-        # Get link to redirect
-        links = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
-        links += groupname
+        # Redirect link
         return redirect(links)
     else:
         # Get name of the group and reload page
@@ -522,6 +526,7 @@ def groupview():
     temporary = []
     for number in range(len(group)):
         temp = []
+        ex_temp = []
         user_id = group[number]["user_id"]
 
         # Get username from helpers
@@ -536,17 +541,22 @@ def groupview():
 
         # Select comments from a picture and put it in a list
         comment_group = comm_group(profilepic)
-        if len(comment_group) == 0:
-            temp.append(["", ""])
-        else:
-            for num in range(len(comment_group)):
-                us = comment_group[num]["user_id"]
+        count = 0
+        # if len(comment_group) == 0:
+        #     temp.append(["", ""])
+        # else:
+        for num in range(len(comment_group)):
+            us = comment_group[num]["user_id"]
 
-                # Get username from helpers
-                usern = nam(us)
-                com = comment_group[num]["comment"]
-                temp.append([usern, com])
-        temporary.append([username, profilepicture, comments, profilepic, like, temp, tim])
+            # Get username from helpers
+            usern = nam(us)
+            com = comment_group[num]["comment"]
+            temp.append([usern, com])
+            if count < 6:
+                ex_temp.append([usern, com])
+            count += 1
+
+        temporary.append([username, profilepicture, comments, profilepic, like, temp, tim, ex_temp])
 
     # return to html page with required information
     return render_template("groupview.html", list_picture=temporary, group=name[0])
@@ -782,12 +792,20 @@ def bin():
     name = urlparse.parse_qs(parsed.query)['value']
     view = urlparse.parse_qs(parsed.query)['q']
 
-    # Delete picture
-    db.execute("DELETE FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
-
     # Redirect link
     link_back = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
     link_back += view[0]
+
+    # Check if an authorized person deletes the picture
+    user = bin_check(name)
+    if session["user_id"] != user:
+        flash("Only the person who posted the picture can delete the picture")
+        return redirect(link_back)
+
+    # Delete picture
+    db.execute("DELETE FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+
+    # Redirect to groupview
     return redirect(link_back)
 
 @app.route("/username", methods=["GET", "POST"])
