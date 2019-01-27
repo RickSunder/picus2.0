@@ -13,25 +13,44 @@
     }
     </script>
 
+    <style>
+        input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    color: black;
+}
 
-    <form action="{{ url_for('upload_photo') }}" method="post" enctype = "multipart/form-data">
-        <br>
-        <br>
-        <div class="container">
-        <fieldset>
-            <h1>Upload picture</h1>
-            <div class="form-group">
-                <input type = "file" name = "file" accept="image/*" />
-            </div>
-            <div class="form-group">
-                <input autocomplete="off" autofocus class="form-control" name="comment" placeholder="Comment" type="text" height="10%" />
-            </div>
-            <div class="form-group">
-                <button class="btn btn-default" type="submit" >Upload Photo <group></group></button>
+</style>
 
-            </div>
-        </fieldset>
+<form action="{{ url_for('upload_photo') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;">
+    <br>
+    <br>
+    <div class="container">
+    <fieldset>
+        <title>Upload picture</title>
+        <h1 style="color:white;">Make a new event</h1>
+            <label class="vulinlog">
+                <input class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Choose the image you want to upload
+            </label>
+
+
+        <div class="form-group">
+            <input class="vulinlog" autocomplete="off" autofocus class="form-control" name="comment" placeholder="Choose a caption" type="text"/>
         </div>
-    </form>
-    <!--<input type="button" id="group" value="Share Photo" onclick="get_group('{{ groupname}}')"/>-->
+            <!--<input type = "submit"/>-->
+        <div class="form-group">
+            <button class="vulinlogbevestig" type="submit">Upload Photo<event></event></button>
+        </div>
+    </fieldset>
+    </div>
+</form>
+
+
+
 {% endblock %}

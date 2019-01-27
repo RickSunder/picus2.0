@@ -5,6 +5,22 @@
 {% endblock %}
 
 {% block main %}
+
+<style>
+        input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    color: black;
+}
+
+</style>
+
+
     <form action="{{ url_for('makeevent') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;">
         <br>
         <br>
@@ -12,10 +28,10 @@
         <fieldset>
             <title>Upload new File</title>
             <h1 style="color:white;">Make a new event</h1>
-<label class="vulinlog">
-    <input class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
-    <i class="fa fa-cloud-upload"></i> Give your event a profile picture
-</label>
+                <label class="vulinlog">
+                    <input class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
+                    <i class="fa fa-cloud-upload" aria-hidden="true"></i> Give your event a profile picture
+                </label>
 
 
             <div class="form-group">
@@ -25,42 +41,9 @@
             <div class="form-group">
                 <button class="vulinlogbevestig" type="submit">Make event <event></event></button>
             </div>
-
-
-     <style>
-        input[type="file"] {
-    display: none;
-}
-.custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-}
-
-       </style>
-
-
-
-
         </fieldset>
         </div>
     </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</form>
 
 {% endblock %}
 
