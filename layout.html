@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html lang="en" background="{{url_for('static', filename='background.png')}}">
+
+    <head>
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='RubikMonoOne-Regular.ttf') }}">
+        <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='balletje-01.png') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='functions.js') }}"></script>
+        <script src="static/functions.js"></script>
+</head>
+      <title>PicUs</title>
+    <body>
+         {% if session.user_id %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: FC5BFF;">
+      <a class="navbar-brand" href="{{ url_for('groupfeed') }}"><img class="logo" src="{{url_for('static', filename='logo.png')}}" alt="logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+
+
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a style="font-family: Rubik Mono One;" class="nav-link" href="{{ url_for('groupfeed') }}">Home <span class="sr-only">(current)</span></a>
+          </li>
+                                        <li class="nav-item dropdown">
+                                        <a style="font-family: Rubik Mono One;color:white;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" style ="color: white" aria-expanded="false">
+                                          Events
+                                        </a>
+                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                              <a style="font-family: Rubik Mono One;"class="dropdown-item" href="{{url_for('makeevent') }}">Make event</a>
+                                              <div class="dropdown-divider"></div>
+                                              <a style="font-family: Rubik Mono One;"class="dropdown-item" href="{{url_for('eventview') }}">My events</a>
+                                            </div>
+                                        </li>
+
+                                        <li class="nav-item dropdown">
+                                        <a style="font-family: Rubik Mono One;color:white;"class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" style ="color: white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          Groups
+                                        </a>
+                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                              <a style="font-family: Rubik Mono One;" class="dropdown-item" href="{{ url_for('makegroup') }}">Make group</a>
+                                              <div class="dropdown-divider"></div>
+                                              <a style="font-family: Rubik Mono One;" class="dropdown-item" href="{{ url_for('groupfeed') }}">Group timeline</a>
+                                            </div>
+        <li class="nav-item active">
+        <a style="font-family: Rubik Mono One;"class="nav-link" href="{{url_for('search') }}">Search</a>
+        </li>
+         <li class="nav-item active">
+        <a style="font-family: Rubik Mono One;"class="nav-link" href="{{url_for('settings') }}">Settings</a>
+        </li>
+            <a style="font-family: Rubik Mono One;"class="nav-link" href="{{url_for('aboutus') }}">About(Pic)Us</a>
+          </li>
+          <li class="nav-item">
+    </ul>
+
+{% else %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: FC5BFF;">
+      <a class="navbar-brand" href="{{url_for('index') }}"><img class="logo" src="{{url_for('static', filename='logo.png')}}" alt="logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a style="font-family: Rubik Mono One;"class="nav-link" href="{{url_for('index') }}">Home <span class="sr-only">(current)</span></a>
+          </li>
+           <li class="nav-item active">
+            <a style="font-family: Rubik Mono One;"class="nav-link" href="{{url_for('login') }}">Login</a>
+          </li>
+          <li class="nav-item">
+          <li class="nav-item active">
+            <a style="font-family: Rubik Mono One;"class="nav-link" href="{{url_for('aboutus') }}">About (Pic)Us</a>
+          </li>
+    </ul>
+  </div>
+</nav>
+{% endif %}
+
+<body background="/static/background.png">
+
+</body>
+</nav>
+<body background="/static/background.png"></body>
+
+            <main>
+                {% block main %}{% endblock %}
+            </main>
+
+        </div cx>
+    </body>
+
+</html>
+
+
+
