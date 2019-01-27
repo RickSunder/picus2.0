@@ -5,13 +5,7 @@
 {% endblock %}
 
 {% block main %}
-<script>
-    function get_group(pass_to_python) {
-        // var pass_to_python = document.getElementById("group").value;
-        var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value='+pass_to_python;
-        return window.open(url, "_self");
-    }
-    </script>
+
     <form action="{{ url_for('nogroup') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;">
         <br>
         <br>
@@ -20,8 +14,9 @@
             <title>You have no groups yet...</title>
             <h1 style="color:white;">You have no groups yet...</h1>
 <div class="form-group">
-            <button href="{{ url_for('makegroup') }}" class="vulinlogbevestig" type="submit">Make your first group here!</button>
+            <div id="vulinlogbevestig"><a id="vulinlogbevestig" href="makegroup">Make your first group here!</a></div>
         </div>
+
 <style>
     input[type="file"] {
     display: none;

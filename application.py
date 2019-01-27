@@ -85,6 +85,9 @@ def register():
         elif not request.form.get("confirmation"):
             return apology("Please fill in your password!")
 
+        if len(db.execute("SELECT * FROM users WHERE username=:username", username=request.form.get("username"))) > 0:
+            return apology("username already exists")
+
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
         if not geregistreerd:
@@ -338,6 +341,7 @@ def login():
 
         # username database
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
+
 
         # kijken of username uniek is en wachtwoord klopt
         if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
@@ -859,17 +863,13 @@ def comment():
     link += groupnamel
     return redirect(link)
 
-@app.route("/noevent", methods=["GET", "POST"])
+@app.route("/noevent")
+@login_required
 def noevent():
-    if request.method == "POST":
-        return redirect(url_for("makegroup"))
-    else:
-        return render_template("noevent.html")
+    return render_template("noevent.html")
 
-@app.route("/nogroup", methods=["GET", "POST"])
+@app.route("/nogroup")
+@login_required
 def nogroup():
-    if request.method == "POST":
-        return redirect(url_for("makeevent"))
-    else:
-        return render_template("nogroup.html")
+    return render_template("nogroup.html")
 
