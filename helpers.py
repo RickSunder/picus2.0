@@ -122,3 +122,18 @@ def get_like(namel):
     like_pic = db.execute("SELECT like FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=namel, groupname=session["group_id"])
     likes = like_pic[0]["like"]
     return likes
+
+    # Used in like_photo(), dislike_photo()
+def event_like_check(name, view):
+        check = db.execute("SELECT id FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname", user_id=session["user_id"], picture_user=name, eventname=view)
+        return check
+
+# Used in like_photo(), dislike_photo()
+def event_get_like(namel):
+    like_pic = db.execute("SELECT like FROM event_feed WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", user_id=session["user_id"], picture_user=namel, eventname=session["event_id"])
+    likes = like_pic[0]["like"]
+    return likes
+
+def event_check_users():
+    event_check = db.execute("SELECT user_id FROM user_events WHERE event_id=:event", event = session["event_id"])
+    return event_check

@@ -790,6 +790,23 @@ def bin():
     link_back += view[0]
     return redirect(link_back)
 
+@app.route('/eventbin/')
+@login_required
+def eventbin():
+    # Get info from url query
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    name = urlparse.parse_qs(parsed.query)['value']
+    view = urlparse.parse_qs(parsed.query)['q']
+
+    # Delete picture
+    db.execute("DELETE FROM event_feed WHERE user_id=:user_id AND picture=:picture_user AND event_id=:eventname", user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
+
+    # Redirect link
+    link_back = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    link_back += view[0]
+    return redirect(link_back)
+
 @app.route("/username", methods=["GET", "POST"])
 @login_required
 def username():
@@ -823,26 +840,68 @@ def username():
 @app.route('/event_like_photo/')
 @login_required
 def event_like_photo():
+    # Get info from url query
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
     view = urlparse.parse_qs(parsed.query)['q']
-    link = "https://ide50-britt1212.legacy.cs50.io:8080/eventfeed?value="
+
+    # Link to redirect
+    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
     link += view[0]
+
+    # Insert like into database
     db.execute("INSERT INTO like_event (user_id, picture_user, eventname) VALUES(:user_id, :picture_user, :eventname)", user_id=session["user_id"], picture_user=name, eventname=view)
-    check = db.execute("SELECT id FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname", user_id=session["user_id"], picture_user=name, eventname=view)
 
+    # Get info about like
+    check = event_like_check(name, view)
+
+    # Check if user already liked the picture
+    check_id = check[0]["id"]
     if len(check) != 1:
-        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname", user_id=session["user_id"], picture_user=name, eventname=view)
-        return apology("You have already liked this picture")
+        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, eventname=view)
+        flash("You have already liked this picture")
+        return redirect(link)
     else:
-        likes = db.execute("SELECT like FROM event_feed WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
-        likes = likes[0]["likes"]
-        db.execute("UPDATE event_feed SET likes=:like WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", like = likes + 1, user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
+        # Update likes
+        likes = event_get_like(name)
+        db.execute("UPDATE event_feed SET likes =:like WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", like = likes + 1, user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
 
+    # Redirect to adjusted link
     return redirect(link)
 
-    return render_template("username.html")
+@app.route('/event_dislike_photo/')
+@login_required
+def event_dislike_photo():
+    # Get info from url query
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    name = urlparse.parse_qs(parsed.query)['value']
+    view = urlparse.parse_qs(parsed.query)['q']
+
+    # Link to redirect
+    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    link += view[0]
+
+    # Insert dislike into database
+    db.execute("INSERT INTO like_event (user_id, picture_user, eventname) VALUES(:user_id, :picture_user, :eventname)", user_id=session["user_id"], picture_user=name, eventname=view)
+
+    # Get info about like
+    check = event_like_check(name, view)
+
+    # Check if user already liked the photo
+    check_id = check[0]["id"]
+    if len(check) != 1:
+        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventpname=:eventname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, eventname=view)
+        flash("You have already liked this picture")
+        return redirect(link)
+    else:
+        # Update dislikes
+        likes = get_like(name)
+        db.execute("UPDATE event_feed SET likes =:like WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", like = likes - 1, user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
+
+    # Redirect to adjusted link
+    return redirect(link)
 
 
 @app.route('/comment/')
