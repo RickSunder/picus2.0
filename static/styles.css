@@ -315,3 +315,52 @@ main .form-control
     border-bottom: black 50px outset;
     border-radius: 10px;
 }
+
+
+.button_view:hover {
+  background-color: #4CAF50; /* Green */
+}
+
+.button_view2:hover {
+  background-color: #f44242; /* Red */
+}
+
+
+.containers {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.containers img {
+  width: 100%;
+  height: auto;
+}
+
+.containers .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.containers .btn:hover {
+  background-color: black;
+}
+
+.containers:hover{
+    opacity: 0.7;
+}
+
+.view{
+    opacity: 0.9;
+}

@@ -526,7 +526,7 @@ def groupview():
     temporary = []
     for number in range(len(group)):
         temp = []
-        ex_temp = []
+        tem = []
         user_id = group[number]["user_id"]
 
         # Get username from helpers
@@ -541,7 +541,7 @@ def groupview():
 
         # Select comments from a picture and put it in a list
         comment_group = comm_group(profilepic)
-        count = 0
+
         # if len(comment_group) == 0:
         #     temp.append(["", ""])
         # else:
@@ -552,11 +552,18 @@ def groupview():
             usern = nam(us)
             com = comment_group[num]["comment"]
             temp.append([usern, com])
-            if count < 6:
-                ex_temp.append([usern, com])
-            count += 1
 
-        temporary.append([username, profilepicture, comments, profilepic, like, temp, tim, ex_temp])
+
+        # gif = gif_group(profilepic)
+        # for number in range(len(gif)):
+        #     us = comment_group[num]["user_id"]
+
+        #     # Get username from helpers
+        #     usern = nam(us)
+        #     com = comment_group[num]["comment"]
+        #     tem.append([usern, com])
+
+        temporary.append([username, profilepicture, comments, profilepic, like, temp, tim])
 
     # return to html page with required information
     return render_template("groupview.html", list_picture=temporary, group=name[0])
@@ -950,3 +957,18 @@ def noevent():
 def nogroup():
     return render_template("nogroup.html")
 
+@app.route("/add_gif")
+@login_required
+def add_gif():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    comm = urlparse.parse_qs(parsed.query)['value']
+    pica = urlparse.parse_qs(parsed.query)['q']
+
+    db.execute("INSERT INTO comment_group (user_id, group_id, picture, comment) VALUES(:user_id, :group_id, :picture, :comment)", user_id=session["user_id"], group_id = session["group_id"], picture=pica, comment=comm)
+
+    # Get groupname to redirect
+    groupnamel = get_nam_group()
+    link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+    link += groupnamel
+    return redirect(link)

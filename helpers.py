@@ -87,7 +87,7 @@ def usernam(user_id):
 
 # Used in groupview()
 def pics(group_idd):
-     group = db.execute("SELECT user_id, picture, comment, like, time FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
+     group = db.execute("SELECT user_id, picture, comment, like, time FROM picture_group WHERE group_id=:id_group ORDER BY time desc", id_group=group_idd)
      return group
 
 # Used in groupview()
