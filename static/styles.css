@@ -315,3 +315,19 @@ main .form-control
     border-bottom: black 50px outset;
     border-radius: 10px;
 }
+
+.vulinlogbevestig2
+{
+    /* center contents */
+    margin-right: auto;
+    text-align: center;
+    background-color: black;
+    background: 4px solid black;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+    font-family: 'Rubik Mono One';
+    color: white;
+    border-radius: 50px;

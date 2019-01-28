@@ -661,19 +661,21 @@ def get_event():
     return event_idd
 
 @app.route('/eventfeed/', methods=["GET", "POST"])
-@login_required
 def eventfeed():
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
+
     event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
     event_idd = event_idd[0]["event_id"]
     session["event_id"] = event_idd
     temporary = []
 
-    event = db.execute("SELECT user_id, images, caption, likes, dislikes, comments FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
+    event = db.execute("SELECT user_id, images, caption, likes, dislikes, comments, time FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
 
     for number in range(len(event)):
+        temp = []
+        ex_temp = []
         user_id = event[number]["user_id"]
 
         username = nam(user_id)
@@ -682,10 +684,24 @@ def eventfeed():
         comments = event[number]["comments"]
         like = event[number]["likes"]
         dislike = event[number]["dislikes"]
+        tim = event[number]["time"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
-        temporary.append([username, profilepicture, captions, profilepicevent, like, comments])
 
-    return render_template("eventfeed.html", list_picture=temporary, event=name[0])
+        comment_event = comm_event(profilepicevent)
+        count = 0
+
+        for num in range(len(comment_event)):
+            us = comment_event[num]["user_id"]
+            # Get username from helpers
+            usern = nam(us)
+            com = comment_event[num]["comment"]
+            temp.append([usern, com])
+            if count < 6:
+                ex_temp.append([usern, com])
+            count += 1
+        temporary.append([username, profilepicture, captions, profilepicevent, like, temp, tim, ex_temp])
+
+    return render_template("eventfeed.html", list_picture=temporary, event=name[0], urls=url)
 
 
 @app.route('/leave_group/')
@@ -806,7 +822,7 @@ def eventbin():
     view = urlparse.parse_qs(parsed.query)['q']
 
     # Delete picture
-    db.execute("DELETE FROM event_feed WHERE user_id=:user_id AND picture=:picture_user AND event_id=:eventname", user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
+    db.execute("DELETE FROM event_feed WHERE user_id=:user_id AND images=:image_user AND event_id=:eventname", user_id=session["user_id"], image_user=name, eventname=session["event_id"])
 
     # Redirect link
     link_back = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
@@ -937,4 +953,22 @@ def noevent():
 @login_required
 def nogroup():
     return render_template("nogroup.html")
+
+@app.route('/eventcomment/')
+@login_required
+def eventcomment():
+    # Get info from url query
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    comm = urlparse.parse_qs(parsed.query)['comments']
+    pica = urlparse.parse_qs(parsed.query)['pic']
+
+    # Insert comment into database
+    db.execute("INSERT INTO comment_event (user_id, event_id, picture, comment) VALUES(:user_id, :event_id, :picture, :comment)", user_id=session["user_id"], event_id = session["event_id"], picture=pica, comment=comm)
+
+    # Get groupname to redirect
+    eventnamel = get_nam_event()
+    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    link += eventnamel
+    return redirect(link)
 
