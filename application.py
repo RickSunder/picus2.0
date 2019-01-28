@@ -671,31 +671,19 @@ def eventfeed():
     session["event_id"] = event_idd
     temporary = []
 
-
-    event = db.execute("SELECT user_id, images, caption, likes, dislikes FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
-
+    event = db.execute("SELECT user_id, images, caption, likes, dislikes, comments FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
 
     for number in range(len(event)):
         user_id = event[number]["user_id"]
-        user = db.execute("SELECT username FROM users WHERE id=:id_user", id_user=user_id)
-        username= user[0]["username"]
+
+        username = nam(user_id)
         profilepicevent = event[number]["images"]
         captions = event[number]["caption"]
+        comments = event[number]["comments"]
         like = event[number]["likes"]
         dislike = event[number]["dislikes"]
         profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepicevent)
-        temporary.append([username, profilepicture, captions])
-    if request.form.get("comment") != None:
-        #gif = request.get_json(url)
-        #data = json.loads(urllib.urlopen(gif).read())
-        #print (json.dumps(data, sort_keys=True, indent=4))
-        return "hoi"
-    if request.form.get("like") == True:
-        db.execute("UPDATE event_feed SET likes =: likes WHERE id =: image_id", likes = like + 1, image_id = session["image_id"])
-
-    dislike_count = db.execute("SELECT dislikes FROM event_feed WHERE dislikes=:dislike", dislike= 0)
-    if request.form.get("dislike") == True:
-        db.execute("UPDATE event_feed SET dislikes =: dislikes WHERE id =: image_id", dislikes = dislike + 1, image_id = session["image_id"])
+        temporary.append([username, profilepicture, captions, profilepicevent, like, comments])
 
     return render_template("eventfeed.html", list_picture=temporary, event=name[0])
 
