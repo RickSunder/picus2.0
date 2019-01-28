@@ -316,6 +316,7 @@ main .form-control
     border-radius: 10px;
 }
 
+<<<<<<< HEAD
 
 .button_view:hover {
   background-color: #4CAF50; /* Green */
@@ -364,3 +365,20 @@ main .form-control
 .view{
     opacity: 0.9;
 }
+=======
+.vulinlogbevestig2
+{
+    /* center contents */
+    margin-right: auto;
+    text-align: center;
+    background-color: black;
+    background: 4px solid black;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+    font-family: 'Rubik Mono One';
+    color: white;
+    border-radius: 50px;
+>>>>>>> fd41d82091e9ac29844d65568253ed9dc85bb9e6
