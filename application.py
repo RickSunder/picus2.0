@@ -1,7 +1,7 @@
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory, jsonify
 from flask_session import Session
-from flask_login import current_user
+from flask_login import current_user, LoginManager
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
 import unicodedata
@@ -55,6 +55,13 @@ Session(app)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 # configure CS50 Library to use SQLite database
 db = SQL("sqlite:///PicUs.db")
+
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
 
 @app.route("/")
 def index():
@@ -671,16 +678,12 @@ def get_event():
     event_idd = event[0]["event_id"]
     return event_idd
 
-@app.route('/eventfeed/', methods=["GET", "POST"])
+@app.route('/eventfeed/')
 def eventfeed():
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
-
-    #user = db.execute("SELECT * FROM users WHERE username=:username", username=session["user_id"])
-    if current_user.is_authenticated == True:
-        pass
-    else:
+    if not current_user.is_authenticated:
         flash("Login or make an account to use more functions")
     event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
     event_idd = event_idd[0]["event_id"]
