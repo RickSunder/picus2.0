@@ -13,7 +13,7 @@
             <title>Upload new File</title>
             <h1 style="color:white;">Make a new group</h1>
                 <label class="vulinlog">
-                    <input class="custom-file-upload" type = "file" name = "file" accept="image/*"/>
+                    <input onchange="readURL(this);" class="custom-file-upload" type = "file" name = "file" accept="image/*"/>
                     <i class="fa fa-cloud-upload"></i> Give your group a profile picture
                 </label>
 
@@ -26,6 +26,27 @@
                 <button class="vulinlogbevestig" type="submit">Make group <group></group></button>
             </div>
 
+<div clas="gecentreerd">
+        <img style="border-radius:20px;" class="gecentreerd" id="goh" src="#" />
+</div>
+
+
+<script>
+      function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#goh')
+                        .attr('src', e.target.result)
+;
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+</script>
 
      <style>
         input[type="file"] {

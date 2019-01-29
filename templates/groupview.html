@@ -111,13 +111,14 @@
     }
 </script>
 
-<h1 class="gecentreerd"style="color:white;"><fontsize="+15">{{ group }}</fontsize></h1>
+<p></p>
+<h1 class="gecentreerd"style="color:white;font-family:Rubik Mono One;"><fontsize="+15">{{ group }}</fontsize></h1>
 <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <br>
-&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Upload photo" onclick="get_group('{{group}}')"/>
-&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Leave group" onclick="leave_group('{{group}}')"/>
-&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Add member" onclick="add_group('{{group}}')"/>
+&nbsp;&nbsp;<input class="vulinlog" style="top:-75px;" type="button" id="event" value="Upload photo" onclick="get_group('{{group}}')"/><p></p>
+&nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Leave group" onclick="leave_group('{{group}}')"/><p></p>
+&nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Add member" onclick="add_group('{{group}}')"/>
 
 {% for row in list_picture %}
 <br>
