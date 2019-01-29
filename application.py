@@ -1,7 +1,6 @@
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory, jsonify
 from flask_session import Session
-from flask_login import current_user, LoginManager
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
 import unicodedata
@@ -934,7 +933,7 @@ def event_dislike_photo():
     # Check if user already liked the photo
     check_id = check[0]["id"]
     if len(check) != 1:
-        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventpname=:eventname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, eventname=view)
+        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, eventname=view)
         flash("You have already liked this picture")
         return redirect(link)
     else:
