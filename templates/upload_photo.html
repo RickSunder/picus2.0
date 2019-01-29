@@ -33,9 +33,9 @@
     <div class="container">
     <fieldset>
         <title>Upload picture</title>
-        <h1 style="color:white;">Make a new event</h1>
+        <h1 style="color:white;">Upload your photo</h1>
             <label class="vulinlog">
-                <input class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
+                <input onchange="readURL(this);" class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i> Choose the image you want to upload
             </label>
 
@@ -51,6 +51,27 @@
     </div>
 </form>
 
+<div clas="gecentreerd">
+        <img style="border-radius:20px;" class="gecentreerd" id="goh" src="#" />
+</div>
+
+
+<script>
+      function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#goh')
+                        .attr('src', e.target.result)
+;
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+</script>
 
 
 {% endblock %}

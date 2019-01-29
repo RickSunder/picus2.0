@@ -83,20 +83,20 @@ h5 {
     border-color: #fff;
 }
 
-.btn-outline-success:hover {
+.-outline-success:hover {
     color: #fff;
-    background-color: #ed3af9;
-    border-color: #ed3af9;
+    background-color: white;
+    border-color: white;
 }
 
 .btn-outline-success:click {
     color: #fff;
-    background-color: #ed3af9;
-    border-color: #ed3af9;
+    background-color: white;
+    border-color: white;
 }
 
 .btn-outline-secondary {
-    color: #f8f9fa;
+    color: white;
     background-color: black;
     border-color: black;
     position: absolute;
@@ -104,6 +104,7 @@ h5 {
     top: 150px;
     padding: 10px;
     border-radius: 50px;
+
 
 }
 
@@ -116,6 +117,14 @@ h5 {
 
 }
 
+.btn-outline-success:not(:disabled):not(.disabled).active:focus, .btn-outline-success:not(:disabled):not(.disabled):active:focus, .show>.btn-outline-success.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(223, 100, 255, 0.5);
+}
+.btn-outline-success:not(:disabled):not(.disabled).active, .btn-outline-success:not(:disabled):not(.disabled):active, .show>.btn-outline-success.dropdown-toggle {
+    color: #fff;
+    background-color: purple;
+    border-color: purple;
+}
 .invulveld {
     color: black;
     background-color: #fff;
