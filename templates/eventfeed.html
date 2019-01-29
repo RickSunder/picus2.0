@@ -9,8 +9,61 @@
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 <script>
+$( document ).ready(function(){
+
+      // Part 1 - Collect User Input Using jQuery Click Listener note we use the class (.) of search_button
+      $('.search_button').on('click', function(){
+
+        // Collect user by grabbing the input form's value via id (#)
+        var userInput = $('#form-value').val().trim();
+
+        // Change the input to suit the API (ie change spaces to +)
+        userInput = userInput.replace(/ /g, "+");
+
+       var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + userInput + '&api_key=fxVVpisTMf7gev7hUdH22OjTT5Axp7z9';
+       //request.open('GET', 'queryURL');
+
+      // Part 2 - Use AJAX to call GIPHY API (note that the .done() function waits for the API to respond)
+        $.ajax({url: queryURL, method: 'GET'}).done(function(response){
+
+          // This is the API response data. It's a JSON object of 25 gifs
+          console.log(response.data);
+
+          // For simplicity, we will take the first gif (ie. at postion 0)
+          var giphyURL = response.data[0].images.fixed_height.url;
+          console.log(giphyURL);
+
+          // Now you can pass that into your "here_is_gif" <img> tag using its id (#)
+          $('#here_is_gif').attr('src', giphyURL);
+
+
+
+
+          $('#here_is_gif').attr('src', giphyURL);
+
+
+        });
+            $('#sumbit_button').on('click', function(){
+            var url = 'https://ide50-a12216321.legacy.cs50.io:8080/event_add_gif?value=' + giphyURL + '&q=' + event;
+              return window.open(url, "_self");
+          })
+        // Part 3 - Clear the Gif using the reset_button id (#)
+        $('#reset_button').on('click', function(){
+          // Grab the img using the id and change the src to empty to remove the image
+          $('#here_is_gif').attr("src",'');
+        })
+
+
+
+
+        // If using a jQuery click listner on a Submit button, you need to return false to prevent the default page refresh
+        return false;
+      })
+    });
+
   function get_event(pass_to_python) {
         // var pass_to_python = document.getElementById("group").value;
         var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventphoto?value='+pass_to_python;
@@ -47,19 +100,25 @@
 <br>
 
 {% if session.user_id %}
-&nbsp;&nbsp;<a class="vulinlogbevestig"id="event" style="top:-75px;">Copy this URL: {{ urls }}</a>
+&nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-10px" type="button" id="event" value="Upload photo" onclick="get_event('{{ event }}')"/><p></p>
+
+<div style="width:300px;border-radius:20px;left:1100px;top:-50px;" class="col-lg-3">
+			<div style="word-wrap:break-word; width:300px; border-radius:20px;"class="shadow-lg p-4 mb-2 bg-white author">
+			 <a><b>Copy this URL for sharing:</b> {{ urls }}</a>
+	</div>
+      </div><!--/ row -->
 {% for row in list_picture %}
 <br>
 <br>
 <section class="hero" opacity="0.5">
-         <div class="container">
-          <div class="row">
+         <div style="top:-250px;" class="container">
+          <div  style="top:-250px;" class="row">
 
-		   <div class="col-lg-6 offset-lg-3">
+		   <div  style="top:-250px;" class="col-lg-6 offset-lg-3">
 
-			<div class="cardbox shadow-lg bg-white" >
+			<div style="border-radius:20px;"class="cardbox shadow-lg bg-white" >
 
-			 <div class="cardbox-heading">
+			 <div style="border-radius:20px;" class="cardbox-heading">
 			  <!-- START dropdown-->
 			 <!-- <div class="dropdown float-right">-->
 			 <!--  <button class="btn btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="false">-->
@@ -105,18 +164,24 @@
                     		 </div>
 			             </td>
 			         </tr>
-                </table>
+            </table>
                 <br>
 			 <div class="cardbox-comments">
 			  <span class="comment-avatar float-left">
 			  </span>
-
+			  <div class="form-group">
+                <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
+                <button id="button_gif" class="search_button" type="submit" > Search GIF </button>
+                <button id="post_gif" class="submit_button" type="submit" value="{{ row[3] }}"> Post GIF </button>
+                <input type="reset" id="reset_button" value="Reset">
+                <img id="here_is_gif" src="giphyURL"/>
+                </div>
 			  <div class="search">
 			   <!--<input placeholder="Write a comment" id="comment-box" type="text">-->
 			   <form action="{{ url_for('eventcomment') }}">
                     <fieldset>
                         <div class="form-group" width = "60%">
-                            <input class="form-control" name="comments" placeholder="Write a comment" type="text" />
+                            <input class="form-control" name="comments" placeholder="Write a comment" type="text" size="40"/>
                         <!--</div>-->
                         <!--<div class="form-group">-->
                             <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
@@ -126,19 +191,33 @@
                         </div>
                         <b><i class="fa fa-comments"> Comments</i></b>
                         <center>
-                        <table width="90%">
-                            <tbody style="display: block; border: 0; max-height: 130px; overflow-y: scroll">
+                        <table width="90%" height = "40%">
+                            <tbody style="display: block; border: 0; max-height: 170px; overflow-y: scroll">
                             {% for line in row[5] %}
+                            {% if line[1].startswith("https") %}
                             <tr>
                                 <td colspan="30%">
                                     <b>  {{ line[0] }}:</b>
                                 </td>
                                 <td colspan="70%" align="left">
-                                    {{ line[1] }}
+                                    <img id="here_is_gif" src="{{ line[1] }}"/>
                                 </td>
                             </tr>
+
+                            {% else %}
+                            <tr>
+                                <td colspan="30%">
+                                    <b>  {{ line[0] }}:</b>
+                                </td>
+                                <td colspan="70%" align="left">
+                                    {{ line[1] }}<br>
+                                </td>
+                            </tr>
+                            {% endif %}
                             {% endfor %}
+
                             </tbody>
+
                         </table>
                         </center>
                     </fieldset>
@@ -162,74 +241,49 @@
 
         </div><!--/ col-lg-6 -->
 		   <!--/ col-lg-3 -->
-<div class="col-lg-3">
-			<div class="shadow-lg p-4 mb-2 bg-white author">
-			 <a>Copy this URL for sharing: {{ urls }}</a>
-	</div>
-      </div><!--/ row -->
+
     </div><!--/ container -->
 </section>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script>
-      $( document ).ready(function(){
 
-      // Part 1 - Collect User Input Using jQuery Click Listener note we use the class (.) of search_button
-      $('.search_button').on('click', function(){
-
-        // Collect user by grabbing the input form's value via id (#)
-        var userInput = $('#form-value').val().trim();
-
-        // Change the input to suit the API (ie change spaces to +)
-        userInput = userInput.replace(/ /g, "+");
-
-       var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + userInput + '&api_key=fxVVpisTMf7gev7hUdH22OjTT5Axp7z9';
-       //request.open('GET', 'queryURL');
-
-      // Part 2 - Use AJAX to call GIPHY API (note that the .done() function waits for the API to respond)
-        $.ajax({url: queryURL, method: 'GET'}).done(function(response){
-
-          // This is the API response data. It's a JSON object of 25 gifs
-          console.log(response.data);
-
-          // For simplicity, we will take the first gif (ie. at postion 0)
-          var giphyURL = response.data[0].images.fixed_height.url;
-          console.log(giphyURL);
-
-          // Now you can pass that into your "here_is_gif" <img> tag using its id (#)
-          $('#here_is_gif').attr('src', giphyURL);
-
-        });
-
-        // Part 3 - Clear the Gif using the reset_button id (#)
-        $('#reset_button').on('click', function(){
-          // Grab the img using the id and change the src to empty to remove the image
-          $('#here_is_gif').attr("src",'');
-        })
-
-
-        // If using a jQuery click listner on a Submit button, you need to return false to prevent the default page refresh
-        return false;
-      })
-    });
-</script>
 {% endfor %}
+
 {% else %}
-
+<div style="width:300px;border-radius:20px;left:1100px;" class="col-lg-3">
+			<div style="word-wrap:break-word; width:300px; border-radius:20px;"class="shadow-lg p-4 mb-2 bg-white author">
+			 <a><b>Copy this URL for sharing:</b> {{ urls }}</a>
+	</div>
+      </div><!--/ row -->
 {% for row in list_picture %}
-<br>
-<br>
+<br><br><br><br>
 <section class="hero" opacity="0.5">
-         <div class="container">
-          <div class="row">
+         <div style="top:-250px;" class="container">
+          <div  style="top:-250px;" class="row">
 
-		   <div class="col-lg-6 offset-lg-3">
+		   <div  style="top:-250px;" class="col-lg-6 offset-lg-3">
 
-			<div class="cardbox shadow-lg bg-white" >
+			<div style="border-radius:20px;"class="cardbox shadow-lg bg-white" >
 
-			 <div class="cardbox-heading">
-			  <div class="media m-0">
-			   <div class="d-flex mr-3">
+			 <div style="border-radius:20px;" class="cardbox-heading">
+			  <!-- START dropdown-->
+			 <!-- <div class="dropdown float-right">-->
+			 <!--  <button class="btn btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="false">-->
+				<!--<em class="fa fa-ellipsis-h"></em>-->
+			 <!--  </button>-->
+			 <!--  <div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">-->
+				<!--<a class="dropdown-item" >Delete post</a>-->
+				<!--<div class="cardbox-base" align="left">-->
+			  <!--<ul class="fa fa-thumbs-up">-->
+			  <div align="right">
+			   <br><a ><i class="fa fa-trash"  type="button" onclick="bin('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
 			   </div>
+			   <!--<li><a></a></li>--
+			  <!--</ul>-->
+			 <!--</div><!--/ cardbox-base -->
+				<!--<a class="dropdown-item" href="#">Stop following</a>-->
+				<!--<a class="dropdown-item" href="#">Report</a>-->
+			 <!--  </div>-->
+			 <!-- </div><!--/ dropdown -->
+			  <div class="media m-0">
 			   <div class="media-body">
 			    <p class="m-0">{{ row[0] }}</p>
 
@@ -250,53 +304,90 @@
 			             <td align = "right">
 			                       <div align="right">
 			                       <a><span>likes: {{ row[4] }}</span></a>
+                    			   <a><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ event }}')" type="button"></i></a>
+                    			   <a><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ event }}')" type="button"></i></a>&nbsp;&nbsp;
                     		 </div>
 			             </td>
 			         </tr>
-                </table>
+            </table>
                 <br>
 			 <div class="cardbox-comments">
 			  <span class="comment-avatar float-left">
 			  </span>
-
+			  <div class="form-group">
+                <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
+                <button id="button_gif" class="search_button" type="submit" > Search GIF </button>
+                <button id="post_gif" class="submit_button" type="submit" value="{{ row[3] }}"> Post GIF </button>
+                <input type="reset" id="reset_button" value="Reset">
+                <img id="here_is_gif" src="giphyURL"/>
+                </div>
 			  <div class="search">
 			   <!--<input placeholder="Write a comment" id="comment-box" type="text">-->
 			   <form action="{{ url_for('eventcomment') }}">
                     <fieldset>
+                        <div class="form-group" width = "60%">
+                            <input class="form-control" name="comments" placeholder="Write a comment" type="text" size="40"/>
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <button class="btn btn-default" type="submit">Post comment</button>
+                        </div>
                         <b><i class="fa fa-comments"> Comments</i></b>
                         <center>
-                        <table width="90%">
-                            <tbody style="display: block; border: 0; max-height: 130px; overflow-y: scroll">
+                        <table width="90%" height = "40%">
+                            <tbody style="display: block; border: 0; max-height: 170px; overflow-y: scroll">
                             {% for line in row[5] %}
+                            {% if line[1].startswith("https") %}
                             <tr>
                                 <td colspan="30%">
                                     <b>  {{ line[0] }}:</b>
                                 </td>
                                 <td colspan="70%" align="left">
-                                    {{ line[1] }}
+                                    <img id="here_is_gif" src="{{ line[1] }}"/>
                                 </td>
                             </tr>
+
+                            {% else %}
+                            <tr>
+                                <td colspan="30%">
+                                    <b>  {{ line[0] }}:</b>
+                                </td>
+                                <td colspan="70%" align="left">
+                                    {{ line[1] }}<br>
+                                </td>
+                            </tr>
+                            {% endif %}
                             {% endfor %}
+
                             </tbody>
+
                         </table>
                         </center>
                     </fieldset>
                 </form>
                 <br>
 
+                <div class="cardbox-base" align="left">
+			  <!--<ul class="fa fa-thumbs-up">-->
+			  <!--&nbsp;&nbsp;-->
+			   <!--<a ><i class="fa fa-comments" data-target="#common" type="button" data-toggle="modal"> <em class="mr-5">View all comments</em></i></a>-->
+
+			   <!--<li><a></a></li>--
+			  <!--</ul>-->
+			 </div><!--/ cardbox-base -->
+			   <!--<span><button><i id = "gifsearch"class="fa fa-camera"></i></button> <button><i id="submit-comment"></i></button></span>-->
 
 			  </div><!--/. Search -->
 			 </div><!--/ cardbox-like -->
-      </div><!--/ cardbox -->
-    </div><!--/ col-lg-6 -->
 
-<div class="col-lg-3">
-			<div class="shadow-lg p-4 mb-2 bg-white author">
-			 <a>Copy this URL for sharing: {{ urls }}</a>
-	</div>
-</div><!--/ col-lg-3 -->
-</div><!--/ row -->
-</div><!--/ container -->
+			</div><!--/ cardbox -->
+
+        </div><!--/ col-lg-6 -->
+		   <!--/ col-lg-3 -->
+
+    </div><!--/ container -->
 </section>
 {% endfor %}
 {% endif %}

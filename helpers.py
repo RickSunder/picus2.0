@@ -130,8 +130,8 @@ def event_like_check(name, view):
 
 # Used in like_photo(), dislike_photo()
 def event_get_like(namel):
-    like_pic = db.execute("SELECT like FROM event_feed WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", user_id=session["user_id"], picture_user=namel, eventname=session["event_id"])
-    likes = like_pic[0]["like"]
+    like_pic = db.execute("SELECT likes FROM event_feed WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", user_id=session["user_id"], picture_user=namel, eventname=session["event_id"])
+    likes = like_pic[0]["likes"]
     return likes
 
 def event_check_users():

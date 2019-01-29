@@ -13,7 +13,7 @@
             <script>
     function get_group(pass_to_python) {
         // var pass_to_python = document.getElementById("group").value;
-        var url = 'https://ide50-britt1212.legacy.cs50.io:8080/groupview?value='+pass_to_python;
+        var url = 'https://ide50-a12216321.legacy.cs50.io:8080/groupview?value='+pass_to_python;
         return window.open(url, "_self");
     }
             </script>
@@ -28,7 +28,7 @@
 <div class="containers">
     <a onclick = "get_group('{{row[0]}}')">
 <img src="{{ row[1] }}" alt="{{ row[0] }}" width="300px" heigth="300px" style="border-radius:50px;">
-<input type="button" class="btn" id="group"  onclick="get_group('{{row[0]}}')" value="{{ row[0] }}">
+<input type="button" class="btn" id="group"  onclick="get_group('{{row[0]}}')" style="font-family: Rubik Mono One; color: white;" value="{{ row[0] }}">
 </input></a></div>
                 </form>
          </center>

@@ -20,9 +20,9 @@
         <fieldset>
             <title>Upload your picture</title>
             <h1 style="color:white;">Upload your picture</h1>
-                <label class="vulinlog">
-                    <input class="custom-file-upload" type = "file" name = "file" accept="image/*"/>
-                    <i class="fa fa-cloud-upload"></i>Upload your picture
+                <label class="vulinlogbevestig">
+                    <input onchange="readURL(this);" class="custom-file-upload" type = "file" name = "file" accept="image/*"/>
+                    <i class="fa fa-cloud-upload"></i>Search your picture
                 </label>
 
 
@@ -31,11 +31,27 @@
             </div>
                 <!--<input type = "submit"/>-->
             <div class="form-group">
-                <button class="vulinlogbevestig" onclick="get_event('{{event}}')"type="submit">Back to timeline </button>
+                <button class="vulinlogbevestig" onclick="get_event('{{ event }}')"type="submit">Upload image </button>
+            </div>
+            <div clas="gecentreerd">
+                <img style="border-radius:20px;width:400px;" class="gecentreerd" id="goh" src="#" />
             </div>
 
+<script>
+      function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-     <style>
+                reader.onload = function (e) {
+                    $('#goh')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+</script>
+<style>
         input[type="file"] {
     display: none;
 }
@@ -45,13 +61,8 @@
     padding: 6px 12px;
     cursor: pointer;
 }
-
-       </style>
-
-
-
-
-        </fieldset>
-        </div>
-    </form>
+</style>
+</fieldset>
+</div>
+</form>
 {% endblock %}

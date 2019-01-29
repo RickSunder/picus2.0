@@ -28,8 +28,8 @@
         <fieldset>
             <title>Upload new File</title>
             <h1 style="color:white;">Make a new event</h1>
-                <label class="vulinlog">
-                    <input class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
+                <label class="vulinlogbevestig">
+                    <input onchange="readURL(this);" class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
                     <i class="fa fa-cloud-upload" aria-hidden="true"></i> Give your event a profile picture
                 </label>
 
@@ -41,6 +41,39 @@
             <div class="form-group">
                 <button class="vulinlogbevestig" type="submit">Make event <event></event></button>
             </div>
+            <div clas="gecentreerd">
+        <img style="border-radius:20px;width:400px;" class="gecentreerd" id="goh" src="#" />
+</div>
+
+
+<script>
+      function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#goh')
+                        .attr('src', e.target.result)
+;
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+</script>
+<style>
+        input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+       </style>
         </fieldset>
         </div>
     </form>

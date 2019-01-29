@@ -25,11 +25,7 @@ import urllib.parse as urlparse
 #from selenium import webdriver
 #from selenium.webdriver.common.keys import Keys
 
-
-
 import uuid
-
-
 
 # configure application
 app = Flask(__name__)
@@ -59,11 +55,19 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 # configure CS50 Library to use SQLite database
 db = SQL("sqlite:///PicUs.db")
 
+
+
+#login_manager = LoginManager()
+#login_manager.init_app(app)
+#login_manager.login_view = 'login'
+
+
+
 @app.route("/")
 def index():
     """The index of the website"""
     if request.method == "POST":
-        return render_template("groupfeed.html")
+        return render_template("groupfeed.html", user_id=session["user_id"])
     if request.method == "GET":
         return render_template("index.html")
 
@@ -565,8 +569,15 @@ def groupview():
 
         temporary.append([username, profilepicture, comments, profilepic, like, temp, tim])
 
+    members = db.execute("SELECT user_id FROM user_groups WHERE group_id = :goh", goh=session['group_id'])
+    ventjes = []
+
+    for person in members:
+        pers=db.execute("SELECT username FROM users WHERE id =:sjala", sjala=members[person]['user_id'])
+        ventjes.append(pers)
+
     # return to html page with required information
-    return render_template("groupview.html", list_picture=temporary, group=name[0])
+    return render_template("groupview.html", list_picture=temporary, group=name[0], ventjes=ventjes)
 
 
 @app.route("/upload_photo", methods=["GET", "POST"])
@@ -633,7 +644,7 @@ def search():
 @login_required
 def eventphoto():
     if request.method == 'POST':
-
+        eventlink = get_nam_event()
         event_name = db.execute("SELECT event_name FROM event_account WHERE event_id=:event", event=session["event_id"])
         event = event_name[0]["event_name"]
 
@@ -649,7 +660,9 @@ def eventphoto():
         db.execute("INSERT INTO event_feed (images, likes, dislikes, comments, caption, user_id, event_id) VALUES(:images, :likes, :dislikes, :comments, :caption, :user_id, :event_id)"
                    ,images=filename, likes = 0, dislikes = 0, comments = "hi does this work?", caption = caption, user_id = session["user_id"], event_id = session["event_id"])
 
-        return render_template("eventphoto.html", event = event_name[0]["event_name"])
+        links = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+        links += eventlink
+        return redirect(links)
     else:
         return render_template("eventphoto.html")
 
@@ -667,12 +680,13 @@ def get_event():
     event_idd = event[0]["event_id"]
     return event_idd
 
-@app.route('/eventfeed/', methods=["GET", "POST"])
+@app.route('/eventfeed/')
 def eventfeed():
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
-
+    if session.get("user_id") is None:
+        flash("Login or make an account to use more functions")
     event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
     event_idd = event_idd[0]["event_id"]
     session["event_id"] = event_idd
@@ -921,7 +935,7 @@ def event_dislike_photo():
     # Check if user already liked the photo
     check_id = check[0]["id"]
     if len(check) != 1:
-        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventpname=:eventname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, eventname=view)
+        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, eventname=view)
         flash("You have already liked this picture")
         return redirect(link)
     else:
@@ -978,17 +992,40 @@ def add_gif():
     link += groupnamel
     return redirect(link)
 
-
 @app.route('/eventcomment/')
 @login_required
 def eventcomment():
+    # Get groupname to redirect
+    eventnamel = get_nam_event()
+    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    link += eventnamel
+
     # Get info from url query
     url = request.url
     parsed = urlparse.urlparse(url)
+    if urlparse.parse_qs(parsed.query)['comments'] is None:
+        flash("you can't post an empty comment")
+        return redirect(link)
     comm = urlparse.parse_qs(parsed.query)['comments']
     pica = urlparse.parse_qs(parsed.query)['pic']
 
     # Insert comment into database
+    db.execute("INSERT INTO comment_event (user_id, event_id, picture, comment) VALUES(:user_id, :event_id, :picture, :comment)", user_id=session["user_id"], event_id = session["event_id"], picture=pica, comment=comm)
+
+
+    eventnamel = get_nam_event()
+    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    link += eventnamel
+    return redirect(link)
+
+@app.route("/event_add_gif")
+@login_required
+def event_add_gif():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    comm = urlparse.parse_qs(parsed.query)['value']
+    pica = urlparse.parse_qs(parsed.query)['q']
+
     db.execute("INSERT INTO comment_event (user_id, event_id, picture, comment) VALUES(:user_id, :event_id, :picture, :comment)", user_id=session["user_id"], event_id = session["event_id"], picture=pica, comment=comm)
 
     # Get groupname to redirect
