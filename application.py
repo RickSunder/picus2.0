@@ -995,13 +995,37 @@ def add_gif():
 @app.route('/eventcomment/')
 @login_required
 def eventcomment():
+    # Get groupname to redirect
+    eventnamel = get_nam_event()
+    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    link += eventnamel
+
     # Get info from url query
     url = request.url
     parsed = urlparse.urlparse(url)
+    if urlparse.parse_qs(parsed.query)['comments'] is None:
+        flash("you can't post an empty comment")
+        return redirect(link)
     comm = urlparse.parse_qs(parsed.query)['comments']
     pica = urlparse.parse_qs(parsed.query)['pic']
 
     # Insert comment into database
+    db.execute("INSERT INTO comment_event (user_id, event_id, picture, comment) VALUES(:user_id, :event_id, :picture, :comment)", user_id=session["user_id"], event_id = session["event_id"], picture=pica, comment=comm)
+
+
+    eventnamel = get_nam_event()
+    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    link += eventnamel
+    return redirect(link)
+
+@app.route("/event_add_gif")
+@login_required
+def event_add_gif():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    comm = urlparse.parse_qs(parsed.query)['value']
+    pica = urlparse.parse_qs(parsed.query)['q']
+
     db.execute("INSERT INTO comment_event (user_id, event_id, picture, comment) VALUES(:user_id, :event_id, :picture, :comment)", user_id=session["user_id"], event_id = session["event_id"], picture=pica, comment=comm)
 
     # Get groupname to redirect
