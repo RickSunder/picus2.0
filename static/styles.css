@@ -324,3 +324,70 @@ main .form-control
     border-bottom: black 50px outset;
     border-radius: 10px;
 }
+
+<<<<<<< HEAD
+
+.button_view:hover {
+  background-color: #4CAF50; /* Green */
+}
+
+.button_view2:hover {
+  background-color: #f44242; /* Red */
+}
+
+
+.containers {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.containers img {
+  width: 100%;
+  height: auto;
+}
+
+.containers .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.containers .btn:hover {
+  background-color: black;
+}
+
+.containers:hover{
+    opacity: 0.7;
+}
+
+.view{
+    opacity: 0.9;
+}
+=======
+.vulinlogbevestig2
+{
+    /* center contents */
+    margin-right: auto;
+    text-align: center;
+    background-color: black;
+    background: 4px solid black;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 40px;
+    position: relative;
+    font-family: 'Rubik Mono One';
+    color: white;
+    border-radius: 50px;
+>>>>>>> fd41d82091e9ac29844d65568253ed9dc85bb9e6

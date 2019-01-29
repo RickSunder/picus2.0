@@ -87,7 +87,7 @@ def usernam(user_id):
 
 # Used in groupview()
 def pics(group_idd):
-     group = db.execute("SELECT user_id, picture, comment, like, time FROM picture_group WHERE group_id=:id_group", id_group=group_idd)
+     group = db.execute("SELECT user_id, picture, comment, like, time FROM picture_group WHERE group_id=:id_group ORDER BY time desc", id_group=group_idd)
      return group
 
 # Used in groupview()
@@ -150,3 +150,12 @@ def event_bin_check(name):
     user = pic[0]["user_id"]
     return user
 
+# Used in groupview()
+def comm_event(profilepicevent):
+    comment_event = db.execute("SELECT comment, user_id FROM comment_event WHERE picture=:picture AND event_id=:event_id ORDER BY id desc", picture = profilepicevent, event_id = session["event_id"])
+    return comment_event
+
+def get_nam_event():
+    eventname = db.execute("SELECT event_name FROM event_account WHERE event_id=:event", event=session["event_id"])
+    event = eventname[0]["event_name"]
+    return event
