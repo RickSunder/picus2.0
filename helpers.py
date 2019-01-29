@@ -119,7 +119,7 @@ def like_check(name, view):
 
 # Used in like_photo(), dislike_photo()
 def get_like(namel):
-    like_pic = db.execute("SELECT like FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=namel, groupname=session["group_id"])
+    like_pic = db.execute("SELECT like FROM picture_group WHERE picture=:picture_user AND group_id=:groupname", picture_user=namel, groupname=session["group_id"])
     likes = like_pic[0]["like"]
     return likes
 

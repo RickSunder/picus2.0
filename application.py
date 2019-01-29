@@ -761,7 +761,7 @@ def like_photo():
     else:
         # Update likes
         likes = get_like(name)
-        db.execute("UPDATE picture_group SET like =:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", like = likes + 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+        db.execute("UPDATE picture_group SET like =:like WHERE picture=:picture_user AND group_id=:groupname", like = likes + 1, picture_user=name, groupname=session["group_id"])
 
     # Redirect to adjusted link
     return redirect(link)
@@ -968,6 +968,7 @@ def noevent():
 def nogroup():
     return render_template("nogroup.html")
 
+
 @app.route("/add_gif")
 @login_required
 def add_gif():
@@ -983,6 +984,7 @@ def add_gif():
     link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
     link += groupnamel
     return redirect(link)
+
 @app.route('/eventcomment/')
 @login_required
 def eventcomment():
