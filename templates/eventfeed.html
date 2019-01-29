@@ -47,19 +47,25 @@
 <br>
 
 {% if session.user_id %}
-&nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Upload photo" onclick="get_event('{{ event }}')"/><p></p>
+&nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-10px" type="button" id="event" value="Upload photo" onclick="get_event('{{ event }}')"/><p></p>
+
+<div style="width:300px;border-radius:20px;left:1100px;top:-50px;" class="col-lg-3">
+			<div style="width:300px;border-radius:20px;"class="shadow-lg p-4 mb-2 bg-white author">
+			 <a><b>Copy this URL for sharing:</b> {{ urls }}</a>
+	</div>
+      </div><!--/ row -->
 {% for row in list_picture %}
 <br>
 <br>
 <section class="hero" opacity="0.5">
-         <div class="container">
-          <div class="row">
+         <div style="top:-250px;" class="container">
+          <div  style="top:-250px;" class="row">
 
-		   <div class="col-lg-6 offset-lg-3">
+		   <div  style="top:-250px;" class="col-lg-6 offset-lg-3">
 
-			<div class="cardbox shadow-lg bg-white" >
+			<div style="border-radius:20px;"class="cardbox shadow-lg bg-white" >
 
-			 <div class="cardbox-heading">
+			 <div style="border-radius:20px;" class="cardbox-heading">
 			  <!-- START dropdown-->
 			 <!-- <div class="dropdown float-right">-->
 			 <!--  <button class="btn btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="false">-->
@@ -124,7 +130,7 @@
                         <!--<div class="form-group">-->
                             <button class="btn btn-default" type="submit">Post comment</button>
                         </div>
-                        <b><i class="fa fa-comments"> Comments</i></b>
+                        <i class="fa fa-comments"></i><b> Comments</b>
                         <center>
                         <table width="90%">
                             <tbody style="display: block; border: 0; max-height: 130px; overflow-y: scroll">
@@ -162,11 +168,7 @@
 
         </div><!--/ col-lg-6 -->
 		   <!--/ col-lg-3 -->
-<div class="col-lg-3">
-			<div class="shadow-lg p-4 mb-2 bg-white author">
-			 <a>Copy this URL for sharing: {{ urls }}</a>
-	</div>
-      </div><!--/ row -->
+
     </div><!--/ container -->
 </section>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -213,6 +215,7 @@
     });
 </script>
 {% endfor %}
+
 {% else %}
 
 {% for row in list_picture %}
