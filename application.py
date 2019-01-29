@@ -58,9 +58,10 @@ db = SQL("sqlite:///PicUs.db")
 
 
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
+#login_manager = LoginManager()
+#login_manager.init_app(app)
+#login_manager.login_view = 'login'
+
 
 
 @app.route("/")
@@ -683,7 +684,7 @@ def eventfeed():
     url = request.url
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
-    if not current_user.is_authenticated:
+    if session.get("user_id") is None:
         flash("Login or make an account to use more functions")
     event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
     event_idd = event_idd[0]["event_id"]
