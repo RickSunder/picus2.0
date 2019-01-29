@@ -47,7 +47,7 @@
 <br>
 
 {% if session.user_id %}
-&nbsp;&nbsp;<a class="vulinlogbevestig"id="event" style="top:-75px;">Copy this URL: {{ urls }}</a>
+&nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Upload photo" onclick="get_event('{{ event }}')"/><p></p>
 {% for row in list_picture %}
 <br>
 <br>
