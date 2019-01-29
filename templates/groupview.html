@@ -57,25 +57,25 @@
 
     function get_group(pass_to_python)
     {
-        var url = 'https://ide50-britt1212.legacy.cs50.io:8080/upload_photo?value='+pass_to_python;
+        var url = 'https://ide50-a12216321.legacy.cs50.io:8080/upload_photo?value='+pass_to_python;
         return window.open(url, "_self");
     }
 
     function leave_group(python)
     {
-        var url_leave = 'https://ide50-britt1212.legacy.cs50.io:8080/leave_group?value='+python;
+        var url_leave = 'https://ide50-a12216321.legacy.cs50.io:8080/leave_group?value='+python;
         return window.open(url_leave, "_self");
     }
 
     function like(photo, name)
     {
-        var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/like_photo?value=' +photo + '&q=' +name;
+        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/like_photo?value=' +photo + '&q=' +name;
         return window.open(url_like, "_self");
     }
 
     function dislike(photo, name)
     {
-        var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/dislike_photo?value=' +photo + '&q=' +name;
+        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/dislike_photo?value=' +photo + '&q=' +name;
         return window.open(url_like, "_self");
     }
 
@@ -86,7 +86,7 @@
 
         if(user_choice==true) {
 
-        var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/bin?value=' +photo + '&q=' +name;
+        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/bin?value=' +photo + '&q=' +name;
         return window.open(url_like, "_self");
         } else {
             return false;
@@ -96,7 +96,7 @@
 
     function add_group(groupl)
     {
-        var url_like = 'https://ide50-britt1212.legacy.cs50.io:8080/add_member?value=' +groupl;
+        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/add_member?value=' +groupl;
         return window.open(url_like, "_self");
     }
 </script>

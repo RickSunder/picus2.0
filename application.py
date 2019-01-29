@@ -1,6 +1,7 @@
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory, jsonify
 from flask_session import Session
+from flask_login import current_user
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
 import unicodedata
@@ -25,11 +26,7 @@ import urllib.parse as urlparse
 #from selenium import webdriver
 #from selenium.webdriver.common.keys import Keys
 
-
-
 import uuid
-
-
 
 # configure application
 app = Flask(__name__)
@@ -666,6 +663,11 @@ def eventfeed():
     parsed = urlparse.urlparse(url)
     name = urlparse.parse_qs(parsed.query)['value']
 
+    #user = db.execute("SELECT * FROM users WHERE username=:username", username=session["user_id"])
+    if current_user.is_authenticated == True:
+        pass
+    else:
+        flash("Login or make an account to use more functions")
     event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
     event_idd = event_idd[0]["event_id"]
     session["event_id"] = event_idd
