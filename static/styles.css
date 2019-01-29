@@ -179,15 +179,15 @@ h5 {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
-    background-color: white;
-    background: 4px white;
+    background-color: black;
+    background: 4px black;
     border: none;
     display: inline-block;
     overflow: hidden;
     padding: 0 40px;
     position: relative;
     font-family: 'Rubik Mono One';
-    color: black;
+    color: white;
     border-radius: 50px;
 
 }

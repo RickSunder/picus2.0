@@ -565,8 +565,15 @@ def groupview():
 
         temporary.append([username, profilepicture, comments, profilepic, like, temp, tim])
 
+    members = db.execute("SELECT user_id FROM user_groups WHERE group_id = :goh", goh=session['group_id'])
+    ventjes = []
+
+    for person in members:
+        pers=db.execute("SELECT username FROM users WHERE id =:sjala", sjala=members[person]['user_id'])
+        ventjes.append(pers)
+
     # return to html page with required information
-    return render_template("groupview.html", list_picture=temporary, group=name[0])
+    return render_template("groupview.html", list_picture=temporary, group=name[0], ventjes=ventjes)
 
 
 @app.route("/upload_photo", methods=["GET", "POST"])
@@ -961,7 +968,6 @@ def noevent():
 def nogroup():
     return render_template("nogroup.html")
 
-<<<<<<< HEAD
 @app.route("/add_gif")
 @login_required
 def add_gif():
@@ -977,7 +983,6 @@ def add_gif():
     link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
     link += groupnamel
     return redirect(link)
-=======
 @app.route('/eventcomment/')
 @login_required
 def eventcomment():
@@ -995,5 +1000,3 @@ def eventcomment():
     link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
     link += eventnamel
     return redirect(link)
-
->>>>>>> fd41d82091e9ac29844d65568253ed9dc85bb9e6
