@@ -644,7 +644,7 @@ def search():
 @login_required
 def eventphoto():
     if request.method == 'POST':
-
+        eventlink = get_nam_event()
         event_name = db.execute("SELECT event_name FROM event_account WHERE event_id=:event", event=session["event_id"])
         event = event_name[0]["event_name"]
 
@@ -660,7 +660,9 @@ def eventphoto():
         db.execute("INSERT INTO event_feed (images, likes, dislikes, comments, caption, user_id, event_id) VALUES(:images, :likes, :dislikes, :comments, :caption, :user_id, :event_id)"
                    ,images=filename, likes = 0, dislikes = 0, comments = "hi does this work?", caption = caption, user_id = session["user_id"], event_id = session["event_id"])
 
-        return render_template("eventphoto.html", event = event_name[0]["event_name"])
+        links = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+        links += eventlink
+        return redirect(links)
     else:
         return render_template("eventphoto.html")
 
