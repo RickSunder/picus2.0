@@ -9,28 +9,23 @@
 <br>
 <h1 class="gecentreerd" style="font-family: Rubik Mono One; color: white;"><font size="+15">My events</fontsize></h1>
 <br>
-
-   <script>
+<script>
     function get_event(pass_to_python) {
-        // var pass_to_python = document.getElementById("group").value;
         var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value='+pass_to_python;
         return window.open(url, "_self");
     }
-    </script>
-    <table class="table" border=0>
-        {% for row in list_event_id %}
-
-         <center>
-                  <!--<a href="{{ url_for('groupview') }}">-->
-                  <img onclick="get_event('{{row[0]}}')" src="{{ row[1] }}" alt="{{ row[0] }}" width="300px" heigth="300px" style="border-radius:50px;"></img>
-                  <!--</a>-->
-            <form action="/get_event/" method="post">
-                <!--<input type="button" onclick='get_group({{row[0]}})' value="{{ row[0] }}"><br>-->
-<input class="vulinlogbevestig" type="button" id="event" value="{{ row[0] }}" onclick="get_event('{{row[0]}}')"/>
-                </form>
-         </center>
-
-            <br>
+</script>
+{% for row in list_event_id %}
+    <center>
+        <form action="/get_event/" method="post">
+            <div class="containers">
+                <a onclick = "get_event('{{row[0]}}')">
+                <img src="{{ row[1] }}" alt="{{ row[0] }}" width="300px" heigth="300px" style="border-radius:50px;">
+                <input type="button" class="btn" id="event"  onclick="get_event('{{row[0]}}')" style="font-family: Rubik Mono One; color: white;" value="{{ row[0] }}"></input>
+                </a>
+            </div>
+        </form>
+    </center><br>
 {% endfor %}
 {% endblock %}
 
