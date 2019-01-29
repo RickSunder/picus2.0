@@ -523,7 +523,7 @@ def groupview():
     temporary = []
     for number in range(len(group)):
         temp = []
-        ex_temp = []
+        tem = []
         user_id = group[number]["user_id"]
 
         # Get username from helpers
@@ -538,7 +538,7 @@ def groupview():
 
         # Select comments from a picture and put it in a list
         comment_group = comm_group(profilepic)
-        count = 0
+
         # if len(comment_group) == 0:
         #     temp.append(["", ""])
         # else:
@@ -549,14 +549,28 @@ def groupview():
             usern = nam(us)
             com = comment_group[num]["comment"]
             temp.append([usern, com])
-            if count < 6:
-                ex_temp.append([usern, com])
-            count += 1
 
-        temporary.append([username, profilepicture, comments, profilepic, like, temp, tim, ex_temp])
+
+        # gif = gif_group(profilepic)
+        # for number in range(len(gif)):
+        #     us = comment_group[num]["user_id"]
+
+        #     # Get username from helpers
+        #     usern = nam(us)
+        #     com = comment_group[num]["comment"]
+        #     tem.append([usern, com])
+
+        temporary.append([username, profilepicture, comments, profilepic, like, temp, tim])
+
+    members = db.execute("SELECT user_id FROM user_groups WHERE group_id = :goh", goh=session['group_id'])
+    ventjes = []
+
+    for person in members:
+        pers=db.execute("SELECT username FROM users WHERE id =:sjala", sjala=members[person]['user_id'])
+        ventjes.append(pers)
 
     # return to html page with required information
-    return render_template("groupview.html", list_picture=temporary, group=name[0])
+    return render_template("groupview.html", list_picture=temporary, group=name[0], ventjes=ventjes)
 
 
 @app.route("/upload_photo", methods=["GET", "POST"])
@@ -749,7 +763,7 @@ def like_photo():
     else:
         # Update likes
         likes = get_like(name)
-        db.execute("UPDATE picture_group SET like =:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", like = likes + 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+        db.execute("UPDATE picture_group SET like =:like WHERE picture=:picture_user AND group_id=:groupname", like = likes + 1, picture_user=name, groupname=session["group_id"])
 
     # Redirect to adjusted link
     return redirect(link)
@@ -956,6 +970,23 @@ def noevent():
 def nogroup():
     return render_template("nogroup.html")
 
+
+@app.route("/add_gif")
+@login_required
+def add_gif():
+    url = request.url
+    parsed = urlparse.urlparse(url)
+    comm = urlparse.parse_qs(parsed.query)['value']
+    pica = urlparse.parse_qs(parsed.query)['q']
+
+    db.execute("INSERT INTO comment_group (user_id, group_id, picture, comment) VALUES(:user_id, :group_id, :picture, :comment)", user_id=session["user_id"], group_id = session["group_id"], picture=pica, comment=comm)
+
+    # Get groupname to redirect
+    groupnamel = get_nam_group()
+    link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+    link += groupnamel
+    return redirect(link)
+
 @app.route('/eventcomment/')
 @login_required
 def eventcomment():
@@ -973,4 +1004,3 @@ def eventcomment():
     link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
     link += eventnamel
     return redirect(link)
-

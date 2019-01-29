@@ -9,15 +9,17 @@
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 <script>
-      $( document ).ready(function(){
+            $( document ).ready(function(){
 
       // Part 1 - Collect User Input Using jQuery Click Listener note we use the class (.) of search_button
       $('.search_button').on('click', function(){
 
         // Collect user by grabbing the input form's value via id (#)
         var userInput = $('#form-value').val().trim();
+        var group =  $("#button_gif").val();
 
         // Change the input to suit the API (ie change spaces to +)
         userInput = userInput.replace(/ /g, "+");
@@ -33,25 +35,26 @@
 
           // For simplicity, we will take the first gif (ie. at postion 0)
           var giphyURL = response.data[0].images.fixed_height.url;
-          console.log(giphyURL)
+          console.log(giphyURL);
 
           // Now you can pass that into your "here_is_gif" <img> tag using its id (#)
           $('#here_is_gif').attr('src', giphyURL);
+
+          var url = 'https://ide50-britt1212.legacy.cs50.io:8080/add_gif?value=' +giphyURL + '&q=' +group;
+          return window.open(url, "_self");
 
         });
 
         // Part 3 - Clear the Gif using the reset_button id (#)
         $('#reset_button').on('click', function(){
           // Grab the img using the id and change the src to empty to remove the image
-          $('#here_is_gif').attr("src",'');
-        })
+          $('#here_is_gif').attr("src",'')
+        });
 
 
         // If using a jQuery click listner on a Submit button, you need to return false to prevent the default page refresh
         return false;
       })
-
-
     });
 
 
@@ -63,8 +66,19 @@
 
     function leave_group(python)
     {
+<<<<<<< HEAD
         var url_leave = 'https://ide50-a12216321.legacy.cs50.io:8080/leave_group?value='+python;
+=======
+        var user_choice = window.confirm('Are you sure you want to leave this group ?');
+
+        if(user_choice==true) {
+
+        var url_leave = 'https://ide50-britt1212.legacy.cs50.io:8080/leave_group?value='+python;
+>>>>>>> 471bf5991f47cd542f3d6d9da32fd4e634a444fa
         return window.open(url_leave, "_self");
+        } else {
+            return false;
+        }
     }
 
     function like(photo, name)
@@ -101,17 +115,19 @@
     }
 </script>
 
-<h1 class="gecentreerd"style="color:white;"><fontsize="+15">{{ group }}</fontsize></h1>
+<p></p>
+<h1 class="gecentreerd"style="color:white;font-family:Rubik Mono One;"><fontsize="+15">{{ group }}</fontsize></h1>
 <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <br>
-&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Upload photo" onclick="get_group('{{group}}')"/>
-&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Leave group" onclick="leave_group('{{group}}')"/>
-&nbsp;&nbsp;<input class="btn btn-light" style="font-size:15px; padding:10px; top:-225px" type="button" id="event" value="Add member" onclick="add_group('{{group}}')"/>
+&nbsp;&nbsp;<input class="vulinlog" style="top:-75px;" type="button" id="event" value="Upload photo" onclick="get_group('{{group}}')"/><p></p>
+&nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Leave group" onclick="leave_group('{{group}}')"/><p></p>
+&nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Add member" onclick="add_group('{{group}}')"/>
 
 {% for row in list_picture %}
 <br>
 <br>
+<div class="view">
 <section class="hero" opacity="0.5">
          <div class="container">
           <div class="row">
@@ -130,8 +146,8 @@
 				<!--<a class="dropdown-item" >Delete post</a>-->
 				<!--<div class="cardbox-base" align="left">-->
 			  <!--<ul class="fa fa-thumbs-up">-->
-			  <div align="right">
-			   <br><a ><i class="fa fa-trash"  type="button" onclick="bin('{{row[3]}}', '{{ group}}')"></i></a>&nbsp;&nbsp;
+			  <div align="right" >
+			   <br><a class="button_view2"><i class="fa fa-trash" onclick="bin('{{row[3]}}', '{{ group}}')"></i></a>&nbsp;&nbsp;
 			   </div>
 			   <!--<li><a></a></li>--
 			  <!--</ul>-->
@@ -162,9 +178,9 @@
 			             </td>
 			             <td align = "right">
 			                       <div align="right">
-			                       <a><span>likes: {{ row[4] }}</span></a>
-                    			   <a><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ group}}')" type="button"></i></a>
-                    			   <a><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ group}}')" type="button"></i></a>&nbsp;&nbsp;
+			                       <a><span>Likes: {{ row[4] }}</span></a>
+                    			   <a class="button_view"><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ group}}')" ></i></a>
+                    			   <a class="button_view2"><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ group}}')"></i></a>&nbsp;&nbsp;
                     		 </div>
 			             </td>
 			         </tr>
@@ -173,13 +189,18 @@
 			 <div class="cardbox-comments">
 			  <span class="comment-avatar float-left">
 			  </span>
-
+			  <div class="form-group">
+                <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
+                <button id="button_gif" class="search_button" type="submit" value="{{ row[3] }}"> Post gif </button>
+                <input type="reset" id="reset_button" value="Reset">
+                <img id="here_is_gif" src="giphyURL"/>
+                </div>
 			  <div class="search">
 			   <!--<input placeholder="Write a comment" id="comment-box" type="text">-->
 			   <form action="{{ url_for('comment') }}">
                     <fieldset>
                         <div class="form-group" width = "60%">
-                            <input class="form-control" name="comments" placeholder="Write a comment" type="text" />
+                            <input class="form-control" name="comments" placeholder="Write a comment" type="text" size="40"/>
                         <!--</div>-->
                         <!--<div class="form-group">-->
                             <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
@@ -189,19 +210,33 @@
                         </div>
                         <b><i class="fa fa-comments"> Comments</i></b>
                         <center>
-                        <table width="90%">
-                            <tbody style="display: block; border: 0; max-height: 130px; overflow-y: scroll">
+                        <table width="90%" height = "40%">
+                            <tbody style="display: block; border: 0; max-height: 170px; overflow-y: scroll">
                             {% for line in row[5] %}
+                            {% if line[1].startswith("https") %}
                             <tr>
                                 <td colspan="30%">
                                     <b>  {{ line[0] }}:</b>
                                 </td>
                                 <td colspan="70%" align="left">
-                                    {{ line[1] }}
+                                    <img id="here_is_gif" src="{{ line[1] }}"/>
                                 </td>
                             </tr>
+
+                            {% else %}
+                            <tr>
+                                <td colspan="30%">
+                                    <b>  {{ line[0] }}:</b>
+                                </td>
+                                <td colspan="70%" align="left">
+                                    {{ line[1] }}<br>
+                                </td>
+                            </tr>
+                            {% endif %}
                             {% endfor %}
+
                             </tbody>
+
                         </table>
                         </center>
                     </fieldset>
@@ -228,32 +263,18 @@
 
       </div><!--/ row -->
     </div><!--/ container -->
-
-<!--<img src="{{ row[1] }}" style ="border: 1px solid #000; max-width:300px; max-height:400px display: block; margin-left: auto; margin-right: auto; text-align: center;"/>-->
-<!--<label for="toggle-1"></label>-->
-<!--<h4>{{ row[2] }}</h4>-->
-<!--<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>-->
-<!--<div class="form-group">-->
-<!--<input id = "comment" autocomplete="off" autofocus class="form-control" name="comment" placeholder="comment" type="text"/>-->
-
-
-<!--<input type = "text" id = "form-value"autocomplete="off" placeholder="search for gif" type="text"/>-->
-<!--<button type="submit" class="search_button"> search </button>-->
-<!--<input type="reset" id="reset_button" value="Reset">-->
-<!--<input id = "gif" name = "gif" <img id="here_is_gif" src=""/>-->
-<!--<form id="like" action="/application.py">-->
-<!--  <button name="like" type="submit">Like</button>-->
-<!--</form>-->
-<!--<form id="dislike" action="/application.py">-->
-<!--  <button name="dislike" type="submit">Dislike</button>-->
-<!--</form>-->
-
-
-<!--<br>-->
-<!--<br>-->
+<br>
+<br>
 <br>
 <br>
 </section>
+</div>
+
 {% endfor %}
 
+{% for i in ventjes %}
+
+      <tr>
+        <td style="float:right; display: table;"class="partofgroup2"><a style="color:#B9B9B9"href="https://ide50-gi-no.legacy.cs50.io:8080/eventfeed/?value={{i}}">{{i}}</a></td>
+      </tr>
 {% endblock %}

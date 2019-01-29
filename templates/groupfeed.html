@@ -21,11 +21,15 @@
         {% for row in list_group %}
          <center>
                   <!--<a href="{{ url_for('groupview') }}">-->
-                  <img src="{{ row[1] }}" alt="{{ row[0] }}" width="300px" heigth="300px" style="border-radius:50px;"></img>
+
                   <!--</a>-->
             <form action="/get_group/" method="post">
                 <!--<input type="button" onclick='get_group({{row[0]}})' value="{{ row[0] }}"><br>-->
-<input class="vulinlogbevestig" type="button" id="group" value="{{ row[0] }}" onclick="get_group('{{row[0]}}')"/>
+<div class="containers">
+    <a onclick = "get_group('{{row[0]}}')">
+<img src="{{ row[1] }}" alt="{{ row[0] }}" width="300px" heigth="300px" style="border-radius:50px;">
+<input type="button" class="btn" id="group"  onclick="get_group('{{row[0]}}')" value="{{ row[0] }}">
+</input></a></div>
                 </form>
          </center>
 
