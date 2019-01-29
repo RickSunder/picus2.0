@@ -63,7 +63,7 @@ db = SQL("sqlite:///PicUs.db")
 def index():
     """The index of the website"""
     if request.method == "POST":
-        return render_template("groupfeed.html")
+        return render_template("groupfeed.html", user_id=session["user_id"])
     if request.method == "GET":
         return render_template("index.html")
 
