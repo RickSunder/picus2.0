@@ -150,13 +150,13 @@ function submit_gif(event){
 			     <table border="0" width="100%">
 			         <tr>
 			             <td align="left">
-			                 <span><i class="icon ion-md-pin"></i> {{ row[2] }}</span><br>
+			                 <span><i class="icon ion-md-pin"></i><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ row[0]}}:</b> {{ row[2] }}</span><br>
 			             </td>
 			             <td align = "right">
 			                       <div align="right">
-			                       <a><span>likes: {{ row[4] }}</span></a>
-                    			   <a class="button_view"><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ event }}')"></i></a>
-                    			   <a class="button_view2"><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
+			                       <a><span><b>likes: </b>{{ row[4] }}</span></a>
+                    			   <a><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ event }}')"></i></a>
+                    			   <a><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
                     		 </div>
 			             </td>
 			         </tr>
@@ -167,9 +167,10 @@ function submit_gif(event){
 			  </span>
 			  <div class="form-group">
                 <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
-                <button id="button_gif" class="search_button" type="submit" > Search GIF </button>
-                <button id="post_gif" onclick="submit_gif('{{ row[3] }}')"> Post GIF </button>
-                <input type="reset" id="reset_button" value="Reset">
+                <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" id="btn btn-default" class="search_button" type="submit" value="{{ row[3] }}"> <i class="fa fa-search" aria-hidden="true"></i></button>
+                <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" id="btn btn-default" onclick="submit_gif('{{ row[3] }}')"><i class="fa fa-paper-plane" aria-hidden="true"></i> </button>
+                <button type="reset" id="reset_button" value="Reset" style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" type="reset" id="reset_button" value="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+
                 <img id="here_is_gif" src="giphyURL"/>
                 </div>
 			  <div class="search">
@@ -183,9 +184,9 @@ function submit_gif(event){
                             <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
                         <!--</div>-->
                         <!--<div class="form-group">-->
-                            <button class="btn btn-default" type="submit">Post comment</button>
+                        <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                         </div>
-                        <b><i class="fa fa-comments"> Comments</i></b>
+                        <b><i class="fa fa-comments"></i> Comments</b>
                         <center>
                         <table width="90%" height = "40%">
                             <tbody style="display: block; border: 0; max-height: 170px; overflow-y: scroll">
