@@ -50,9 +50,9 @@ In de helpers.py staan allemaal functies waarin gegevens uit de database worden 
 * Rick: alles dat met events te maken heeft en API gifjes
 * Britt: alles dat met groepen te maken heeft
 
-## Concurrerende bestaande websites:
-* Facebook
-* Instagram
+## Repository
+In de algemene map staat helpers.py, application.py en de database (PicUs.db)
+In templates staan al onze html bestanden. En in static staat onze css stylesheet en ons logo. Als laatste staat in de map upload alle foto's die gebruikers kunnen uploaden op onze website.
 
 # Technisch Ontwerp
 ## Controllers
