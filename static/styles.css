@@ -328,16 +328,6 @@ main .form-control
 }
 
 
-
-.button_view:hover {
-  background-color: #4CAF50; /* Green */
-}
-
-.button_view2:hover {
-  background-color: #f44242; /* Red */
-}
-
-
 .containers {
   position: relative;
   width: 100%;
@@ -410,3 +400,25 @@ main .form-control
   border-radius:15px;
 
 }
+
+.fa-paper-plane:hover {
+    color:blue;
+}
+
+.fa-paper-plane:hover
+{
+    color:purple;
+}
+.fa-thumbs-up:hover
+{
+    color:green;
+}
+.fa-thumbs-down:hover
+{
+    color:red;
+}
+.fa-trash:hover
+{
+    color:red;
+}
+
