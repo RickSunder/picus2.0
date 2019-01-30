@@ -8,10 +8,22 @@ Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een i
 ## Schetsen:
 
 ![schets](doc/Add_member.PNG)
-![schets](doc/IMG_2174.jpg)
-![schets](doc/IMG_2175.jpg)
-![schets](doc/IMG_2176.jpg)
-![schets](doc/IMG_2177.jpg)
+![schets](Schermopname (9).png)
+![schets](Schermopname (10).png)
+![schets](Schermopname (11).png)
+![schets](Schermopname (13).png)
+![schets](Schermopname (14).png)
+![schets](Schermopname (15).png)
+![schets](Schermopname (16).png)
+![schets](Schermopname (17).png)
+![schets](Schermopname (18).png)
+![schets](Schermopname (19).png)
+![schets](Schermopname (20).png)
+![schets](Schermopname (21).png)
+![schets](Schermopname (21).png)
+![schets](Schermopname (23).png)
+![schets](Schermopname (24).png)
+
 
 * Homepage
 * Login
