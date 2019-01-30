@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    <br><br><h1 class="gecentreerd" style="font-family: Rubik Mono One; color: white;"><font size="+15">My groups</fontsize></h1><br>
+<br><br><h1 class="gecentreerd" style="font-family: Rubik Mono One; color: white;"><font size="+15">My groups</fontsize></h1><br>
     <script>
         function get_group(pass_to_python)
         {
@@ -15,16 +15,16 @@
             return window.open(url, "_self");
         }
     </script>
-        {% for row in list_group %}
-            <center><form action="/get_group/" method="post">
-                <div class="containers">
-                    <a onclick = "get_group('{{row[0]}}')">
-                        <img src="{{ row[1] }}" alt="{{ row[0] }}" width="300px" heigth="300px" style="border-radius:50px;">
-                            <input type="button" class="btn" id="group"  onclick="get_group('{{row[0]}}')" style="font-family: Rubik Mono One; color: white;" value="{{ row[0] }}">
-                            </input>
-                        </img>
-                    </a>
-                </div>
-            </form></center><br>
-        {% endfor %}
+    {% for row in list_group %}
+        <center><form action="/get_group/" method="post">
+            <div class="containers">
+                <a onclick = "get_group('{{row[0]}}')">
+                    <img src="{{ row[1] }}" alt="{{ row[0] }}" width="300px" heigth="300px" style="border-radius:50px;">
+                        <input type="button" class="btn" id="group"  onclick="get_group('{{row[0]}}')" style="font-family: Rubik Mono One; color: white;" value="{{ row[0] }}">
+                        </input>
+                    </img>
+                </a>
+            </div>
+        </form></center><br>
+    {% endfor %}
 {% endblock %}
