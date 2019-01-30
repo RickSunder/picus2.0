@@ -47,8 +47,10 @@ $( document ).ready(function(){
 
         });
             $('#sumbit_button').on('click', function(){
-            var url = 'https://ide50-a12216321.legacy.cs50.io:8080/event_add_gif?value=' + giphyURL + '&q=' + event;
-              return window.open(url, "_self");
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host;
+            var url = baseUrl + '/event_add_gif?value=' + giphyURL + '&q=' + event;
+            return window.open(url, "_self");
           })
         // Part 3 - Clear the Gif using the reset_button id (#)
         $('#reset_button').on('click', function(){
@@ -101,7 +103,7 @@ $( document ).ready(function(){
     }
 </script>
 <p></p>
-<h1 class="gecentreerd"style="color:white;font-family:Rubik Mono One"><fontsize="+15">{{ event }}</fontsize></h1>
+<p></p><h1 class="gecentreerdtekst" style="color:white;font-family:Rubik Mono One;"><font size="+15">{{ event }}</font></h1>
 <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <br>
@@ -271,25 +273,6 @@ $( document ).ready(function(){
 			<div style="border-radius:20px;"class="cardbox shadow-lg bg-white" >
 
 			 <div style="border-radius:20px;" class="cardbox-heading">
-			  <!-- START dropdown-->
-			 <!-- <div class="dropdown float-right">-->
-			 <!--  <button class="btn btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="false">-->
-				<!--<em class="fa fa-ellipsis-h"></em>-->
-			 <!--  </button>-->
-			 <!--  <div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">-->
-				<!--<a class="dropdown-item" >Delete post</a>-->
-				<!--<div class="cardbox-base" align="left">-->
-			  <!--<ul class="fa fa-thumbs-up">-->
-			  <div align="right">
-			   <br><a ><i class="fa fa-trash"  type="button" onclick="bin('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
-			   </div>
-			   <!--<li><a></a></li>--
-			  <!--</ul>-->
-			 <!--</div><!--/ cardbox-base -->
-				<!--<a class="dropdown-item" href="#">Stop following</a>-->
-				<!--<a class="dropdown-item" href="#">Report</a>-->
-			 <!--  </div>-->
-			 <!-- </div><!--/ dropdown -->
 			  <div class="media m-0">
 			   <div class="media-body">
 			    <p class="m-0">{{ row[0] }}</p>
@@ -311,8 +294,6 @@ $( document ).ready(function(){
 			             <td align = "right">
 			                       <div align="right">
 			                       <a><span>likes: {{ row[4] }}</span></a>
-                    			   <a><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ event }}')" type="button"></i></a>
-                    			   <a><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ event }}')" type="button"></i></a>&nbsp;&nbsp;
                     		 </div>
 			             </td>
 			         </tr>
@@ -321,26 +302,9 @@ $( document ).ready(function(){
 			 <div class="cardbox-comments">
 			  <span class="comment-avatar float-left">
 			  </span>
-			  <div class="form-group">
-                <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
-                <button id="button_gif" class="search_button" type="submit" > Search GIF </button>
-                <button id="post_gif" class="submit_button" type="submit" value="{{ row[3] }}"> Post GIF </button>
-                <input type="reset" id="reset_button" value="Reset">
-                <img id="here_is_gif" src="giphyURL"/>
-                </div>
 			  <div class="search">
-			   <!--<input placeholder="Write a comment" id="comment-box" type="text">-->
 			   <form action="{{ url_for('eventcomment') }}">
                     <fieldset>
-                        <div class="form-group" width = "60%">
-                            <input class="form-control" name="comments" placeholder="Write a comment" type="text" size="40"/>
-                        <!--</div>-->
-                        <!--<div class="form-group">-->
-                            <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
-                        <!--</div>-->
-                        <!--<div class="form-group">-->
-                            <button class="btn btn-default" type="submit">Post comment</button>
-                        </div>
                         <b><i class="fa fa-comments"> Comments</i></b>
                         <center>
                         <table width="90%" height = "40%">
@@ -377,23 +341,11 @@ $( document ).ready(function(){
                 <br>
 
                 <div class="cardbox-base" align="left">
-			  <!--<ul class="fa fa-thumbs-up">-->
-			  <!--&nbsp;&nbsp;-->
-			   <!--<a ><i class="fa fa-comments" data-target="#common" type="button" data-toggle="modal"> <em class="mr-5">View all comments</em></i></a>-->
-
-			   <!--<li><a></a></li>--
-			  <!--</ul>-->
-			 </div><!--/ cardbox-base -->
-			   <!--<span><button><i id = "gifsearch"class="fa fa-camera"></i></button> <button><i id="submit-comment"></i></button></span>-->
-
+			 </div>
 			  </div><!--/. Search -->
 			 </div><!--/ cardbox-like -->
-
 			</div><!--/ cardbox -->
-
-        </div><!--/ col-lg-6 -->
-		   <!--/ col-lg-3 -->
-
+        </div>
     </div><!--/ container -->
 </section>
 {% endfor %}
