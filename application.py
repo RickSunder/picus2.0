@@ -222,8 +222,9 @@ def add_member():
         add_members = request.form.get("add_members")
         groupname = request.form.get("name")
 
-        # Get link to redirect
-        links = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+        # Link to redirect
+        urlBase = request.url_root
+        link = urlBase + 'groupview?value='
         links += groupname
 
         # Check username
@@ -569,15 +570,15 @@ def groupview():
 
         temporary.append([username, profilepicture, comments, profilepic, like, temp, tim])
 
-    members = db.execute("SELECT user_id FROM user_groups WHERE group_id = :goh", goh=session['group_id'])
-    ventjes = []
+    # members = db.execute("SELECT user_id FROM user_groups WHERE group_id = :goh", goh=session['group_id'])
+    # ventjes = []
 
-    for person in members:
-        pers=db.execute("SELECT username FROM users WHERE id =:sjala", sjala=members[person]['user_id'])
-        ventjes.append(pers)
+    # for person in members:
+    #     pers=db.execute("SELECT username FROM users WHERE id =:sjala", sjala=members[person]['user_id'])
+    #     ventjes.append(pers)
 
     # return to html page with required information
-    return render_template("groupview.html", list_picture=temporary, group=name[0], ventjes=ventjes)
+    return render_template("groupview.html", list_picture=temporary, group=name[0])
 
 
 @app.route("/upload_photo", methods=["GET", "POST"])
@@ -610,7 +611,9 @@ def upload_photo():
                    user_id=session["user_id"], picture=filename, group_id=session["group_id"], like=0, comment=comments)
 
         # Get link to redirect to groupview
-        links = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+        # Link to redirect
+        urlBase = request.url_root
+        link = urlBase + 'groupview?value='
         links += group
         return redirect(links)
     else:
@@ -660,7 +663,9 @@ def eventphoto():
         db.execute("INSERT INTO event_feed (images, likes, dislikes, comments, caption, user_id, event_id) VALUES(:images, :likes, :dislikes, :comments, :caption, :user_id, :event_id)"
                    ,images=filename, likes = 0, dislikes = 0, comments = "hi does this work?", caption = caption, user_id = session["user_id"], event_id = session["event_id"])
 
-        links = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+        # Link to redirect
+        urlBase = request.url_root
+        link = urlBase + 'eventfeed?value='
         links += eventlink
         return redirect(links)
     else:
@@ -750,7 +755,8 @@ def like_photo():
     view = urlparse.parse_qs(parsed.query)['q']
 
     # Link to redirect
-    link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+    urlBase = request.url_root
+    link = urlBase + 'groupview?value='
     link += view[0]
 
     # Insert like into database
@@ -784,7 +790,9 @@ def dislike_photo():
     view = urlparse.parse_qs(parsed.query)['q']
 
     # Link to redirect
-    link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+    # Link to redirect
+    urlBase = request.url_root
+    link = urlBase + 'groupview?value='
     link += view[0]
 
     # Insert dislike into database
@@ -818,7 +826,9 @@ def bin():
     view = urlparse.parse_qs(parsed.query)['q']
 
     # Redirect link
-    link_back = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+    # Link to redirect
+    urlBase = request.url_root
+    link_back = urlBase + 'groupview?value='
     link_back += view[0]
 
     # Check if an authorized person deletes the picture
@@ -846,7 +856,8 @@ def eventbin():
     db.execute("DELETE FROM event_feed WHERE user_id=:user_id AND images=:image_user AND event_id=:eventname", user_id=session["user_id"], image_user=name, eventname=session["event_id"])
 
     # Redirect link
-    link_back = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    urlBase = request.url_root
+    link_back = urlBase + 'eventfeed?value='
     link_back += view[0]
     return redirect(link_back)
 
@@ -890,7 +901,9 @@ def event_like_photo():
     view = urlparse.parse_qs(parsed.query)['q']
 
     # Link to redirect
-    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    # Link to redirect
+    urlBase = request.url_root
+    link = urlBase + 'eventfeed?value='
     link += view[0]
 
     # Insert like into database
@@ -923,7 +936,8 @@ def event_dislike_photo():
     view = urlparse.parse_qs(parsed.query)['q']
 
     # Link to redirect
-    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+    urlBase = request.url_root
+    link = urlBase + 'eventfeed?value='
     link += view[0]
 
     # Insert dislike into database
@@ -961,7 +975,10 @@ def comment():
 
     # Get groupname to redirect
     groupnamel = get_nam_group()
-    link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+
+    # Link to redirect
+    urlBase = request.url_root
+    link = urlBase + 'groupview?value='
     link += groupnamel
     return redirect(link)
 
@@ -988,7 +1005,10 @@ def add_gif():
 
     # Get groupname to redirect
     groupnamel = get_nam_group()
-    link = "https://ide50-britt1212.legacy.cs50.io:8080/groupview?value="
+
+    # Link to redirect
+    urlBase = request.url_root
+    link = urlBase + 'groupview?value='
     link += groupnamel
     return redirect(link)
 
@@ -997,7 +1017,10 @@ def add_gif():
 def eventcomment():
     # Get groupname to redirect
     eventnamel = get_nam_event()
-    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+
+    # Link to redirect
+    urlBase = request.url_root
+    link = urlBase + 'eventfeed?value='
     link += eventnamel
 
     # Get info from url query
@@ -1014,7 +1037,10 @@ def eventcomment():
 
 
     eventnamel = get_nam_event()
-    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+
+    # Link to redirect
+    urlBase = request.url_root
+    link = urlBase + 'eventfeed?value='
     link += eventnamel
     return redirect(link)
 
@@ -1030,6 +1056,9 @@ def event_add_gif():
 
     # Get groupname to redirect
     eventnamel = get_nam_event()
-    link = "https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value="
+
+    # Link to redirect
+    urlBase = request.url_root
+    link = urlBase + 'eventfeed?value='
     link += eventnamel
     return redirect(link)

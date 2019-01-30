@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Make group
+    Add groupmembers
 {% endblock %}
 
 {% block main %}
@@ -9,43 +9,36 @@
         <br>
         <br>
         <div class="container">
-        <fieldset>
+          <fieldset>
             <div class="form-group">
                 <input class="vulinlog" name="add_members" placeholder="Member" type="text"/>
             </div>
             <div class="form-group">
                 <button class="vulinlogbevestig" type="submit">Add Member</button>
             </div>
-
-        </fieldset>
+          </fieldset>
         </div>
     </form>
-
     <p>
       <p>
-
       </p>
     </p>
-
     <div style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
-    <table style="font-family:Rubik Mono One;"class="gecentreerd">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col"><u>Added groupmembers</u></th>
-        </tr>
-      </thead>
-        {% for row in list_members %}
+      <table style="font-family:Rubik Mono One;"class="gecentreerd">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col"><u>Added groupmembers</u></th>
+          </tr>
+            {% for row in list_members %}
           <tr>
             <td class="gecentreerd">{{ row[0] }}</td>
-        {% endfor %}
+            {% endfor %}
           </tr>
-    </table>
+        </thead>
+      </table>
     </div>
-
-<br>
-                <a class="gecentreerd"href="{{ url_for('groupfeed') }}">
-               <input class="vulinlog" type="button" value="Done" />
-            </a>
-
-
+  <br>
+    <a class="gecentreerd"href="{{ url_for('groupfeed') }}">
+      <input class="vulinlog" type="button" value="Done" />
+    </a>
 {% endblock %}

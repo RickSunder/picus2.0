@@ -6,72 +6,61 @@
 
 {% block main %}
 <script>
-    function get_group(pass_to_python) {
-        // var pass_to_python = document.getElementById("group").value;
-        var url = 'https://ide50-britt1212.legacy.cs50.io:8080/groupview?value='+pass_to_python;
-        return window.open(url, "_self");
-    }
-    </script>
-
-    <style>
-        input[type="file"] {
-    display: none;
-}
-.custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    color: black;
-}
-
-</style>
-
-<form action="{{ url_for('upload_photo') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;">
-    <br>
-    <br>
-    <div class="container">
-    <fieldset>
-        <title>Upload picture</title>
-        <h1 style="color:white;">Upload your photo</h1>
-            <label class="vulinlog">
-                <input onchange="readURL(this);" class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Choose the image you want to upload
-            </label>
-
-
-        <div class="form-group">
-            <input class="vulinlog" autocomplete="off" autofocus class="form-control" name="comment" placeholder="Choose a caption" type="text"/>
-        </div>
-            <!--<input type = "submit"/>-->
-        <div class="form-group">
-            <button class="vulinlogbevestig" type="submit">Upload Photo<event></event></button>
-        </div>
-    </fieldset>
-    </div>
-</form>
-
-<div clas="gecentreerd">
-        <img style="border-radius:20px;" class="gecentreerd" id="goh" src="#" />
-</div>
-
-
-<script>
       function readURL(input) {
-            if (input.files && input.files[0]) {
+            if (input.files && input.files[0])
+            {
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
                     $('#goh')
-                        .attr('src', e.target.result)
-;
+                        .attr('src', e.target.result);
                 };
-
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
+
+    function get_group(pass_to_python)
+    {
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url = baseUrl + '/groupview?value=' +pass_to_python;
+        return window.open(url, "_self");
+    }
 </script>
+<style>
+    input[type="file"] {
+        display: none;
+    }
 
-
+    .custom-file-upload
+    {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        color: black;
+    }
+</style>
+<form action="{{ url_for('upload_photo') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;"><br><br>
+    <div class="container">
+        <fieldset>
+            <title>Upload picture</title>
+            <h1 style="color:white;">Upload your photo</h1>
+                <label class="vulinlog">
+                    <input onchange="readURL(this);" class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
+                    <i class="fa fa-cloud-upload" aria-hidden="true"></i> Choose the image you want to upload
+                </label>
+                <div class="form-group">
+                    <input class="vulinlog" autocomplete="off" autofocus class="form-control" name="comment" placeholder="Choose a caption" type="text"/>
+                </div>
+            <div class="form-group">
+                <button class="vulinlogbevestig" type="submit">Upload Photo<event></event></button>
+            </div>
+        </fieldset>
+    </div>
+</form>
+<div clas="gecentreerd">
+        <img style="border-radius:20px;" class="gecentreerd" id="goh" src="#" />
+</div>
 {% endblock %}
