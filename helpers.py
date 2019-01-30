@@ -213,12 +213,12 @@ def get_event_info(number):
     return event_info
 
 
-def get_event_name():
+def get_event_name(name_event):
     event_name = db.execute("SELECT * FROM event_account WHERE event_name=:event", event=name_event)
     return event_name
 
 
-def get_event_nameid():
+def get_event_nameid(name_event):
     eventnameid = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name_event)
     return eventnameid
 
