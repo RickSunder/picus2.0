@@ -112,24 +112,44 @@ $( document ).ready(function(){
         return window.open(url_add, "_self");
     }
 </script>
-<div style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
-    <table class="gecentreerd">
-        <tr>
-            <td style="font-style: normal;">Members of the group</td>
-        </tr>
-        {% for i in list_members %}
-        <tr>
-            <td style="margin-left:auto; margin-right:auto; display: table;"class="partofgroup2">{{ i[0] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-<p></p><h1 class="gecentreerdtekst" style="color:white;font-family:Rubik Mono One;"><font size="+15">{{ group }}</font></h1>
+<table border = 0 width="100%">
+    <tr>
+        <td width = "30%">
+
     <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
 	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"><br>
-        &nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Upload photo" onclick="get_group('{{group}}')"/><p></p>
-        &nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Leave group" onclick="leave_group('{{group}}')"/><p></p>
-        &nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Add member" onclick="add_group('{{group}}')"/>
+        &nbsp;&nbsp;<input class="vulinlogbevestig" type="button" id="event" value="Upload photo" onclick="get_group('{{group}}')"/><p></p>
+        &nbsp;&nbsp;<input class="vulinlogbevestig" type="button" id="event" value="Leave group" onclick="leave_group('{{group}}')"/><p></p>
+        &nbsp;&nbsp;<input class="vulinlogbevestig" type="button" id="event" value="Add member" onclick="add_group('{{group}}')"/>
+        </td>
+        <td width="40%">
+            <p></p><h1 class="gecentreerdtekst" style="color:white;font-family:Rubik Mono One;"><font size="+15">{{ group }}</font></h1>
+        </td>
+        <td width = "25%">
+            <div style="background-color: white; border-radius: 20px; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;float:right;">
+    <table style="left:-10px;" class="gecentreerd">
+        <tr style="align:center;" class="gecentreerd">
+            <td style="font-style: normal;color:black;align:center;"><b><center>Members of the group:</center></b></td>
+        </tr>
+
+        {% for i in list_members %}
+        <tr>
+            <td style="margin-left:auto; margin-right:auto; display: table;color:black;"class="partofgroup2">{{ i[0] }}</td>
+        </tr>
+
+        {% endfor %}
+        <td width = "5%">
+        </td>
+    </table>
+</div>
+        </td>
+    </tr>
+</table>
+
+
+
+
+
             {% for row in list_picture %}
                 <br><br><div class="view">
                     <section class="hero" opacity="0.5">
@@ -167,18 +187,18 @@ $( document ).ready(function(){
                             			             </td>
                             			         </tr>
                                             </table><br>
-			                                 <div class="cardbox-comments">
+			                                 <div style="align:left;" class="cardbox-comments">
 			                                     <span class="comment-avatar float-left">
 			                                     </span>
-			                                         <div class="form-group">
-                                                        <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
-                                                        <button id="btn btn-default" class="search_button" type="submit" value="{{ row[3] }}"> Search gif </button>
-                                                        <button id="btn btn-default" onclick="submit_gif('{{ row[3] }}')"> Post gif </button>
-                                                        <input type="reset" id="reset_button" value="Reset">
+			                                         <div style="align:left;" class="form-group">
+                                                        <input class="form-control" type = "text" id ="form-value" autocomplete="off" placeholder="Comment with a gif" type="text"/>
+                                                        <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" id="btn btn-default" class="search_button" type="submit" value="{{ row[3] }}"> <i class="fa fa-search" aria-hidden="true"></i></button>
+                                                        <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" id="btn btn-default" onclick="submit_gif('{{ row[3] }}')"><i class="fa fa-paper-plane" aria-hidden="true"></i> </button>
+                                                        <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" type="reset" id="reset_button" value="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                                                         <img id="here_is_gif" src="giphyURL"/>
                                                     </div>
 			                                     <div class="search">
-			                                   <form action="{{ url_for('comment') }}">
+			                                   <form style="align:left;" action="{{ url_for('comment') }}">
                                                     <fieldset>
                                                         <div class="form-group" width = "60%">
                                                             <input class="form-control" name="comments" placeholder="Write a comment" type="text" size="40"/>
@@ -194,7 +214,7 @@ $( document ).ready(function(){
                                                                         {% if line[1].startswith("https") %}
                                                                     <tr>
                                                                         <td colspan="30%">
-                                                                            <b>  {{ line[0] }}:</b>
+                                                                            <b>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ line[0] }}:</b>
                                                                         </td>
                                                                         <td colspan="70%" align="left">
                                                                             <img class="gifborder" id="here_is_gif" src="{{ line[1] }}"/>
@@ -203,10 +223,10 @@ $( document ).ready(function(){
                                                                     {% else %}
                                                                     <tr>
                                                                         <td colspan="30%">
-                                                                            <b>  {{ line[0] }}:</b>
+                                                                            <b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ line[0] }}:</b>
                                                                         </td>
                                                                         <td colspan="70%" align="left">
-                                                                            {{ line[1] }}<br>
+                                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ line[1] }}<br>
                                                                         </td>
                                                                     </tr>
                                                                     {% endif %}
@@ -225,5 +245,15 @@ $( document ).ready(function(){
                 </div><!--/ container -->
             <br><br><br><br></section>
         </div>
+
+
+
+
+
+
+
+
+
+
     {% endfor %}
 {% endblock %}

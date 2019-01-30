@@ -422,3 +422,14 @@ main .form-control
     color:red;
 }
 
+.fa-search:hover
+{
+    color:purple;
+}
+
+.fa-refresh:hover
+{
+    color:purple;
+}
+
+
