@@ -45,13 +45,10 @@ In de helpers.py staan allemaal functies waarin gegevens uit de database worden 
 * Gebruikers kunnen zelf uit een groep gaan
 * **Foto’s in gesloten groepen kunnen geliked worden en er kan op gereageerd worden.**
 
-
-## Databronnen:
-Gaan wij waarschijnlijk weinig gebruik van maken, want de foto’s die gebruikt gaan worden in onze applicatie kunnen users zelf uploaden.
-
-## Externe componenten:
-* Eventueel bootstrap voor het liken van foto’s (https://bootsnipp.com/snippets/featured/modal-lightbox-with-likedislike)
-
+## Taakverdeling:
+* Gino: login, registratie, zoekfunctie, layout, homepage (met zwevende computer) en alle opmaak
+* Rick: alles dat met events te maken heeft en API gifjes
+* Britt: alles dat met groepen te maken heeft
 
 ## Concurrerende bestaande websites:
 * Facebook
