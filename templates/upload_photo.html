@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Make group
+    Upload photo
 {% endblock %}
 
 {% block main %}
@@ -47,13 +47,13 @@
         <fieldset>
             <title>Upload picture</title>
             <h1 style="color:white;">Upload your photo</h1>
-                <label class="vulinlogbevestig">
-                    <input onchange="readURL(this);" class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
-                    <i class="fa fa-cloud-upload" aria-hidden="true"></i> Choose the image you want to upload
-                </label>
-                <div class="form-group">
-                    <input class="vulinlog" autocomplete="off" autofocus class="form-control" name="comment" placeholder="Choose a caption" type="text"/>
-                </div>
+            <label class="vulinlogbevestig">
+                <input onchange="readURL(this);" class="custom-file-upload" type = "file" name = "file" accept="image/*" required/>
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Choose the image you want to upload
+            </label>
+            <div class="form-group">
+                <input class="vulinlog" autocomplete="off" autofocus class="form-control" name="comment" placeholder="Choose a caption" type="text"/>
+            </div>
             <div class="form-group">
                 <button class="vulinlogbevestig" type="submit">Upload Photo<event></event></button>
             </div>

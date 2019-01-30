@@ -5,24 +5,18 @@
 {% endblock %}
 
 {% block main %}
-    <form action="{{ url_for('addmember') }}" style="font-family:Rubik Mono One;" method="post">
-        <br>
-        <br>
-        <div class="container">
-          <fieldset>
-            <div class="form-group">
-                <input class="vulinlog" name="add_members" placeholder="Member" type="text"/>
-            </div>
-            <div class="form-group">
-                <button class="vulinlogbevestig" type="submit">Add Member</button>
-            </div>
-          </fieldset>
-        </div>
-    </form>
-    <p>
-      <p>
-      </p>
-    </p>
+    <form action="{{ url_for('addmember') }}" style="font-family:Rubik Mono One;" method="post"><br><br>
+      <div class="container">
+        <fieldset>
+          <div class="form-group">
+              <input class="vulinlog" name="add_members" placeholder="Member" type="text"/>
+          </div>
+          <div class="form-group">
+              <button class="vulinlogbevestig" type="submit">Add Member</button>
+          </div>
+        </fieldset>
+      </div>
+    </form><p><p></p></p>
     <div style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
       <table style="font-family:Rubik Mono One;"class="gecentreerd">
         <thead class="thead-dark">
@@ -36,8 +30,7 @@
           </tr>
         </thead>
       </table>
-    </div>
-  <br>
+    </div><br>
     <a class="gecentreerd"href="{{ url_for('groupfeed') }}">
       <input class="vulinlog" type="button" value="Done" />
     </a>

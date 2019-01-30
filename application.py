@@ -11,20 +11,13 @@ from flask import send_from_directory
 from helpers import *
 import time
 global request
-# import giphy_client
-# from giphy_client.rest import ApiException
-
 import re
-
 from pprint import pprint
 import urllib.parse as urlparse
 from django.utils.deprecation import MiddlewareMixin
 import urllib
 import json
 import urllib.parse as urlparse
-#from selenium import webdriver
-#from selenium.webdriver.common.keys import Keys
-
 import uuid
 
 # configure application
@@ -56,13 +49,6 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 db = SQL("sqlite:///PicUs.db")
 
 
-
-#login_manager = LoginManager()
-#login_manager.init_app(app)
-#login_manager.login_view = 'login'
-
-
-
 @app.route("/")
 def index():
     """The index of the website"""
@@ -71,7 +57,7 @@ def index():
     if request.method == "GET":
         return render_template("index.html")
 
-#GINO
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -104,7 +90,8 @@ def register():
             flash("username already exists")
             return render_template("register.html")
 
-        geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
+        geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get(
+            "email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
         if not geregistreerd:
             flash("The registration could not happen")
@@ -153,19 +140,20 @@ def makegroup():
             flash("This is not a picture")
             return render_template("makegroup.html")
 
-
         # Upload profile picture
-        filename =  namegroup + "_" + file.filename
+        filename = namegroup + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         # Upload info group into database groups
-        db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)", groupname=namegroup, profile_picture=filename)
+        db.execute("INSERT INTO groups (name_group, profile_picture) VALUES(:groupname, :profile_picture)",
+                   groupname=namegroup, profile_picture=filename)
 
         # Make session for the group
         session["group_id"] = ses_group(namegroup)
 
         # Put users into database user_groups
-        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=session["user_id"], group_id=session["group_id"])
+        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)",
+                   user_id=session["user_id"], group_id=session["group_id"])
 
         # Redirect to adding group members
         return redirect(url_for("addmember"))
@@ -206,7 +194,8 @@ def addmember():
             return render_template("addgroupmember.html")
 
         # Add member to the group
-        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
+        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)",
+                   user_id=id_user, group_id=session["group_id"])
 
         # Get other members and put it in a list
         members = get_members()
@@ -221,7 +210,7 @@ def addmember():
             temporary.append([mem])
 
         # Reload page with updated list of members
-        return render_template("addgroupmember.html", list_members = temporary)
+        return render_template("addgroupmember.html", list_members=temporary)
     else:
         # Reload page
         return render_template("addgroupmember.html")
@@ -238,7 +227,7 @@ def add_member():
         # Link to redirect
         urlBase = request.url_root
         link = urlBase + 'groupview?value='
-        links += groupname
+        link += groupname
 
         # Check username
         user = find_user(add_members)
@@ -263,17 +252,18 @@ def add_member():
             return redirect(url_for("add_member"))
 
         # Add user to database
-        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
+        db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)",
+                   user_id=id_user, group_id=session["group_id"])
 
         # Redirect link
-        return redirect(links)
+        return redirect(link)
     else:
         # Get name of the group and reload page
         url = request.url
         parsed = urlparse.urlparse(url)
         name = urlparse.parse_qs(parsed.query)['value']
         groupname = name[0]
-        return render_template("add_member.html", name = groupname)
+        return render_template("add_member.html", name=groupname)
 
 
 @app.route("/eventview", methods=["GET", "POST"])
@@ -298,8 +288,8 @@ def eventview():
     for rows in temporary:
         print(rows[0], rows[1])
 
+    return render_template("eventview.html", list_event_id=temporary)
 
-    return render_template("eventview.html", list_event_id = temporary)
 
 @app.route("/makeevent", methods=["GET", "POST"])
 @login_required
@@ -310,10 +300,8 @@ def makeevent():
         if not request.form.get("makeevent"):
             return "insert eventname"
 
-
         if len(db.execute("SELECT * FROM event_account WHERE event_name=:event", event=name_event)) > 0:
             return "eventname already exists"
-
 
         # check if the post request has the file part
         file = request.files['file']
@@ -321,28 +309,26 @@ def makeevent():
             flash('No file part')
             return redirect(request.url)
 
-
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
             flash('No selected file')
-        filename =  name_event + "_" + file.filename
+        filename = name_event + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        db.execute("INSERT INTO event_account (event_picture, event_name) VALUES(:event_picture, :event_name)", event_picture=filename, event_name = name_event)
-
+        db.execute("INSERT INTO event_account (event_picture, event_name) VALUES(:event_picture, :event_name)",
+                   event_picture=filename, event_name=name_event)
 
         rows = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name_event)
         session["event"] = rows[0]["event_id"]
 
-        db.execute("INSERT INTO user_events (user_id, event_id) VALUES(:user_id, :event_id)", user_id=session["user_id"], event_id=session["event"])
+        db.execute("INSERT INTO user_events (user_id, event_id) VALUES(:user_id, :event_id)",
+                   user_id=session["user_id"], event_id=session["event"])
         return redirect(url_for("eventview"))
     else:
         return render_template("makeevent.html")
 
 
-
-#GINO
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in."""
@@ -365,7 +351,6 @@ def login():
 
         # username database
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
-
 
         # kijken of username uniek is en wachtwoord klopt
         if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
@@ -411,7 +396,7 @@ def groupfeed():
             user = usernam(user_id)
 
             # Select needed info
-            username= user[0]["username"]
+            username = user[0]["username"]
             profilepic = group[number]["picture"]
             comments = group[number]["comment"]
             profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
@@ -440,7 +425,7 @@ def groupfeed():
 
             # Add info to list and reload page
             temporary.append([groupnamel, profilepicture])
-        return render_template("groupfeed.html", list_group = temporary)
+        return render_template("groupfeed.html", list_group=temporary)
 
 
 @app.route("/aboutus", methods=["GET", "POST"])
@@ -453,6 +438,7 @@ def aboutus():
 def settings():
     return render_template("settings.html")
 
+
 @app.route("/password", methods=["GET", "POST"])
 @login_required
 def password():
@@ -463,11 +449,11 @@ def password():
             flash("Make sure your password is at least 8 letters")
             return render_template("password.html")
 
-        if re.search('[0-9]',password) is None:
+        if re.search('[0-9]', password) is None:
             flash("Make sure your password has a number in it")
             return render_template("password.html")
 
-        if re.search('[A-Z]',password) is None:
+        if re.search('[A-Z]', password) is None:
             flash("Make sure your password has a capital letter in it")
             return render_template("password.html")
 
@@ -491,7 +477,8 @@ def password():
             flash("Please fill in your password!")
             return render_template("password.html")
 
-        wwupdate = db.execute("UPDATE users SET hash = :password WHERE id = :ide", ide=session["user_id"], password=pwd_context.hash(request.form.get("newpassword")))
+        wwupdate = db.execute("UPDATE users SET hash = :password WHERE id = :ide",
+                              ide=session["user_id"], password=pwd_context.hash(request.form.get("newpassword")))
 
         if not wwupdate:
             flash("The password change could not happen")
@@ -505,6 +492,7 @@ def password():
 
     return render_template("password.html")
 
+
 @app.route("/profilepicture", methods=["GET", "POST"])
 def profilepicture():
     if request.method == "POST":
@@ -515,19 +503,20 @@ def profilepicture():
             flash('No picture uploaded')
             return render_template("profilepicture.html")
 
-
         nummer = str(session["user_id"])
 
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
             flash('No selected file')
-        filename =  nummer + "_" + file.filename
+        filename = nummer + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        db.execute("UPDATE users SET profilepicture = :profilepicture WHERE id = :gebruiksersnaam", profilepicture=filename, gebruikersnaam=session["user_id"])
+        db.execute("UPDATE users SET profilepicture = :profilepicture WHERE id = :gebruiksersnaam",
+                   profilepicture=filename, gebruikersnaam=session["user_id"])
         return render_template("settings.html")
     else:
         return render_template("profilepicture.html")
+
 
 @app.route("/logout")
 def logout():
@@ -600,18 +589,18 @@ def groupview():
         member = members[line]["user_id"]
         list_temp.append(member)
     for row in list_temp:
-        mem = db.execute("SELECT username FROM users WHERE id=:id_mem", id_mem=row)
+        mem = get_memb(row)
         mem = mem[0]["username"]
         list_temporary.append([mem])
     print(list_temporary)
     # return to html page with required information
-    return render_template("groupview.html", list_picture=temporary, group=name[0], list_members = list_temporary)
+    return render_template("groupview.html", list_picture=temporary, group=name[0], list_members=list_temporary)
 
 
 @app.route("/upload_photo", methods=["GET", "POST"])
 @login_required
 def upload_photo():
-    if request.method=="POST":
+    if request.method == "POST":
         # Get groupname from helpers
         group = get_nam_group()
 
@@ -630,7 +619,7 @@ def upload_photo():
             return render_template("upload_photo.html")
 
         # Add picture to the server with special name
-        filename =  str(session["user_id"]) + "_" + str(session["group_id"]) + "_" + file.filename
+        filename = str(session["user_id"]) + "_" + str(session["group_id"]) + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         # Add picture with comment to database
@@ -651,8 +640,9 @@ def upload_photo():
 @app.route("/search", methods=["GET", "POST"])
 def search():
     check = 0
-    zoekopdracht=request.form.get("search")
-    zoeken = db.execute("SELECT * FROM event_account WHERE event_name LIKE :zoekopdracht ORDER BY event_name ASC", zoekopdracht=str(zoekopdracht)+"%")
+    zoekopdracht = request.form.get("search")
+    zoeken = db.execute("SELECT * FROM event_account WHERE event_name LIKE :zoekopdracht ORDER BY event_name ASC",
+                        zoekopdracht=str(zoekopdracht)+"%")
     resultaten = []
 
     for row in zoeken:
@@ -663,11 +653,7 @@ def search():
     if not request.form.get("search"):
         return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=0)
 
-
     return render_template("search.html", zoekopdracht=zoekopdracht, resultaten=resultaten, check=1)
-
-
-
 
 
 @app.route("/eventphoto", methods=["GET", "POST"])
@@ -684,11 +670,11 @@ def eventphoto():
         if not allowed_file(file.filename):
             return "This is not a picture"
 
-        filename =  str(session["user_id"]) + "_" + str(session["event_id"]) + "_" + file.filename
+        filename = str(session["user_id"]) + "_" + str(session["event_id"]) + "_" + file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        db.execute("INSERT INTO event_feed (images, likes, dislikes, comments, caption, user_id, event_id) VALUES(:images, :likes, :dislikes, :comments, :caption, :user_id, :event_id)"
-                   ,images=filename, likes = 0, dislikes = 0, comments = "hi does this work?", caption = caption, user_id = session["user_id"], event_id = session["event_id"])
+        db.execute("INSERT INTO event_feed (images, likes, dislikes, comments, caption, user_id, event_id) VALUES(:images, :likes, :dislikes, :comments, :caption, :user_id, :event_id)",
+                   images=filename, likes=0, dislikes=0, comments="hi does this work?", caption=caption, user_id=session["user_id"], event_id=session["event_id"])
 
         # Link to redirect
         urlBase = request.url_root
@@ -698,19 +684,14 @@ def eventphoto():
     else:
         return render_template("eventphoto.html")
 
-# @app.route("/get_group/", methods=['POST'])
-# def get_group():
-#     f=request.form.get("groupname")
-#     group = db.execute("SELECT group_id FROM groups WHERE name_group=:name_group", name_group=f)
-#     group_idd = group[0]["group_id"]
-#     return group_idd
 
 @app.route("/get_event/", methods=['POST'])
 def get_event():
-    f=request.form.get("eventname")
+    f = request.form.get("eventname")
     event = db.execute("SELECT event_id FROM event_account WHERE event_name=:name_event", name_event=f)
     event_idd = event[0]["event_id"]
     return event_idd
+
 
 @app.route('/eventfeed/')
 def eventfeed():
@@ -724,7 +705,8 @@ def eventfeed():
     session["event_id"] = event_idd
     temporary = []
 
-    event = db.execute("SELECT user_id, images, caption, likes, dislikes, comments, time FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
+    event = db.execute(
+        "SELECT user_id, images, caption, likes, dislikes, comments, time FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
 
     for number in range(len(event)):
         temp = []
@@ -761,12 +743,13 @@ def eventfeed():
 @login_required
 def leave_group():
     # Delete group
-    db.execute("DELETE FROM user_groups WHERE user_id = :user_id AND group_id = :group_id", user_id=session["user_id"], group_id = session["group_id"])
+    db.execute("DELETE FROM user_groups WHERE user_id = :user_id AND group_id = :group_id",
+               user_id=session["user_id"], group_id=session["group_id"])
 
     # Check if group is empty if true delete the group from database
     check = check_users()
     if check == []:
-         db.execute("DELETE FROM groups WHERE group_id = :group_id", group_id = session["group_id"])
+        db.execute("DELETE FROM groups WHERE group_id = :group_id", group_id=session["group_id"])
 
     # redirect to groupfeed
     return redirect(url_for("groupfeed"))
@@ -787,7 +770,8 @@ def like_photo():
     link += view[0]
 
     # Insert like into database
-    db.execute("INSERT INTO like_group (user_id, picture_user, groupname) VALUES(:user_id, :picture_user, :groupname)", user_id=session["user_id"], picture_user=name, groupname=view)
+    db.execute("INSERT INTO like_group (user_id, picture_user, groupname) VALUES(:user_id, :picture_user, :groupname)",
+               user_id=session["user_id"], picture_user=name, groupname=view)
 
     # Get info about like
     check = like_check(name, view)
@@ -795,13 +779,15 @@ def like_photo():
     # Check if user already liked the picture
     check_id = check[0]["id"]
     if len(check) != 1:
-        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, groupname=view)
+        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname AND id=:id_check",
+                   id_check=check_id, user_id=session["user_id"], picture_user=name, groupname=view)
         flash("You have already liked this picture")
         return redirect(link)
     else:
         # Update likes
         likes = get_like(name)
-        db.execute("UPDATE picture_group SET like =:like WHERE picture=:picture_user AND group_id=:groupname", like = likes + 1, picture_user=name, groupname=session["group_id"])
+        db.execute("UPDATE picture_group SET like =:like WHERE picture=:picture_user AND group_id=:groupname",
+                   like=likes + 1, picture_user=name, groupname=session["group_id"])
 
     # Redirect to adjusted link
     return redirect(link)
@@ -823,7 +809,8 @@ def dislike_photo():
     link += view[0]
 
     # Insert dislike into database
-    db.execute("INSERT INTO like_group (user_id, picture_user, groupname) VALUES(:user_id, :picture_user, :groupname)", user_id=session["user_id"], picture_user=name, groupname=view)
+    db.execute("INSERT INTO like_group (user_id, picture_user, groupname) VALUES(:user_id, :picture_user, :groupname)",
+               user_id=session["user_id"], picture_user=name, groupname=view)
 
     # Get info about like
     check = like_check(name, view)
@@ -831,13 +818,15 @@ def dislike_photo():
     # Check if user already liked the photo
     check_id = check[0]["id"]
     if len(check) != 1:
-        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, groupname=view)
+        db.execute("DELETE FROM like_group WHERE user_id=:user_id AND picture_user=:picture_user AND groupname=:groupname AND id=:id_check",
+                   id_check=check_id, user_id=session["user_id"], picture_user=name, groupname=view)
         flash("You have already liked this picture")
         return redirect(link)
     else:
         # Update dislikes
         likes = get_like(name)
-        db.execute("UPDATE picture_group SET like =:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", like = likes - 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+        db.execute("UPDATE picture_group SET like =:like WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname",
+                   like=likes - 1, user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
 
     # Redirect to adjusted link
     return redirect(link)
@@ -865,10 +854,12 @@ def bin():
         return redirect(link_back)
 
     # Delete picture
-    db.execute("DELETE FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname", user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
+    db.execute("DELETE FROM picture_group WHERE user_id=:user_id AND picture=:picture_user AND group_id=:groupname",
+               user_id=session["user_id"], picture_user=name, groupname=session["group_id"])
 
     # Redirect to groupview
     return redirect(link_back)
+
 
 @app.route('/eventbin/')
 @login_required
@@ -880,13 +871,15 @@ def eventbin():
     view = urlparse.parse_qs(parsed.query)['q']
 
     # Delete picture
-    db.execute("DELETE FROM event_feed WHERE user_id=:user_id AND images=:image_user AND event_id=:eventname", user_id=session["user_id"], image_user=name, eventname=session["event_id"])
+    db.execute("DELETE FROM event_feed WHERE user_id=:user_id AND images=:image_user AND event_id=:eventname",
+               user_id=session["user_id"], image_user=name, eventname=session["event_id"])
 
     # Redirect link
     urlBase = request.url_root
     link_back = urlBase + 'eventfeed?value='
     link_back += view[0]
     return redirect(link_back)
+
 
 @app.route("/username", methods=["GET", "POST"])
 @login_required
@@ -913,13 +906,12 @@ def username():
             flash("Please fill in your username!")
             return redirect(url_for("settings"))
 
-
-        usupdate = db.execute("UPDATE users SET username = :username WHERE id = :ide", ide=session["user_id"], username=request.form.get("newusername"))
+        usupdate = db.execute("UPDATE users SET username = :username WHERE id = :ide",
+                              ide=session["user_id"], username=request.form.get("newusername"))
 
         if not usupdate:
             flash("The username change could not happen")
             return redirect(url_for("settings"))
-
 
         # gebruiker onthouden
         session["user_id"] = usupdate
@@ -927,8 +919,8 @@ def username():
         # als alles doorstaan en voltooid is, bevestig registratie
         return redirect(url_for("settings"))
 
-
     return redirect(link)
+
 
 @app.route('/event_like_photo/')
 @login_required
@@ -946,7 +938,8 @@ def event_like_photo():
     link += view[0]
 
     # Insert like into database
-    db.execute("INSERT INTO like_event (user_id, picture_user, eventname) VALUES(:user_id, :picture_user, :eventname)", user_id=session["user_id"], picture_user=name, eventname=view)
+    db.execute("INSERT INTO like_event (user_id, picture_user, eventname) VALUES(:user_id, :picture_user, :eventname)",
+               user_id=session["user_id"], picture_user=name, eventname=view)
 
     # Get info about like
     check = event_like_check(name, view)
@@ -954,16 +947,19 @@ def event_like_photo():
     # Check if user already liked the picture
     check_id = check[0]["id"]
     if len(check) != 1:
-        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, eventname=view)
+        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname AND id=:id_check",
+                   id_check=check_id, user_id=session["user_id"], picture_user=name, eventname=view)
         flash("You have already liked this picture")
         return redirect(link)
     else:
         # Update likes
         likes = event_get_like(name)
-        db.execute("UPDATE event_feed SET likes =:like WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", like = likes + 1, user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
+        db.execute("UPDATE event_feed SET likes =:like WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname",
+                   like=likes + 1, user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
 
     # Redirect to adjusted link
     return redirect(link)
+
 
 @app.route('/event_dislike_photo/')
 @login_required
@@ -980,7 +976,8 @@ def event_dislike_photo():
     link += view[0]
 
     # Insert dislike into database
-    db.execute("INSERT INTO like_event (user_id, picture_user, eventname) VALUES(:user_id, :picture_user, :eventname)", user_id=session["user_id"], picture_user=name, eventname=view)
+    db.execute("INSERT INTO like_event (user_id, picture_user, eventname) VALUES(:user_id, :picture_user, :eventname)",
+               user_id=session["user_id"], picture_user=name, eventname=view)
 
     # Get info about like
     check = event_like_check(name, view)
@@ -988,13 +985,15 @@ def event_dislike_photo():
     # Check if user already liked the photo
     check_id = check[0]["id"]
     if len(check) != 1:
-        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname AND id=:id_check", id_check = check_id, user_id=session["user_id"], picture_user=name, eventname=view)
+        db.execute("DELETE FROM like_event WHERE user_id=:user_id AND picture_user=:picture_user AND eventname=:eventname AND id=:id_check",
+                   id_check=check_id, user_id=session["user_id"], picture_user=name, eventname=view)
         flash("You have already liked this picture")
         return redirect(link)
     else:
         # Update dislikes
         likes = get_like(name)
-        db.execute("UPDATE event_feed SET likes =:like WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname", like = likes - 1, user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
+        db.execute("UPDATE event_feed SET likes =:like WHERE user_id=:user_id AND images=:picture_user AND event_id=:eventname",
+                   like=likes - 1, user_id=session["user_id"], picture_user=name, eventname=session["event_id"])
 
     # Redirect to adjusted link
     return redirect(link)
@@ -1010,7 +1009,8 @@ def comment():
     pica = urlparse.parse_qs(parsed.query)['pic']
 
     # Insert comment into database
-    db.execute("INSERT INTO comment_group (user_id, group_id, picture, comment) VALUES(:user_id, :group_id, :picture, :comment)", user_id=session["user_id"], group_id = session["group_id"], picture=pica, comment=comm)
+    db.execute("INSERT INTO comment_group (user_id, group_id, picture, comment) VALUES(:user_id, :group_id, :picture, :comment)",
+               user_id=session["user_id"], group_id=session["group_id"], picture=pica, comment=comm)
 
     # Get groupname to redirect
     groupnamel = get_nam_group()
@@ -1021,10 +1021,12 @@ def comment():
     link += groupnamel
     return redirect(link)
 
+
 @app.route("/noevent")
 @login_required
 def noevent():
     return render_template("noevent.html")
+
 
 @app.route("/nogroup")
 @login_required
@@ -1035,12 +1037,15 @@ def nogroup():
 @app.route("/add_gif")
 @login_required
 def add_gif():
+    # Get info from url
     url = request.url
     parsed = urlparse.urlparse(url)
     comm = urlparse.parse_qs(parsed.query)['value']
     pica = urlparse.parse_qs(parsed.query)['q']
 
-    db.execute("INSERT INTO comment_group (user_id, group_id, picture, comment) VALUES(:user_id, :group_id, :picture, :comment)", user_id=session["user_id"], group_id = session["group_id"], picture=pica, comment=comm)
+    # Add data into database
+    db.execute("INSERT INTO comment_group (user_id, group_id, picture, comment) VALUES(:user_id, :group_id, :picture, :comment)",
+               user_id=session["user_id"], group_id=session["group_id"], picture=pica, comment=comm)
 
     # Get groupname to redirect
     groupnamel = get_nam_group()
@@ -1050,6 +1055,7 @@ def add_gif():
     link = urlBase + 'groupview?value='
     link += groupnamel
     return redirect(link)
+
 
 @app.route('/eventcomment/')
 @login_required
@@ -1069,8 +1075,8 @@ def eventcomment():
     pica = urlparse.parse_qs(parsed.query)['pic']
 
     # Insert comment into database
-    db.execute("INSERT INTO comment_event (user_id, event_id, picture, comment) VALUES(:user_id, :event_id, :picture, :comment)", user_id=session["user_id"], event_id = session["event_id"], picture=pica, comment=comm)
-
+    db.execute("INSERT INTO comment_event (user_id, event_id, picture, comment) VALUES(:user_id, :event_id, :picture, :comment)",
+               user_id=session["user_id"], event_id=session["event_id"], picture=pica, comment=comm)
 
     eventnamel = get_nam_event()
 
@@ -1080,6 +1086,7 @@ def eventcomment():
     link += eventnamel
     return redirect(link)
 
+
 @app.route("/event_add_gif")
 @login_required
 def event_add_gif():
@@ -1088,7 +1095,8 @@ def event_add_gif():
     comm = urlparse.parse_qs(parsed.query)['value']
     pica = urlparse.parse_qs(parsed.query)['q']
 
-    db.execute("INSERT INTO comment_event (user_id, event_id, picture, comment) VALUES(:user_id, :event_id, :picture, :comment)", user_id=session["user_id"], event_id = session["event_id"], picture=pica, comment=comm)
+    db.execute("INSERT INTO comment_event (user_id, event_id, picture, comment) VALUES(:user_id, :event_id, :picture, :comment)",
+               user_id=session["user_id"], event_id=session["event_id"], picture=pica, comment=comm)
 
     # Get groupname to redirect
     eventnamel = get_nam_event()
