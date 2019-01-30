@@ -40,7 +40,9 @@
         // Now you can pass that into your "here_is_gif" <img> tag using its id (#)
         $('#here_is_gif').attr('src', giphyURL);
 
-        var url = 'https://ide50-britt1212.legacy.cs50.io:8080/add_gif?value=' +giphyURL + '&q=' +group;
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url = baseUrl + '/add_gif?value=' +giphyURL + '&q=' +group;
         return window.open(url, "_self");
 
         });

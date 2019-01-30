@@ -47,8 +47,10 @@ $( document ).ready(function(){
 
         });
             $('#sumbit_button').on('click', function(){
-            var url = 'https://ide50-a12216321.legacy.cs50.io:8080/event_add_gif?value=' + giphyURL + '&q=' + event;
-              return window.open(url, "_self");
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host;
+            var url = baseUrl + '/event_add_gif?value=' + giphyURL + '&q=' + event;
+            return window.open(url, "_self");
           })
         // Part 3 - Clear the Gif using the reset_button id (#)
         $('#reset_button').on('click', function(){
