@@ -89,6 +89,89 @@ function bin(photo, name){
 {% for row in list_picture %}
 <br><br>
 <section class="hero" opacity="0.5">
+         <div style="top:-250px;" class="container">
+          <div  style="top:-250px;" class="row">
+
+		   <div  style="top:-250px;" class="col-lg-6 offset-lg-3">
+
+			<div style="border-radius:20px;"class="cardbox shadow-lg bg-white" >
+
+			 <div style="border-radius:20px;" class="cardbox-heading">
+			  <!-- START dropdown-->
+			 <!-- <div class="dropdown float-right">-->
+			 <!--  <button class="btn btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="false">-->
+				<!--<em class="fa fa-ellipsis-h"></em>-->
+			 <!--  </button>-->
+			 <!--  <div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">-->
+				<!--<a class="dropdown-item" >Delete post</a>-->
+				<!--<div class="cardbox-base" align="left">-->
+			  <!--<ul class="fa fa-thumbs-up">-->
+			  <div align="right">
+			   <br><a class="button_view2"><i class="fa fa-trash" onclick="bin('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
+			   </div>
+			   <!--<li><a></a></li>--
+			  <!--</ul>-->
+			 <!--</div><!--/ cardbox-base -->
+				<!--<a class="dropdown-item" href="#">Stop following</a>-->
+				<!--<a class="dropdown-item" href="#">Report</a>-->
+			 <!--  </div>-->
+			 <!-- </div><!--/ dropdown -->
+			  <div class="media m-0">
+			   <div class="media-body">
+			    <p class="m-0">{{ row[0] }}</p>
+
+				<small><span><i class="icon ion-md-time"></i> {{ row[6] }} </span></small>
+			   </div>
+			  </div><!--/ media -->
+			 </div><!--/ cardbox-heading -->
+
+			 <div class="cardbox-item">
+			  <img class="img-fluid" src="{{ row[1] }}" alt="Image">
+			 </div><!--/ cardbox-item -->
+
+			     <table border="0" width="100%">
+			         <tr>
+			             <td align="left">
+			                 <span><i class="icon ion-md-pin"></i><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ row[0]}}:</b> {{ row[2] }}</span><br>
+			             </td>
+			             <td align = "right">
+			                       <div align="right">
+			                       <a><span><b>likes: </b>{{ row[4] }}</span></a>
+                    			   <a><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ event }}')"></i></a>
+                    			   <a><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
+                    		 </div>
+			             </td>
+			         </tr>
+            </table>
+                <br>
+			 <div class="cardbox-comments">
+			  <span class="comment-avatar float-left">
+			  </span>
+			  <div class="form-group">
+                <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
+                <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" id="btn btn-default" class="search_button" type="submit" value="{{ row[3] }}"> <i class="fa fa-search" aria-hidden="true"></i></button>
+                <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" id="btn btn-default" onclick="submit_gif('{{ row[3] }}')"><i class="fa fa-paper-plane" aria-hidden="true"></i> </button>
+                <button type="reset" id="reset_button" value="Reset" style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" type="reset" id="reset_button" value="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+
+                <img id="here_is_gif" src="giphyURL"/>
+                </div>
+			  <div class="search">
+			   <!--<input placeholder="Write a comment" id="comment-box" type="text">-->
+			   <form action="{{ url_for('eventcomment') }}">
+                    <fieldset>
+                        <div class="form-group" width = "60%">
+                            <input class="form-control" name="comments" placeholder="Write a comment" type="text" size="40"/>
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                        <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                        </div>
+                        <b><i class="fa fa-comments"></i> Comments</b>
+                        <center>
+                        <table width="90%" height = "40%">
+
     <div style="top:-250px;" class="container">
         <div  style="top:-250px;" class="row">
             <div  style="top:-250px;" class="col-lg-6 offset-lg-3">

@@ -78,13 +78,15 @@ function get_group(pass_to_python)
         <div style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
         <table class="gecentreerd">
           <tr>
-            <td style="font-style: normal;">Search results for: {{ zoekopdracht }}</td>
+            <td style="font-style: normal;"><center>Search results for: {{ zoekopdracht }}</center></td>
           </tr>
               {% for i in resultaten %}
                   {% if resultaten|length > 0 %}
 
                       <tr>
-                        <td style="margin-left:auto; margin-right:auto; display: table;"class="partofgroup2"><a style="color:#B9B9B9" onclick="get_group('{{ i }}')">{{i}}</a></td>
+                        <td style="margin-left:auto; margin-right:auto; display: table;"class="partofgroup2">
+                            <a id="zoek" style="color:white" href="eventfeed/?value={{i}}">{{i}}</a>
+                        </td>
                       </tr>
 
                   {% else %}
