@@ -78,37 +78,37 @@ def register():
         # checken voor goede invulling
         if not request.form.get("email"):
             flash("Please fill in your email adress!")
-            return redirect(url_for("register"))
+            return render_template("register.html")
 
         if not request.form.get("username"):
             flash("Please fill in your username!")
-            return redirect(url_for("register"))
+            return render_template("register.html")
 
         if request.form.get("password") != request.form.get("confirmation"):
             flash("Password and confirmation password were not the same!")
-            return redirect(url_for("register"))
+            return render_template("register.html")
 
         if request.form.get("password") == "":
             flash("Please fill in your password!")
-            return redirect(url_for("register"))
+            return render_template("register.html")
 
         elif not request.form.get("password"):
             flash("Please fill in your password!")
-            return redirect(url_for("register"))
+            return render_template("register.html")
 
         elif not request.form.get("confirmation"):
             flash("Please fill in your password!")
-            return redirect(url_for("register"))
+            return render_template("register.html")
 
         if len(db.execute("SELECT * FROM users WHERE username=:username", username=request.form.get("username"))) > 0:
             flash("username already exists")
-            return redirect(url_for("register"))
+            return render_template("register.html")
 
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
         if not geregistreerd:
             flash("The registration could not happen")
-            return redirect(url_for("register"))
+            return render_template("register.html")
 
         # gebruiker onthouden
         session["user_id"] = geregistreerd
@@ -139,7 +139,7 @@ def makegroup():
         # Check if groupname already exist
         if name == namegroup:
             flash("Name of the group already exist")
-            return redirect(url_for("makegroup"))
+            return render_template("makegroup.html")
 
         # Get profile picture
         file = request.files['file']
@@ -147,11 +147,11 @@ def makegroup():
         # Check if picture is uploaded
         if file == "":
             flash("Upload photo")
-            return redirect(url_for("makegroup"))
+            return render_template("makegroup.html")
 
         if not allowed_file(file.filename):
             flash("This is not a picture")
-            return redirect(url_for("makegroup"))
+            return render_template("makegroup.html")
 
 
         # Upload profile picture
@@ -186,7 +186,7 @@ def addmember():
         user = find_user(add_members)
         if user == []:
             flash("Username doesn't exist")
-            return redirect(url_for("addmember"))
+            return render_template("addgroupmember.html")
 
         # Get user id from helpers.py
         id_user = userse(add_members)
@@ -203,7 +203,7 @@ def addmember():
         # Notification if user is already part of the group
         if users == id_user:
             flash("This user is already part of the group")
-            return redirect(url_for("addmember"))
+            return render_template("addgroupmember.html")
 
         # Add member to the group
         db.execute("INSERT INTO user_groups (user_id, group_id) VALUES(:user_id, :group_id)", user_id=id_user, group_id=session["group_id"])
@@ -356,12 +356,12 @@ def login():
         # username verzekeren
         if not request.form.get("username"):
             flash("Must provide username!")
-            return redirect(url_for("login"))
+            return render_template("login.html")
 
         # wachtwoord verzekeren
         elif not request.form.get("password"):
             flash("must provide password!")
-            return redirect(url_for("login"))
+            return render_template("login.html")
 
         # username database
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
@@ -370,7 +370,7 @@ def login():
         # kijken of username uniek is en wachtwoord klopt
         if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
             flash("invalid username and/or password!")
-            return redirect(url_for("login"))
+            return render_template("login.html")
 
         # remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -461,41 +461,41 @@ def password():
         password = request.form.get("newpassword")
         if len(password) < 8:
             flash("Make sure your password is at least 8 letters")
-            return redirect(url_for("password"))
+            return render_template("password.html")
 
         if re.search('[0-9]',password) is None:
             flash("Make sure your password has a number in it")
-            return redirect(url_for("password"))
+            return render_template("password.html")
 
         if re.search('[A-Z]',password) is None:
             flash("Make sure your password has a capital letter in it")
-            return redirect(url_for("password"))
+            return render_template("password.html")
 
         if request.form.get("newpassword") != request.form.get("newconfirmation"):
             flash("Password and confirmation password were not the same!")
-            return redirect(url_for("password"))
+            return render_template("password.html")
 
         if request.form.get("newpassword") == "":
             flash("Please fill in your password!")
-            return redirect(url_for("password"))
+            return render_template("password.html")
 
         if request.form.get("newconfirmation") == "":
             flash("Please fill in your password!")
-            return redirect(url_for("password"))
+            return render_template("password.html")
 
         elif not request.form.get("newpassword"):
             flash("Please fill in your password!")
-            return redirect(url_for("password"))
+            return render_template("password.html")
 
         elif not request.form.get("newconfirmation"):
             flash("Please fill in your password!")
-            return redirect(url_for("password"))
+            return render_template("password.html")
 
         wwupdate = db.execute("UPDATE users SET hash = :password WHERE id = :ide", ide=session["user_id"], password=pwd_context.hash(request.form.get("newpassword")))
 
         if not wwupdate:
             flash("The password change could not happen")
-            return redirect(url_for("password"))
+            return render_template("password.html")
 
         # gebruiker onthouden
         session["user_id"] = wwupdate
@@ -625,13 +625,13 @@ def upload_photo():
         # Check if user wrote a comment
         if comments == "":
             flash("You need to write a comment")
-            return redirect(url_for("upload_photo"))
+            return render_template("upload_photo.html")
 
         # Check if uploaded file is an actual picture
         file = request.files['file']
         if not allowed_file(file.filename):
             flash("This is not a picture")
-            return redirect(url_for("upload_photo"))
+            return render_template("upload_photo.html")
 
         # Add picture to the server with special name
         filename =  str(session["user_id"]) + "_" + str(session["group_id"]) + "_" + file.filename

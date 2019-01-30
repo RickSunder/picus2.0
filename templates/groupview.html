@@ -40,7 +40,9 @@
         // Now you can pass that into your "here_is_gif" <img> tag using its id (#)
         $('#here_is_gif').attr('src', giphyURL);
 
-        var url = 'https://ide50-britt1212.legacy.cs50.io:8080/add_gif?value=' +giphyURL + '&q=' +group;
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url = baseUrl + '/add_gif?value=' +giphyURL + '&q=' +group;
         return window.open(url, "_self");
 
         });
@@ -143,14 +145,14 @@
 		                      <div style="border-radius:20px;" class="col-lg-6 offset-lg-3">
 		                          <div style="border-radius:20px;" class="cardbox shadow-lg bg-white" >
 		                              <div style="border-radius:20px;" class="cardbox-heading">
-		                                  <div align="right" >
-			                                   <br><a class="button_view2"><i class="fa fa-trash" onclick="bin('{{row[3]}}', '{{ group}}')"></i></a>&nbsp;&nbsp;
+		                                  <div style="top:55px;" align="right" >
+			                                   <br><a style="top:55px;"  class="button_view2"><i style="top:55px;"  class="fa fa-trash" onclick="bin('{{row[3]}}', '{{ group}}')"></i></a>&nbsp;&nbsp;
 			                              </div>
 			                                  <div class="media m-0">
 			                                      <div class="d-flex mr-3">
 			                                          </div>
 			                                              <div class="media-body">
-			                                                 <p class="m-0">{{ row[0] }}</p>
+			                                                 <p class="m-0"><h1>{{ row[0] }}</h1></p>
 			                                                 <small><span><i class="icon ion-md-time"></i> {{ row[6] }} </span></small>
 			                                               </div>
 			                                          </div><!--/ media -->
@@ -161,11 +163,11 @@
 			                                  <table border="0" width="100%">
 			                                     <tr>
                             			             <td align="left">
-                            			                 <span><i class="icon ion-md-pin"></i> {{ row[2] }}</span><br>
+                            			                 <span><i class="icon ion-md-pin"></i><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ row[0]}}:</b> {{ row[2] }}</span><br>
                             			             </td>
                             			             <td align = "right">
                             			                 <div align="right">
-                            			                   <a><span>Likes: {{ row[4] }}</span></a>
+                            			                   <a><span><b>Likes: </b>{{ row[4] }}</span></a>
                                                 		   <a class="button_view"><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ group}}')" ></i></a>
                                             			   <a class="button_view2"><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ group}}')"></i></a>&nbsp;&nbsp;
                                                 		 </div>
