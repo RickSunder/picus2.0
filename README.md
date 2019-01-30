@@ -37,9 +37,9 @@ In de helpers.py staan allemaal functies waarin gegevens uit de database worden 
 
 * **Gebruikers kunnen worden toegevoegd door andere leden van de groep**
 * **Je moet inloggen om een groep aan te maken**
-* Je moet een gebruiker zijn om foto’s te posten bij een evenement
-* Voor gesloten groep moet je inloggen
-* Iedereen kan foto toevoegen in gesloten groep
+* **Je moet een gebruiker zijn om foto’s te posten bij een evenement
+* **Voor gesloten groep moet je inloggen
+* I**edereen kan foto toevoegen in gesloten groep
 * Degene die de foto heeft geüpload kan hem ook weer verwijderen
 * Onder een foto kan er een gifje worden gepost als commentaar bij zowel de besloten groepen als de events (mits je bent ingelogd).
 * Gebruikers kunnen zelf uit een groep gaan
