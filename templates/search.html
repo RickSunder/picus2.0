@@ -44,16 +44,15 @@
 
 }
 </style>
-
-
-
-
-
-
-
-
-
-
+<script>
+function get_group(pass_to_python)
+    {
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url = baseUrl + '/eventfeed?value=' +pass_to_python;
+        return window.open(url, "_self");
+    }
+</script>
     <form action="{{ url_for('search') }}" method="post">
         <br>
         <br>
@@ -85,7 +84,7 @@
                   {% if resultaten|length > 0 %}
 
                       <tr>
-                        <td style="margin-left:auto; margin-right:auto; display: table;"class="partofgroup2"><a style="color:#B9B9B9"href="https://ide50-gi-no.legacy.cs50.io:8080/eventfeed/?value={{i}}">{{i}}</a></td>
+                        <td style="margin-left:auto; margin-right:auto; display: table;"class="partofgroup2"><a style="color:#B9B9B9" onclick="get_group('{{ i }}')">{{i}}</a></td>
                       </tr>
 
                   {% else %}
