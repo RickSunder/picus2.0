@@ -12,52 +12,34 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 <script>
-    $( document ).ready(function(){
-
-        // Part 1 - Collect User Input Using jQuery Click Listener note we use the class (.) of search_button
-        $('.search_button').on('click', function(){
-
-        // Collect user by grabbing the input form's value via id (#)
+$( document ).ready(function(){
+    $('.search_button').on('click', function(){
         var userInput = $('#form-value').val().trim();
-        var group =  $("#button_gif").val();
-
-        // Change the input to suit the API (ie change spaces to +)
         userInput = userInput.replace(/ /g, "+");
-
         var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + userInput + '&api_key=fxVVpisTMf7gev7hUdH22OjTT5Axp7z9';
-        //request.open('GET', 'queryURL');
 
-        // Part 2 - Use AJAX to call GIPHY API (note that the .done() function waits for the API to respond)
         $.ajax({url: queryURL, method: 'GET'}).done(function(response){
-
-        // This is the API response data. It's a JSON object of 25 gifs
-        console.log(response.data);
-
-        // For simplicity, we will take the first gif (ie. at postion 0)
-        var giphyURL = response.data[0].images.fixed_height.url;
-        console.log(giphyURL);
-
-        // Now you can pass that into your "here_is_gif" <img> tag using its id (#)
-        $('#here_is_gif').attr('src', giphyURL);
-
-        var getUrl = window.location;
-        var baseUrl = getUrl.protocol + "//" + getUrl.host;
-        var url = baseUrl + '/add_gif?value=' +giphyURL + '&q=' +group;
-        return window.open(url, "_self");
-
+          console.log(response.data);
+          var giphyURL = response.data[0].images.fixed_height.url;
+          console.log(giphyURL);
+          $('#here_is_gif').attr('src', giphyURL);
         });
-
-        // Part 3 - Clear the Gif using the reset_button id (#)
         $('#reset_button').on('click', function(){
-          // Grab the img using the id and change the src to empty to remove the image
-          $('#here_is_gif').attr("src",'')
-        });
-
-
+            $('#here_is_gif').attr("src",'');
+        })
         // If using a jQuery click listner on a Submit button, you need to return false to prevent the default page refresh
         return false;
-        })
+      })
     });
+
+    function submit_gif(group)
+    {
+        var giphyURL = document.getElementById("here_is_gif").src;
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url = baseUrl + '/add_gif?value=' + giphyURL + '&q=' + group;
+        return window.open(url, "_self");
+    }
 
 
     function get_group(pass_to_python)
@@ -130,7 +112,18 @@
         return window.open(url_add, "_self");
     }
 </script>
-
+<div style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
+    <table class="gecentreerd">
+        <tr>
+            <td style="font-style: normal;">Members of the group</td>
+        </tr>
+        {% for i in list_members %}
+        <tr>
+            <td style="margin-left:auto; margin-right:auto; display: table;"class="partofgroup2">{{ i[0] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 <p></p><h1 class="gecentreerdtekst" style="color:white;font-family:Rubik Mono One;"><font size="+15">{{ group }}</font></h1>
     <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
 	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"><br>
@@ -179,7 +172,8 @@
 			                                     </span>
 			                                         <div class="form-group">
                                                         <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
-                                                        <button id="button_gif" class="search_button" type="submit" value="{{ row[3] }}"> Post gif </button>
+                                                        <button id="btn btn-default" class="search_button" type="submit" value="{{ row[3] }}"> Search gif </button>
+                                                        <button id="btn btn-default" onclick="submit_gif('{{ row[3] }}')"> Post gif </button>
                                                         <input type="reset" id="reset_button" value="Reset">
                                                         <img id="here_is_gif" src="giphyURL"/>
                                                     </div>
