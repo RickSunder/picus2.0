@@ -52,8 +52,11 @@ db = SQL("sqlite:///PicUs.db")
 @app.route("/")
 def index():
     """The index of the website"""
+    # If user logged in, show groupfeed
     if request.method == "POST":
         return render_template("groupfeed.html", user_id=session["user_id"])
+
+    # If user new, render the startscreen
     if request.method == "GET":
         return render_template("index.html")
 
@@ -61,7 +64,7 @@ def index():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        # checken voor goede invulling
+        # check if information is right and valid
         if not request.form.get("email"):
             flash("Please fill in your email adress!")
             return render_template("register.html")
@@ -86,24 +89,27 @@ def register():
             flash("Please fill in your password!")
             return render_template("register.html")
 
-        if len(db.execute("SELECT * FROM users WHERE username=:username", username=request.form.get("username"))) > 0:
+        # Check if username exists
+        username = request.form.get("username")
+        if len(select_users_with_name(username)) > 0:
             flash("username already exists")
             return render_template("register.html")
 
+        # register
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get(
             "email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
-
+        # if not possible, fill in form again
         if not geregistreerd:
             flash("The registration could not happen")
             return render_template("register.html")
 
-        # gebruiker onthouden
+        # Remember user
         session["user_id"] = geregistreerd
 
-        # als alles doorstaan en voltooid is, bevestig registratie
+        # Confirm registration
         return redirect(url_for("groupfeed"))
 
-    # opnieuw registerpagina tevoorschijn toveren wanneer geen POST
+    # When no POST, render register again
     else:
         return render_template("register.html")
 
@@ -205,7 +211,7 @@ def addmember():
             member = members[line]["user_id"]
             temp.append(member)
         for row in temp:
-            mem = db.execute("SELECT username FROM users WHERE id=:id_mem", id_mem=row)
+            mem = get_username_by_id(row)
             mem = mem[0]["username"]
             temporary.append([mem])
 
@@ -335,37 +341,39 @@ def makeevent():
 def login():
     """Log user in."""
 
-    # forget any user_id
+    # Forget any user_id
     session.clear()
 
     # Als POST kan
     if request.method == "POST":
 
-        # username verzekeren
+        # Confirm username
         if not request.form.get("username"):
             flash("Must provide username!")
             return render_template("login.html")
 
-        # wachtwoord verzekeren
+        # Confirm password
         elif not request.form.get("password"):
             flash("must provide password!")
             return render_template("login.html")
 
         # username database
-        rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
+        username = request.form.get("username")
+        rows = select_users_with_name(username)
 
-        # kijken of username uniek is en wachtwoord klopt
+        # Check if username unique and valid
         if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
             flash("invalid username and/or password!")
             return render_template("login.html")
 
-        # remember which user has logged in
+        # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
-        # redirect user to home page
+        # Redirect user to home page
 
         return redirect(url_for("groupfeed"))
-    # else if user reached route via GET (as by clicking a link or via redirect)
+
+    # Else if user reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
 
@@ -420,7 +428,7 @@ def groupfeed():
             temp.append(group)
 
         for number in temp:
-            groupname = db.execute("SELECT name_group, profile_picture FROM groups WHERE group_id=:id_group", id_group=number)
+            groupname = name_pic_group_by_group_id(number)
             groupnamel = groupname[0]["name_group"]
             profilepic = groupname[0]["profile_picture"]
             profilepicture = os.path.join(app.config['UPLOAD_FOLDER'], profilepic)
@@ -445,7 +453,7 @@ def settings():
 @login_required
 def password():
     if request.method == "POST":
-        # Tests if password is correct
+        # Tests if password is correct and valid
         password = request.form.get("newpassword")
         if len(password) < 8:
             flash("Make sure your password is at least 8 letters")
@@ -479,20 +487,23 @@ def password():
             flash("Please fill in your password!")
             return render_template("password.html")
 
+        # Update password
         wwupdate = db.execute("UPDATE users SET hash = :password WHERE id = :ide",
                               ide=session["user_id"], password=pwd_context.hash(request.form.get("newpassword")))
 
+        # If not possible, try again
         if not wwupdate:
             flash("The password change could not happen")
             return render_template("password.html")
 
-        # gebruiker onthouden
+        # Remember user
         session["user_id"] = wwupdate
 
-        # als alles doorstaan en voltooid is, bevestig registratie
+        # If everything succeeded, return to settings
         return redirect(url_for("settings"))
 
-    return render_template("password.html")
+    if request.method == "GET":
+        return render_template("index.html")
 
 
 @app.route("/profilepicture", methods=["GET", "POST"])
@@ -643,8 +654,7 @@ def upload_photo():
 def search():
     check = 0
     zoekopdracht = request.form.get("search")
-    zoeken = db.execute("SELECT * FROM event_account WHERE event_name LIKE :zoekopdracht ORDER BY event_name ASC",
-                        zoekopdracht=str(zoekopdracht)+"%")
+    zoeken = search_results(zoekopdracht)
     resultaten = []
 
     for row in zoeken:
@@ -688,7 +698,7 @@ def eventphoto():
 @app.route("/get_event/", methods=['POST'])
 def get_event():
     eventform = request.form.get("eventname")
-    event = db.execute("SELECT event_id FROM event_account WHERE event_name=:name_event", name_event=eventform)
+    event = get_event_id_by_name(eventform)
     event_idd = event[0]["event_id"]
     return event_idd
 
@@ -697,11 +707,11 @@ def get_event():
 def eventfeed():
     url = request.url
     parsed = urlparse.urlparse(url)
-    name = urlparse.parse_qs(parsed.query)['value']
+    eventform = urlparse.parse_qs(parsed.query)['value']
     if session.get("user_id") is None:
         flash("Login or make an account to use more functions")
 
-    event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
+    event_idd = get_event_id_by_name(eventform)
     event_idd = event_idd[0]["event_id"]
     session["event_id"] = event_idd
     temporary = []
@@ -735,7 +745,7 @@ def eventfeed():
             count += 1
         temporary.append([username, profilepicture, captions, profilepicevent, like, temp, tim, ex_temp])
 
-    return render_template("eventfeed.html", list_picture=temporary, event=name[0], urls=url)
+    return render_template("eventfeed.html", list_picture=temporary, event=eventform[0], urls=url)
 
 
 @app.route('/leave_group/')

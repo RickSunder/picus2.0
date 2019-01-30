@@ -227,3 +227,34 @@ def get_eventfeed_info(event_idd):
     event = db.execute("SELECT user_id, images, caption, likes, dislikes, comments, time FROM event_feed WHERE event_id=:id_event ORDER BY time desc",
                        id_event=event_idd)
     return event
+
+
+# Used in register() and login()
+def select_users_with_name(username):
+    zoeken = db.execute("SELECT * FROM users WHERE username=:username", username=request.form.get("username"))
+    return zoeken
+
+
+# Used in search()
+def search_results(zoekopdracht):
+    zoeken = db.execute("SELECT * FROM event_account WHERE event_name LIKE :zoekopdracht ORDER BY event_name ASC",
+                        zoekopdracht=str(zoekopdracht)+"%")
+    return zoeken
+
+
+# Used in get_event()
+def get_event_id_by_name(eventform):
+    id1 = db.execute("SELECT event_id FROM event_account WHERE event_name=:name_event", name_event=eventform)
+    return id1
+
+
+# Used in addmember()
+def get_username_by_id(row):
+    mem = db.execute("SELECT username FROM users WHERE id=:id_mem", id_mem=row)
+    return mem
+
+
+# Used in groupfeed()
+def name_pic_group_by_group_id(number):
+    groupname = db.execute("SELECT name_group, profile_picture FROM groups WHERE group_id=:id_group", id_group=number)
+    return groupname
