@@ -17,11 +17,11 @@
         </fieldset>
       </div>
     </form><p><p></p></p>
-    <div style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
+    <div class="gecentreerd" style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
       <table style="font-family:Rubik Mono One;"class="gecentreerd">
-        <thead class="thead-dark">
+        <thead class="gecentreerd"class="thead-dark">
           <tr>
-            <th scope="col"><u>Members</u></th>
+            <th scope="col"><u><center>Members</center></u></th>
           </tr>
             {% for row in list_members %}
           <tr>
@@ -30,8 +30,10 @@
           </tr>
         </thead>
       </table>
-    </div><br>
-    <a class="gecentreerd"href="{{ url_for('groupfeed') }}">
+    <a class="gecentreerd" href="{{ url_for('groupfeed') }}">
       <input class="vulinlog" type="button" value="Done" />
     </a>
+    </div><br>
+
+    </div>
 {% endblock %}
