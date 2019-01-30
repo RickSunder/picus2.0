@@ -443,7 +443,7 @@ def settings():
 @login_required
 def password():
     if request.method == "POST":
-
+        # Tests if password is correct
         password = request.form.get("newpassword")
         if len(password) < 8:
             flash("Make sure your password is at least 8 letters")
