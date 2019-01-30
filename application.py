@@ -77,25 +77,38 @@ def register():
     if request.method == "POST":
         # checken voor goede invulling
         if not request.form.get("email"):
-            return apology("Please fill in your email adress!")
+            flash("Please fill in your email adress!")
+            return redirect(url_for("register"))
+
         if not request.form.get("username"):
-            return apology("Please fill in your username!")
+            flash("Please fill in your username!")
+            return redirect(url_for("register"))
+
         if request.form.get("password") != request.form.get("confirmation"):
-            return apology("Password and confirmation password were not the same!")
+            flash("Password and confirmation password were not the same!")
+            return redirect(url_for("register"))
+
         if request.form.get("password") == "":
-            return apology("Please fill in your password!")
+            flash("Please fill in your password!")
+            return redirect(url_for("register"))
+
         elif not request.form.get("password"):
-            return apology("Please fill in your password!")
+            flash("Please fill in your password!")
+            return redirect(url_for("register"))
+
         elif not request.form.get("confirmation"):
-            return apology("Please fill in your password!")
+            flash("Please fill in your password!")
+            return redirect(url_for("register"))
 
         if len(db.execute("SELECT * FROM users WHERE username=:username", username=request.form.get("username"))) > 0:
-            return apology("username already exists")
+            flash("username already exists")
+            return redirect(url_for("register"))
 
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get("email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
 
         if not geregistreerd:
-            return apology("The registration could not happen")
+            flash("The registration could not happen")
+            return redirect(url_for("register"))
 
         # gebruiker onthouden
         session["user_id"] = geregistreerd
@@ -342,11 +355,13 @@ def login():
 
         # username verzekeren
         if not request.form.get("username"):
-            return apology("Must provide username!")
+            flash("Must provide username!")
+            return redirect(url_for("login"))
 
         # wachtwoord verzekeren
         elif not request.form.get("password"):
-            return apology("must provide password!")
+            flash("must provide password!")
+            return redirect(url_for("login"))
 
         # username database
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
@@ -354,7 +369,8 @@ def login():
 
         # kijken of username uniek is en wachtwoord klopt
         if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
-            return apology("invalid username and/or password!")
+            flash("invalid username and/or password!")
+            return redirect(url_for("login"))
 
         # remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -444,27 +460,42 @@ def password():
 
         password = request.form.get("newpassword")
         if len(password) < 8:
-            return apology("Make sure your password is at least 8 letters")
+            flash("Make sure your password is at least 8 letters")
+            return redirect(url_for("password"))
+
         if re.search('[0-9]',password) is None:
-            return apology("Make sure your password has a number in it")
+            flash("Make sure your password has a number in it")
+            return redirect(url_for("password"))
+
         if re.search('[A-Z]',password) is None:
-            return apology("Make sure your password has a capital letter in it")
+            flash("Make sure your password has a capital letter in it")
+            return redirect(url_for("password"))
 
         if request.form.get("newpassword") != request.form.get("newconfirmation"):
-            return apology("Password and confirmation password were not the same!")
+            flash("Password and confirmation password were not the same!")
+            return redirect(url_for("password"))
+
         if request.form.get("newpassword") == "":
-            return apology("Please fill in your password!")
+            flash("Please fill in your password!")
+            return redirect(url_for("password"))
+
         if request.form.get("newconfirmation") == "":
-            return apology("Please fill in your password!")
+            flash("Please fill in your password!")
+            return redirect(url_for("password"))
+
         elif not request.form.get("newpassword"):
-            return apology("Please fill in your password!")
+            flash("Please fill in your password!")
+            return redirect(url_for("password"))
+
         elif not request.form.get("newconfirmation"):
-            return apology("Please fill in your password!")
+            flash("Please fill in your password!")
+            return redirect(url_for("password"))
 
         wwupdate = db.execute("UPDATE users SET hash = :password WHERE id = :ide", ide=session["user_id"], password=pwd_context.hash(request.form.get("newpassword")))
 
         if not wwupdate:
-            return apology("The password change could not happen")
+            flash("The password change could not happen")
+            return redirect(url_for("password"))
 
         # gebruiker onthouden
         session["user_id"] = wwupdate
@@ -867,20 +898,32 @@ def username():
     if request.method == "POST":
 
         if request.form.get("newusername") != request.form.get("newusernameconfirmation"):
-            return apology("Username and confirmation username were not the same!")
+            flash("Username and confirmation username were not the same!")
+            return redirect(url_for("settings"))
+
         if request.form.get("newusername") == "":
-            return apology("Please fill in your username!")
+            flash("Please fill in your username!")
+            return redirect(url_for("settings"))
+
         if request.form.get("newusernameconfirmation") == "":
-            return apology("Please fill in your username!")
+            flash("Please fill in your username!")
+            return redirect(url_for("settings"))
+
         elif not request.form.get("newusername"):
-            return apology("Please fill in your username!")
+            flash("Please fill in your username!")
+            return redirect(url_for("settings"))
+
         elif not request.form.get("newusernameconfirmation"):
-            return apology("Please fill in your username!")
+            flash("Please fill in your username!")
+            return redirect(url_for("settings"))
+
 
         usupdate = db.execute("UPDATE users SET username = :username WHERE id = :ide", ide=session["user_id"], username=request.form.get("newusername"))
 
         if not usupdate:
-            return apology("The username change could not happen")
+            flash("The username change could not happen")
+            return redirect(url_for("settings"))
+
 
         # gebruiker onthouden
         session["user_id"] = usupdate
