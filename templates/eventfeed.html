@@ -13,49 +13,22 @@
 </head>
 <script>
 $( document ).ready(function(){
-
-      // Part 1 - Collect User Input Using jQuery Click Listener note we use the class (.) of search_button
-      $('.search_button').on('click', function(){
-
-        // Collect user by grabbing the input form's value via id (#)
+    $('.search_button').on('click', function(){
         var userInput = $('#form-value').val().trim();
-
-        // Change the input to suit the API (ie change spaces to +)
         userInput = userInput.replace(/ /g, "+");
+        var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + userInput + '&api_key=fxVVpisTMf7gev7hUdH22OjTT5Axp7z9';
 
-       var queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + userInput + '&api_key=fxVVpisTMf7gev7hUdH22OjTT5Axp7z9';
-       //request.open('GET', 'queryURL');
-
-      // Part 2 - Use AJAX to call GIPHY API (note that the .done() function waits for the API to respond)
         $.ajax({url: queryURL, method: 'GET'}).done(function(response){
-
-          // This is the API response data. It's a JSON object of 25 gifs
           console.log(response.data);
-
-          // For simplicity, we will take the first gif (ie. at postion 0)
           var giphyURL = response.data[0].images.fixed_height.url;
           console.log(giphyURL);
-
-          // Now you can pass that into your "here_is_gif" <img> tag using its id (#)
           $('#here_is_gif').attr('src', giphyURL);
-
-
-
-
-          $('#here_is_gif').attr('src', giphyURL);
-
-
         });
-            $('#sumbit_button').on('click', function(){
-            var getUrl = window.location;
-            var baseUrl = getUrl.protocol + "//" + getUrl.host;
-            var url = baseUrl + '/event_add_gif?value=' + giphyURL + '&q=' + event;
-            return window.open(url, "_self");
-          })
-        // Part 3 - Clear the Gif using the reset_button id (#)
+
+
+
         $('#reset_button').on('click', function(){
-          // Grab the img using the id and change the src to empty to remove the image
-          $('#here_is_gif').attr("src",'');
+            $('#here_is_gif').attr("src",'');
         })
 
 
@@ -64,8 +37,22 @@ $( document ).ready(function(){
         // If using a jQuery click listner on a Submit button, you need to return false to prevent the default page refresh
         return false;
       })
+      //$('#sumbit_button').on('click', function(){
+        //     var giphyURL = document.getElementById("here_is_gif").src;
+        //     var getUrl = window.location;
+        //     var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        //     var url = baseUrl + '/event_add_gif?value=' + giphyURL + '&q=' + event;
+        //     return window.open(url, "_self");
+        //   })
     });
 
+function submit_gif(event){
+    var giphyURL = document.getElementById("here_is_gif").src;
+    var getUrl = window.location;
+    var baseUrl = getUrl.protocol + "//" + getUrl.host;
+    var url = baseUrl + '/event_add_gif?value=' + event + '&q=' + giphyURL;
+    return window.open(url, "_self");
+  }
   function get_event(pass_to_python) {
         // var pass_to_python = document.getElementById("group").value;
         var getUrl = window.location;
@@ -181,7 +168,7 @@ $( document ).ready(function(){
 			  <div class="form-group">
                 <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
                 <button id="button_gif" class="search_button" type="submit" > Search GIF </button>
-                <button id="post_gif" class="submit_button" type="submit" value="{{ row[3] }}"> Post GIF </button>
+                <button id="post_gif" onclick="submit_gif('{{ row[3] }}')"> Post GIF </button>
                 <input type="reset" id="reset_button" value="Reset">
                 <img id="here_is_gif" src="giphyURL"/>
                 </div>
