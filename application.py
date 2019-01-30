@@ -1069,9 +1069,6 @@ def eventcomment():
     # Get info from url query
     url = request.url
     parsed = urlparse.urlparse(url)
-    if urlparse.parse_qs(parsed.query)['comments'] is None:
-        flash("you can't post an empty comment")
-        return redirect(link)
     comm = urlparse.parse_qs(parsed.query)['comments']
     pica = urlparse.parse_qs(parsed.query)['pic']
 
