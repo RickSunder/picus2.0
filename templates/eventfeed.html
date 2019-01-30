@@ -155,85 +155,33 @@ function bin(photo, name){
 
                 <img id="here_is_gif" src="giphyURL"/>
                 </div>
-			  <div class="search">
-			   <!--<input placeholder="Write a comment" id="comment-box" type="text">-->
-			   <form action="{{ url_for('eventcomment') }}">
-                    <fieldset>
-                        <div class="form-group" width = "60%">
-                            <input class="form-control" name="comments" placeholder="Write a comment" type="text" size="40"/>
-                        <!--</div>-->
-                        <!--<div class="form-group">-->
-                            <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
-                        <!--</div>-->
-                        <!--<div class="form-group">-->
-                        <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                        </div>
-                        <b><i class="fa fa-comments"></i> Comments</b>
-                        <center>
-                        <table width="90%" height = "40%">
-
-    <div style="top:-250px;" class="container">
-        <div  style="top:-250px;" class="row">
-            <div  style="top:-250px;" class="col-lg-6 offset-lg-3">
-                <div style="border-radius:20px;"class="cardbox shadow-lg bg-white" >
-                    <div style="border-radius:20px;" class="cardbox-heading">
-                        <div style="top:55px;" align="right" >
-                            <br><a style="top:55px;"><i style="top:55px;"  class="fa fa-trash" onclick="bin('{{row[3]}}', '{{ group}}')"></i></a>&nbsp;&nbsp;
-                        </div>
-                        <div class="media m-0">
-                            <div class="d-flex mr-3"></div>
-                            <div class="media-body">
-                                <p class="m-0">{{ row[0] }}</p>
-                                <small><span><i class="icon ion-md-time"></i> {{ row[6] }} </span></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cardbox-item">
-                        <img class="img-fluid" src="{{ row[1] }}" alt="Image">
-                    </div>
-                    <table border="0" width="100%">
-                        <tr>
-                            <td align="left">
-                                <span><i class="icon ion-md-pin"></i> {{ row[2] }}</span><br>
-                            </td>
-                            <td align = "right">
-                                <div align="right">
-                                    <a><span>likes: {{ row[4] }}</span></a>
-                                    <a class="button_view"><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ event }}')"></i></a>
-                                    <a class="button_view2"><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
-                                </div>
-                            </td>
-                        </tr>
-                    </table><br>
-                    <div class="cardbox-comments">
-                        <span class="comment-avatar float-left"></span>
-                        <div class="form-group">
-                            <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
-                            <button id="button_gif" class="search_button" type="submit" > Search GIF </button>
-                            <button id="post_gif" onclick="submit_gif('{{ row[3] }}')"> Post GIF </button>
-                            <input type="reset" id="reset_button" value="Reset">
-                            <img id="here_is_gif" src="giphyURL"/>
-                        </div>
-                        <div class="search">
-                            <form action="{{ url_for('eventcomment') }}">
+    			  <div class="search">
+        			   <!--<input placeholder="Write a comment" id="comment-box" type="text">-->
+        			   <form action="{{ url_for('eventcomment') }}">
                             <fieldset>
                                 <div class="form-group" width = "60%">
                                     <input class="form-control" name="comments" placeholder="Write a comment" type="text" size="40"/>
+                                    <!--</div>-->
+                                    <!--<div class="form-group">-->
                                     <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
-                                    <button class="btn btn-default" type="submit">Post comment</button>
+                                    <!--</div>-->
+                                    <!--<div class="form-group">-->
+                                    <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                                 </div>
-                            <b><i class="fa fa-comments"> Comments</i></b>
+                                <b><i class="fa fa-comments"></i> Comments</b>
+                                <center><p></p>
+                            </table>
                             <center><table width="90%" height = "40%">
                             <tbody style="display: block; border: 0; max-height: 170px; overflow-y: scroll">
                             {% for line in row[5] %}
                                 {% if line[1].startswith("https") %}
                                     <tr>
-                                    <td colspan="30%">
-                                        <b>{{ line[0] }}:</b>
-                                    </td>
-                                    <td colspan="70%" align="left">
-                                        <img class="gifborder" id="here_is_gif" src="{{ line[1] }}"/>
-                                    </td>
+                                        <td colspan="30%">
+                                            <b>{{ line[0] }}:</b>
+                                        </td>
+                                        <td colspan="70%" align="left">
+                                            <img class="gifborder" id="here_is_gif" src="{{ line[1] }}"/>
+                                        </td>
                                     </tr>
                                 {% else %}
                                     <tr>
@@ -277,8 +225,8 @@ function bin(photo, name){
 			         <div style="border-radius:20px;" class="cardbox-heading">
 			            <div class="media m-0">
 			                <div class="media-body">
-			                    <p class="m-0">{{ row[0] }}</p>
-				                <small><span><i class="icon ion-md-time"></i> {{ row[6] }} </span></small>
+			                    <p class="m-0">q{{ row[0] }}</p>
+				                <small><span><i class="icon ion-md-time"></i>w {{ row[6] }} </span></small>
 			                </div>
 			            </div>
 			         </div>
@@ -288,7 +236,7 @@ function bin(photo, name){
 			     <table border="0" width="100%">
 			         <tr>
 			             <td align="left">
-			                 <span><i class="icon ion-md-pin"></i> {{ row[2] }}</span><br>
+			                 <span><i class="icon ion-md-pin"></i>e {{ row[2] }}</span><br>
 			             </td>
 			             <td align = "right">
 			                 <div align="right">
