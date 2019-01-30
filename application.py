@@ -90,7 +90,7 @@ def register():
             return render_template("register.html")
 
         # Check if username exists
-        username=request.form.get("username")
+        username = request.form.get("username")
         if len(select_users_with_name(username)) > 0:
             flash("username already exists")
             return render_template("register.html")
@@ -98,7 +98,7 @@ def register():
         # register
         geregistreerd = db.execute("INSERT INTO users (email, username, hash) VALUES(:email, :username, :password)", email=request.form.get(
             "email"), username=request.form.get("username"), password=pwd_context.hash(request.form.get("password")))
-        #if not possible, fill in form again
+        # if not possible, fill in form again
         if not geregistreerd:
             flash("The registration could not happen")
             return render_template("register.html")
@@ -358,7 +358,7 @@ def login():
             return render_template("login.html")
 
         # username database
-        username=request.form.get("username")
+        username = request.form.get("username")
         rows = select_users_with_name(username)
 
         # Check if username unique and valid
