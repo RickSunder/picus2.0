@@ -443,7 +443,7 @@ def settings():
 @login_required
 def password():
     if request.method == "POST":
-
+        # Tests if password is correct
         password = request.form.get("newpassword")
         if len(password) < 8:
             flash("Make sure your password is at least 8 letters")
@@ -706,7 +706,7 @@ def eventfeed():
     temporary = []
 
     event = db.execute(
-        "SELECT user_id, images, caption, likes, dislikes, comments, time FROM event_feed WHERE event_id=:id_event", id_event=event_idd)
+        "SELECT user_id, images, caption, likes, dislikes, comments, time FROM event_feed WHERE event_id=:id_event ORDER BY time desc", id_event=event_idd)
 
     for number in range(len(event)):
         temp = []
