@@ -50,7 +50,7 @@ function submit_gif(event){
     var giphyURL = document.getElementById("here_is_gif").src;
     var getUrl = window.location;
     var baseUrl = getUrl.protocol + "//" + getUrl.host;
-    var url = baseUrl + '/event_add_gif?value=' + event + '&q=' + giphyURL;
+    var url = baseUrl + '/event_add_gif?value=' + giphyURL + '&q=' + event;
     return window.open(url, "_self");
   }
   function get_event(pass_to_python) {
@@ -196,7 +196,7 @@ function submit_gif(event){
                                     <b>  {{ line[0] }}:</b>
                                 </td>
                                 <td colspan="70%" align="left">
-                                    <img id="here_is_gif" src="{{ line[1] }}"/>
+                                    <img class="gifborder" id="here_is_gif" src="{{ line[1] }}"/>
                                 </td>
                             </tr>
 
