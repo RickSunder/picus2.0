@@ -130,7 +130,18 @@
         return window.open(url_add, "_self");
     }
 </script>
-
+<div style="font-family: Rubik Mono One; background-color: black; border-radius: 20px; color: white; padding: 10px; width: 30%; margin-left:auto; margin-right:auto; display: table;">
+    <table class="gecentreerd">
+        <tr>
+            <td style="font-style: normal;">Members of the group</td>
+        </tr>
+        {% for i in list_members %}
+        <tr>
+            <td style="margin-left:auto; margin-right:auto; display: table;"class="partofgroup2">{{ i[0] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 <p></p><h1 class="gecentreerdtekst" style="color:white;font-family:Rubik Mono One;"><font size="+15">{{ group }}</font></h1>
     <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
 	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"><br>

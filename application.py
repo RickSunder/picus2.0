@@ -589,27 +589,23 @@ def groupview():
             com = comment_group[num]["comment"]
             temp.append([usern, com])
 
-
-        # gif = gif_group(profilepic)
-        # for number in range(len(gif)):
-        #     us = comment_group[num]["user_id"]
-
-        #     # Get username from helpers
-        #     usern = nam(us)
-        #     com = comment_group[num]["comment"]
-        #     tem.append([usern, com])
-
         temporary.append([username, profilepicture, comments, profilepic, like, temp, tim])
 
-    # members = db.execute("SELECT user_id FROM user_groups WHERE group_id = :goh", goh=session['group_id'])
-    # ventjes = []
-
-    # for person in members:
-    #     pers=db.execute("SELECT username FROM users WHERE id =:sjala", sjala=members[person]['user_id'])
-    #     ventjes.append(pers)
-
+    # Get other members and put it in a list
+    members = get_members()
+    print(members)
+    list_temporary = []
+    list_temp = []
+    for line in range(len(members)):
+        member = members[line]["user_id"]
+        list_temp.append(member)
+    for row in list_temp:
+        mem = db.execute("SELECT username FROM users WHERE id=:id_mem", id_mem=row)
+        mem = mem[0]["username"]
+        list_temporary.append([mem])
+    print(list_temporary)
     # return to html page with required information
-    return render_template("groupview.html", list_picture=temporary, group=name[0])
+    return render_template("groupview.html", list_picture=temporary, group=name[0], list_members = list_temporary)
 
 
 @app.route("/upload_photo", methods=["GET", "POST"])
