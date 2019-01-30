@@ -227,7 +227,7 @@ def add_member():
         # Link to redirect
         urlBase = request.url_root
         link = urlBase + 'groupview?value='
-        links += groupname
+        link += groupname
 
         # Check username
         user = find_user(add_members)
@@ -256,7 +256,7 @@ def add_member():
                    user_id=id_user, group_id=session["group_id"])
 
         # Redirect link
-        return redirect(links)
+        return redirect(link)
     else:
         # Get name of the group and reload page
         url = request.url
