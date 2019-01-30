@@ -269,9 +269,11 @@ def add_member():
 @app.route("/eventview", methods=["GET", "POST"])
 @login_required
 def eventview():
-    event_id1 = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
+    event_id1 = get_event_id()
+
     if len(event_id1) <= 0:
         return redirect(url_for("noevent"))
+
     temporary = []
     temp = []
     for event in range(len(event_id1)):
@@ -279,7 +281,7 @@ def eventview():
         temp.append(event_id)
 
     for number in temp:
-        event_id = db.execute("SELECT event_name, event_picture FROM event_account WHERE event_id=:id_event", id_event=number)
+        event_id = get_event_info(number)
         event_id1 = event_id[0]["event_name"]
         profilepic = event_id[0]["event_picture"]
         profilepicture = os.path.join(app.config["UPLOAD_FOLDER"], profilepic)
@@ -300,7 +302,7 @@ def makeevent():
         if not request.form.get("makeevent"):
             return "insert eventname"
 
-        if len(db.execute("SELECT * FROM event_account WHERE event_name=:event", event=name_event)) > 0:
+        if len(get_event_name(name_event)) > 0:
             return "eventname already exists"
 
         # check if the post request has the file part
@@ -319,7 +321,7 @@ def makeevent():
         db.execute("INSERT INTO event_account (event_picture, event_name) VALUES(:event_picture, :event_name)",
                    event_picture=filename, event_name=name_event)
 
-        rows = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name_event)
+        rows = get_event_nameid(name_event)
         session["event"] = rows[0]["event_id"]
 
         db.execute("INSERT INTO user_events (user_id, event_id) VALUES(:user_id, :event_id)",
@@ -661,8 +663,6 @@ def search():
 def eventphoto():
     if request.method == 'POST':
         eventlink = get_nam_event()
-        event_name = db.execute("SELECT event_name FROM event_account WHERE event_id=:event", event=session["event_id"])
-        event = event_name[0]["event_name"]
 
         caption = request.form.get("caption")
 
@@ -687,8 +687,8 @@ def eventphoto():
 
 @app.route("/get_event/", methods=['POST'])
 def get_event():
-    f = request.form.get("eventname")
-    event = db.execute("SELECT event_id FROM event_account WHERE event_name=:name_event", name_event=f)
+    eventform = request.form.get("eventname")
+    event = db.execute("SELECT event_id FROM event_account WHERE event_name=:name_event", name_event=eventform)
     event_idd = event[0]["event_id"]
     return event_idd
 
@@ -700,13 +700,12 @@ def eventfeed():
     name = urlparse.parse_qs(parsed.query)['value']
     if session.get("user_id") is None:
         flash("Login or make an account to use more functions")
+
     event_idd = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name)
     event_idd = event_idd[0]["event_id"]
     session["event_id"] = event_idd
     temporary = []
-
-    event = db.execute(
-        "SELECT user_id, images, caption, likes, dislikes, comments, time FROM event_feed WHERE event_id=:id_event ORDER BY time desc", id_event=event_idd)
+    event = get_eventfeed_info(event_idd)
 
     for number in range(len(event)):
         temp = []

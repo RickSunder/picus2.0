@@ -201,3 +201,25 @@ def get_nam_event():
 def get_memb(row):
     mem = db.execute("SELECT username FROM users WHERE id=:id_mem", id_mem=row)
     return mem
+
+def get_event_id():
+    eventje = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
+    return eventje
+
+def get_event_info(number):
+    event_info = db.execute("SELECT event_name, event_picture FROM event_account WHERE event_id=:id_event", id_event=number)
+    return event_info
+
+def get_event_name():
+    event_name = db.execute("SELECT * FROM event_account WHERE event_name=:event", event=name_event)
+    return event_name
+
+def get_event_nameid():
+    eventnameid= db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name_event)
+    return eventnameid
+
+def get_eventfeed_info(event_idd):
+    event = db.execute("SELECT user_id, images, caption, likes, dislikes, comments, time FROM event_feed WHERE event_id=:id_event ORDER BY time desc", id_event=event_idd)
+    return event
+
+
