@@ -7,7 +7,7 @@ Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een i
 
 ## Schetsen:
 
-![schets](doc/IMG_2173.jpg)
+![schets](doc/add_member.png)
 ![schets](doc/IMG_2174.jpg)
 ![schets](doc/IMG_2175.jpg)
 ![schets](doc/IMG_2176.jpg)
