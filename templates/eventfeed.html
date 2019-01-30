@@ -66,17 +66,23 @@ $( document ).ready(function(){
 
   function get_event(pass_to_python) {
         // var pass_to_python = document.getElementById("group").value;
-        var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventphoto?value='+pass_to_python;
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url = baseUrl + '/eventphoto?value=' +pass_to_python;
         return window.open(url, "_self");
     }
     function like(photo, name)
     {
-        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/event_like_photo?value=' + photo + '&q=' +name;
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url_like = baseUrl + '/event_like_photo?value=' + photo + '&q=' +name;
         return window.open(url_like, "_self");
     }
    function dislike(photo, name)
     {
-        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/event_dislike_photo?value=' +photo + '&q=' +name;
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url_like = baseUrl + '/event_dislike_photo?value=' + photo + '&q=' +name;
         return window.open(url_like, "_self");
     }
     function bin(photo, name)
@@ -85,8 +91,9 @@ $( document ).ready(function(){
 
 
         if(user_choice==true) {
-
-        var url_like = 'https://ide50-a12216321.legacy.cs50.io:8080/eventbin?value=' +photo + '&q=' +name;
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url_like = baseUrl + '/eventbin?value=' + photo + '&q=' +name;
         return window.open(url_like, "_self");
         } else {
             return false;

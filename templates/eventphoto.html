@@ -7,8 +7,9 @@
 {% block main %}
 <script>
     function get_event(pass_to_python) {
-        // var pass_to_python = document.getElementById("group").value;
-        var url = 'https://ide50-a12216321.legacy.cs50.io:8080/eventfeed?value='+pass_to_python;
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
+        var url = baseUrl + '/eventfeed?value=' +pass_to_python;
         return window.open(url, "_self");
     }
     </script>
