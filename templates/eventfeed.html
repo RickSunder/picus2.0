@@ -148,7 +148,7 @@ function bin(photo, name){
 			  <span class="comment-avatar float-left">
 			  </span>
 			  <div class="form-group">
-                <input type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
+                <input class="form-control" type = "text" id ="form-value" autocomplete="off" placeholder="search for gif" type="text"/>
                 <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" id="btn btn-default" class="search_button" type="submit" value="{{ row[3] }}"> <i class="fa fa-search" aria-hidden="true"></i></button>
                 <button style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" id="btn btn-default" onclick="submit_gif('{{ row[3] }}')"><i class="fa fa-paper-plane" aria-hidden="true"></i> </button>
                 <button type="reset" id="reset_button" value="Reset" style="background:Transparent;background-repeat:no-repeat;border: none;cursor:pointer;overflow:hidden;" type="reset" id="reset_button" value="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
@@ -225,8 +225,8 @@ function bin(photo, name){
 			         <div style="border-radius:20px;" class="cardbox-heading">
 			            <div class="media m-0">
 			                <div class="media-body">
-			                    <p class="m-0">q{{ row[0] }}</p>
-				                <small><span><i class="icon ion-md-time"></i>w {{ row[6] }} </span></small>
+			                    <p class="m-0">{{ row[0] }}</p>
+				                <small><span><i class="icon ion-md-time"></i>{{ row[6] }}</span></small>
 			                </div>
 			            </div>
 			         </div>
@@ -236,7 +236,7 @@ function bin(photo, name){
 			     <table border="0" width="100%">
 			         <tr>
 			             <td align="left">
-			                 <span><i class="icon ion-md-pin"></i>e {{ row[2] }}</span><br>
+			                 <span><i class="icon ion-md-pin"></i>{{ row[2] }}</span><br>
 			             </td>
 			             <td align = "right">
 			                 <div align="right">
