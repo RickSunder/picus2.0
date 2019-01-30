@@ -666,8 +666,8 @@ def eventphoto():
         # Link to redirect
         urlBase = request.url_root
         link = urlBase + 'eventfeed?value='
-        links += eventlink
-        return redirect(links)
+        link += eventlink
+        return redirect(link)
     else:
         return render_template("eventphoto.html")
 
