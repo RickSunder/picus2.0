@@ -45,24 +45,22 @@
 }
 
 </style>
-
-
-    <form action="{{ url_for('login') }}" method="post">
-        <br>
-        <br>
-        <div style="font-family: 'Rubik Mono One';" class="container">
-        <fieldset>
-            <div class="form-group">
-                <input autocomplete="off" autofocus class="vulinlog" name="username" placeholder="Username" type="text"/>
-            </div>
-            <p></p>
-            <div class="form-group">
-                <input class="vulinlog" name="password" placeholder="Password" type="password"/>
-            </div>
-            <div>
-                <button class="vulinlogbevestig" type="submit">Log In</button>
-            </div>
-        </fieldset>
+<form action="{{ url_for('login') }}" method="post">
+    <br>
+    <br>
+    <div style="font-family: 'Rubik Mono One';" class="container">
+    <fieldset>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="vulinlog" name="username" placeholder="Username" type="text"/>
         </div>
-    </form>
+        <p></p>
+        <div class="form-group">
+            <input class="vulinlog" name="password" placeholder="Password" type="password"/>
+        </div>
+        <div>
+            <button class="vulinlogbevestig" type="submit">Log In</button>
+        </div>
+    </fieldset>
+    </div>
+</form>
 {% endblock %}

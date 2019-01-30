@@ -32,12 +32,7 @@ function checkUsername()
 }
 
 </script>
-
-<p>
-    <p>
-
-    </p>
-</p>
+<p><p></p></p>
     <form action="{{ url_for('username') }}" method="post" class="gecentreerd">
         <fieldset>
             <div class="form-group">
@@ -46,11 +41,9 @@ function checkUsername()
             <div class="form-group">
                 <input class="vulinlog" name="newusernameconfirmation" placeholder="Confirm new username" type="text" type="text"id="newusernameconfirmation" onkeyup="checkUsername(newusername); return false;"/>
             </div>
-                            <p>
-                                <div class="gecentreerd">
-                    <span style="font-family: Rubik Mono One;" id="confirmMessage" class="confirmMessage"></span>
-                    </div>
-                </p>
+            <p><div class="gecentreerd">
+                <span style="font-family: Rubik Mono One;" id="confirmMessage" class="confirmMessage"></span>
+            </div></p>
             <div class="form-group">
                 <button class="vulinlogbevestig" type="submit">Change your username</button>
             </div>

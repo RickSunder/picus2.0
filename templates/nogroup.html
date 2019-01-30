@@ -5,18 +5,6 @@
 {% endblock %}
 
 {% block main %}
-
-    <form action="{{ url_for('nogroup') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;">
-        <br>
-        <br>
-        <div class="container">
-        <fieldset>
-            <title>You have no groups yet...</title>
-            <h1 style="color:white;">You have no groups yet...</h1>
-<div class="form-group">
-            <div id="vulinlogbevestig"><a style="color:white;" id="vulinlogbevestig" href="makegroup">Make your first group here!</a></div>
-        </div>
-
 <style>
     input[type="file"] {
     display: none;
@@ -28,11 +16,15 @@
     cursor: pointer;
 }
 </style>
-
-
-
-
+<form action="{{ url_for('nogroup') }}" method="post" enctype = "multipart/form-data" style="font-family:Rubik Mono One;">
+    <br><br><div class="container">
+        <fieldset>
+            <title>You have no groups yet...</title>
+            <h1 style="color:white;">You have no groups yet...</h1>
+            <div class="form-group">
+                <div id="vulinlogbevestig"><a style="color:white;" id="vulinlogbevestig" href="makegroup">Make your first group here!</a></div>
+            </div>
         </fieldset>
-        </div>
-    </form>
+    </div>
+</form>
 {% endblock %}

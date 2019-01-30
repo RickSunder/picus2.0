@@ -5,21 +5,17 @@
 {% endblock %}
 
 {% block main %}
-  <body>
-    <div class="index">
-        <h1 style="width: 300"><font>Be part of your own group now!</fontsize></h1>
-    </div>
-    <div class="laptop">
-      <img src="{{url_for('static', filename='laptop.png')}}" class="floating">
-    </div>
-
-<div>
-
-<a href="register" type="button" class="btn-outline-secondary" style="font-family: Rubik Mono One; border-radius: 20px; top: 500px;"><font size="+6">Register</fontsize></a>
-
-</div>
-  </body>
-
+<body>
+  <div class="index">
+    <h1 style="width: 300"><font>Be part of your own group now!</fontsize></h1>
+  </div>
+  <div class="laptop">
+    <img src="{{url_for('static', filename='laptop.png')}}" class="floating">
+  </div>
+  <div>
+    <a href="register" type="button" class="btn-outline-secondary" style="font-family: Rubik Mono One; border-radius: 20px; top: 500px;"><font size="+6">Register</fontsize></a>
+  </div>
+</body>
 {% endblock %}
 
 
