@@ -1,6 +1,6 @@
 # PicUs
 
-Rick Sunder, Gino Pennasilico en Britt Roele
+Rick Sunder, Gino Penasilico en Britt Roele
 ## Samenvatting
 Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een ingelogde functie en een voor iedereen beschikbare functie. Bij de ingelogde functie is het mogelijk om een evenement aan te maken om foto's te delen die voor iedereen zichtbaar zijn. Daarnaast is het mogelijk om gesloten groepen aan te maken, waarbij in groepen foto's kunnen worden gedeeld, de foto kan worden gedislikt en gelikt worden en gifjes en commentaar kan onder een foto worden gepost. Als je geen account hebt is het mogelijk om een event te bekijken en alle foto's die daar bij horen. Met de zoekfunctie kun je events op naam vinden. Door middel van een link rechtsboven in het scherm bij events kan de pagina worden gedeeld met allemaal mensen. De extra functies zoals liken, commenten en foto's uploaden wordt beschikbaar wanneer je bent ingelogd. Degene die de foto heeft gepost kan de foto verwijderen. Bij de besloten groepen is het mogelijk om leden toe te voegen, zelf uit de groep te gaan en foto's te uploaden. De nieuwste foto's verschijnen bovenaan de pagina. So Pic Us instead of them!
 
@@ -8,21 +8,22 @@ Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een i
 ## Schetsen:
 
 ![schets](doc/Add_member.PNG)
-![schets](doc/Schermopname(9).png)
-![schets](doc/Schermopname(10).png)
-![schets](doc/Schermopname(11).png)
-![schets](doc/Schermopname(13).png)
-![schets](doc/Schermopname(14).png)
-![schets](doc/Schermopname(15).png)
-![schets](doc/Schermopname(16).png)
-![schets](doc/Schermopname(17).png)
-![schets](doc/Schermopname(18).png)
-![schets](doc/Schermopname(19).png)
-![schets](doc/Schermopname(20).png)
-![schets](doc/Schermopname(21).png)
-![schets](doc/Schermopname(21).png)
-![schets](doc/Schermopname(23).png)
-![schets](doc/Schermopname(24).png)
+![schets](doc/1.png)
+![schets](doc/2.png)
+![schets](doc/3.png)
+![schets](doc/4.png)
+![schets](doc/5.png)
+![schets](doc/6.png)
+![schets](doc/7.png)
+![schets](doc/8.png)
+![schets](doc/9.png)
+![schets](doc/10.png)
+![schets](doc/11.png)
+![schets](doc/12.png)
+![schets](doc/13.png)
+![schets](doc/14.png)
+![schets](doc/15.png)
+
 
 
 * Homepage
