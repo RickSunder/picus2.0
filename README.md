@@ -29,7 +29,8 @@ Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een i
 * Wachtwoord veranderen
 * Profielfoto toevoegen voor een groep of event
 
-
+## Helpers.py
+In de helpers.py staan allemaal functies waarin gegevens uit de database worden opgehaald. Als comment is er bij geschreven bij welke functie in application.py die wordt gebruikt. Daarnaast is er een functie die checkt of je bent ingelogd.
 
 ## Features
 (Dikgedrukt is nodig voor het MVP)
