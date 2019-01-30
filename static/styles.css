@@ -400,3 +400,13 @@ main .form-control
   display: table;
 }
 
+.gifborder {
+  width:120px;
+  height:120px;
+  background-image: url("http://i.stack.imgur.com/2OrtT.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-radius:15px;
+
+}
