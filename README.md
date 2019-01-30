@@ -1,6 +1,8 @@
-# Projectvoorstel webik
+# PicUs
+
+Rick Sunder, Gino Penasilico en Britt Roele
 ## Samenvatting
-Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een ingelogde functie en een voor iedereen beschikbare functie. Bij de ingelogde functie is het mogelijk om een evenement aan te maken om foto's te delen die voor iedereen zichtbaar zijn. Daarnaast is het mogelijk om gesloten groepen aan te maken, waarbij in groepen foto's kunnen worden gedeeld, gepict (liken) en gifjes worden gestuurd. Als je geen account hebt is het mogelijk om een event te bekijken en alle foto's die daar bij horen. Met de zoekfunctie kun je onder andere de top 5 evenementen vinden.
+Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een ingelogde functie en een voor iedereen beschikbare functie. Bij de ingelogde functie is het mogelijk om een evenement aan te maken om foto's te delen die voor iedereen zichtbaar zijn. Daarnaast is het mogelijk om gesloten groepen aan te maken, waarbij in groepen foto's kunnen worden gedeeld, de foto kan worden gedislikt en gelikt worden en gifjes en commentaar kan onder een foto worden gepost. Als je geen account hebt is het mogelijk om een event te bekijken en alle foto's die daar bij horen. Met de zoekfunctie kun je events op naam vinden. Door middel van een link rechtsboven in het scherm bij events kan de pagina worden gedeeld met allemaal mensen. De extra functies zoals liken, commenten en foto's uploaden wordt beschikbaar wanneer je bent ingelogd. Degene die de foto heeft gepost kan de foto verwijderen. Bij de besloten groepen is het mogelijk om leden toe te voegen, zelf uit de groep te gaan en foto's te uploaden. De nieuwste foto's verschijnen bovenaan de pagina. So Pic Us instead of them!
 
 
 ## Schetsen:
@@ -25,7 +27,7 @@ Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een i
 * Zoeken
 * Instellingen
 * Wachtwoord veranderen
-* Profielfoto toevoegen
+* Profielfoto toevoegen voor een groep of event
 
 
 
@@ -36,12 +38,11 @@ Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een i
 * **Je moet inloggen om een groep aan te maken**
 * Je moet een gebruiker zijn om foto’s te posten bij een evenement
 * Voor gesloten groep moet je inloggen
-* Iedereen kan foto toevoegen en verwijderen in gesloten groep
-* In plaats van een foto kan er ook een gifje worden gepost bij gesloten groepen.
+* Iedereen kan foto toevoegen in gesloten groep
+* Degene die de foto heeft geüpload kan hem ook weer verwijderen
+* Onder een foto kan er een gifje worden gepost als commentaar bij zowel de besloten groepen als de events (mits je bent ingelogd).
 * Gebruikers kunnen zelf uit een groep gaan
 * **Foto’s in gesloten groepen kunnen geliked worden en er kan op gereageerd worden.**
-* Nieuw geregistreerde gebruikers moeten hun e-mailadres bevestigen via de mail.
-* Foto’s verwijderen bij evenement als 20% disliked.
 
 
 ## Databronnen:
@@ -54,11 +55,6 @@ Gaan wij waarschijnlijk weinig gebruik van maken, want de foto’s die gebruikt 
 ## Concurrerende bestaande websites:
 * Facebook
 * Instagram
-
-## Moeilijkste delen:
-* Een apart gedeelte voor de groepsaccounts en voor het persoonlijke account
-* Iemand met een speciale status (admin) bepaalde rechten geven
-* Het blokkeren van iemand lijkt ons lastig
 
 # Technisch Ontwerp
 ## Controllers
