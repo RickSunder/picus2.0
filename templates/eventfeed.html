@@ -136,7 +136,7 @@ $( document ).ready(function(){
 				<!--<div class="cardbox-base" align="left">-->
 			  <!--<ul class="fa fa-thumbs-up">-->
 			  <div align="right">
-			   <br><a ><i class="fa fa-trash"  type="button" onclick="bin('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
+			   <br><a class="button_view2"><i class="fa fa-trash" onclick="bin('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
 			   </div>
 			   <!--<li><a></a></li>--
 			  <!--</ul>-->
@@ -166,8 +166,8 @@ $( document ).ready(function(){
 			             <td align = "right">
 			                       <div align="right">
 			                       <a><span>likes: {{ row[4] }}</span></a>
-                    			   <a><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ event }}')" type="button"></i></a>
-                    			   <a><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ event }}')" type="button"></i></a>&nbsp;&nbsp;
+                    			   <a class="button_view"><i class="fa fa-thumbs-up" onclick="like('{{row[3]}}', '{{ event }}')"></i></a>
+                    			   <a class="button_view2"><i class="fa fa-thumbs-down" onclick="dislike('{{row[3]}}', '{{ event }}')"></i></a>&nbsp;&nbsp;
                     		 </div>
 			             </td>
 			         </tr>
