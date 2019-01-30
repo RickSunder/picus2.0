@@ -114,8 +114,5 @@ In templates staan al onze html bestanden. En in static staat onze css styleshee
 ## Framework:
 * [Bootstrap navigatie bar](https://bootsnipp.com/snippets/Vm7d)
 * [Eventueel bootstrap voor het liken van foto’s](https://bootsnipp.com/snippets/featured/modal-lightbox-with-likedislike)
-
-## Eventuele extra links:
-* gebruikersnaam.html(POST)
-* mijn-fotos.html(POST)
-* vrienden.html(POST)
+* Bootstrap voor de opmaak van het weergaven van foto's
+* Bootstrap voor de icoontjes die wij gebruiken als button
