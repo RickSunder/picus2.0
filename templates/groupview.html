@@ -134,7 +134,7 @@
 <p></p><h1 class="gecentreerdtekst" style="color:white;font-family:Rubik Mono One;"><font size="+15">{{ group }}</font></h1>
     <link href="https://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet">
 	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"><br>
-        &nbsp;&nbsp;<input class="vulinlog" style="top:-75px;" type="button" id="event" value="Upload photo" onclick="get_group('{{group}}')"/><p></p>
+        &nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Upload photo" onclick="get_group('{{group}}')"/><p></p>
         &nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Leave group" onclick="leave_group('{{group}}')"/><p></p>
         &nbsp;&nbsp;<input class="vulinlogbevestig" style="top:-75px;" type="button" id="event" value="Add member" onclick="add_group('{{group}}')"/>
             {% for row in list_picture %}
@@ -152,7 +152,7 @@
 			                                      <div class="d-flex mr-3">
 			                                          </div>
 			                                              <div class="media-body">
-			                                                 <p class="m-0"><h1>{{ row[0] }}</h1></p>
+			                                                 <p class="m-0">{{ row[0] }}</p>
 			                                                 <small><span><i class="icon ion-md-time"></i> {{ row[6] }} </span></small>
 			                                               </div>
 			                                          </div><!--/ media -->
@@ -189,7 +189,7 @@
                                                         <div class="form-group" width = "60%">
                                                             <input class="form-control" name="comments" placeholder="Write a comment" type="text" size="40"/>
                                                             <input class="form-control" name="pic" value="{{ row[3] }}"  type="hidden"/>
-                                                            <button class="btn btn-default" type="submit">Post comment</button>
+                                                            <button class="vulinlogbevestig" type="submit">Post comment</button>
                                                         </div>
                                                             <b><i class="fa fa-comments"> Comments</i></b><center>
                                                             <table width="90%" height = "40%">
