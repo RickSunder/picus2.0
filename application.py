@@ -614,8 +614,8 @@ def upload_photo():
         # Link to redirect
         urlBase = request.url_root
         link = urlBase + 'groupview?value='
-        links += group
-        return redirect(links)
+        link += group
+        return redirect(link)
     else:
         # Reload page
         return render_template("upload_photo.html")
