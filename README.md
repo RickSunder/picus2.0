@@ -1,15 +1,29 @@
-# Projectvoorstel webik
+# PicUs
+
+Rick Sunder, Gino Penasilico en Britt Roele
 ## Samenvatting
-Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een ingelogde functie en een voor iedereen beschikbare functie. Bij de ingelogde functie is het mogelijk om een evenement aan te maken om foto's te delen die voor iedereen zichtbaar zijn. Daarnaast is het mogelijk om gesloten groepen aan te maken, waarbij in groepen foto's kunnen worden gedeeld, gepict (liken) en gifjes worden gestuurd. Als je geen account hebt is het mogelijk om een event te bekijken en alle foto's die daar bij horen. Met de zoekfunctie kun je onder andere de top 5 evenementen vinden.
+Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een ingelogde functie en een voor iedereen beschikbare functie. Bij de ingelogde functie is het mogelijk om een evenement aan te maken om foto's te delen die voor iedereen zichtbaar zijn. Daarnaast is het mogelijk om gesloten groepen aan te maken, waarbij in groepen foto's kunnen worden gedeeld, de foto kan worden gedislikt en gelikt worden en gifjes en commentaar kan onder een foto worden gepost. Als je geen account hebt is het mogelijk om een event te bekijken en alle foto's die daar bij horen. Met de zoekfunctie kun je events op naam vinden. Door middel van een link rechtsboven in het scherm bij events kan de pagina worden gedeeld met allemaal mensen. De extra functies zoals liken, commenten en foto's uploaden wordt beschikbaar wanneer je bent ingelogd. Degene die de foto heeft gepost kan de foto verwijderen. Bij de besloten groepen is het mogelijk om leden toe te voegen, zelf uit de groep te gaan en foto's te uploaden. De nieuwste foto's verschijnen bovenaan de pagina. So Pic Us instead of them!
 
 
 ## Schetsen:
 
-![schets](doc/IMG_2173.jpg)
-![schets](doc/IMG_2174.jpg)
-![schets](doc/IMG_2175.jpg)
-![schets](doc/IMG_2176.jpg)
-![schets](doc/IMG_2177.jpg)
+![schets](doc/1.png)
+![schets](doc/2.png)
+![schets](doc/3.png)
+![schets](doc/4.png)
+![schets](doc/5.png)
+![schets](doc/6.png)
+![schets](doc/7.png)
+![schets](doc/8.png)
+![schets](doc/9.png)
+![schets](doc/10.png)
+![schets](doc/11.png)
+![schets](doc/12.png)
+![schets](doc/13.png)
+![schets](doc/14.png)
+![schets](doc/15.png)
+
+
 
 * Homepage
 * Login
@@ -25,40 +39,32 @@ Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een i
 * Zoeken
 * Instellingen
 * Wachtwoord veranderen
-* Profielfoto toevoegen
+* Profielfoto toevoegen voor een groep of event
 
-
+## Helpers.py
+In de helpers.py staan allemaal functies waarin gegevens uit de database worden opgehaald. Als comment is er bij geschreven bij welke functie in application.py die wordt gebruikt. Daarnaast is er een functie die checkt of je bent ingelogd.
 
 ## Features
 (Dikgedrukt is nodig voor het MVP)
 
 * **Gebruikers kunnen worden toegevoegd door andere leden van de groep**
 * **Je moet inloggen om een groep aan te maken**
-* Je moet een gebruiker zijn om foto’s te posten bij een evenement
-* Voor gesloten groep moet je inloggen
-* Iedereen kan foto toevoegen en verwijderen in gesloten groep
-* In plaats van een foto kan er ook een gifje worden gepost bij gesloten groepen.
+* **Je moet een gebruiker zijn om foto’s te posten bij een evenement
+* **Voor gesloten groep moet je inloggen
+* I**edereen kan foto toevoegen in gesloten groep
+* Degene die de foto heeft geüpload kan hem ook weer verwijderen
+* Onder een foto kan er een gifje worden gepost als commentaar bij zowel de besloten groepen als de events (mits je bent ingelogd).
 * Gebruikers kunnen zelf uit een groep gaan
 * **Foto’s in gesloten groepen kunnen geliked worden en er kan op gereageerd worden.**
-* Nieuw geregistreerde gebruikers moeten hun e-mailadres bevestigen via de mail.
-* Foto’s verwijderen bij evenement als 20% disliked.
 
+## Taakverdeling:
+* Gino: login, registratie, zoekfunctie, layout, homepage (met zwevende computer) en alle opmaak
+* Rick: alles dat met events te maken heeft en API gifjes
+* Britt: alles dat met groepen te maken heeft
 
-## Databronnen:
-Gaan wij waarschijnlijk weinig gebruik van maken, want de foto’s die gebruikt gaan worden in onze applicatie kunnen users zelf uploaden.
-
-## Externe componenten:
-* Eventueel bootstrap voor het liken van foto’s (https://bootsnipp.com/snippets/featured/modal-lightbox-with-likedislike)
-
-
-## Concurrerende bestaande websites:
-* Facebook
-* Instagram
-
-## Moeilijkste delen:
-* Een apart gedeelte voor de groepsaccounts en voor het persoonlijke account
-* Iemand met een speciale status (admin) bepaalde rechten geven
-* Het blokkeren van iemand lijkt ons lastig
+## Repository
+In de algemene map staat helpers.py, application.py en de database (PicUs.db)
+In templates staan al onze html bestanden. En in static staat onze css stylesheet en ons logo. Als laatste staat in de map upload alle foto's die gebruikers kunnen uploaden op onze website.
 
 # Technisch Ontwerp
 ## Controllers
@@ -108,8 +114,5 @@ Gaan wij waarschijnlijk weinig gebruik van maken, want de foto’s die gebruikt 
 ## Framework:
 * [Bootstrap navigatie bar](https://bootsnipp.com/snippets/Vm7d)
 * [Eventueel bootstrap voor het liken van foto’s](https://bootsnipp.com/snippets/featured/modal-lightbox-with-likedislike)
-
-## Eventuele extra links:
-* gebruikersnaam.html(POST)
-* mijn-fotos.html(POST)
-* vrienden.html(POST)
+* Bootstrap voor de opmaak van het weergaven van foto's
+* Bootstrap voor de icoontjes die wij gebruiken als button
