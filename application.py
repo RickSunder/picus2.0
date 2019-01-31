@@ -277,9 +277,11 @@ def add_member():
 def eventview():
     event_id1 = get_event_id()
 
+    # Check if user has an event yet
     if len(event_id1) <= 0:
         return redirect(url_for("noevent"))
 
+    # Get all the info and upload it to html page
     temporary = []
     temp = []
     for event in range(len(event_id1)):
@@ -303,7 +305,7 @@ def eventview():
 @login_required
 def makeevent():
     if request.method == "POST":
-
+        # Check if the field is not empty
         name_event = request.form.get("makeevent")
         if not request.form.get("makeevent"):
             return "insert eventname"
@@ -440,12 +442,14 @@ def groupfeed():
 
 @app.route("/aboutus", methods=["GET", "POST"])
 def aboutus():
+    # Go to about us html
     return render_template("aboutus.html")
 
 
 @app.route("/settings", methods=["GET", "POST"])
 @login_required
 def settings():
+    # Go to settings html
     return render_template("settings.html")
 
 
@@ -542,6 +546,7 @@ def logout():
 
 @app.route('/home/ubuntu/workspace/picus2.0/upload/<path:path>')
 def show(path):
+    # Get photo from server
     return send_from_directory('upload', path)
 
 
@@ -652,6 +657,7 @@ def upload_photo():
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
+    # Search for events and show results
     check = 0
     zoekopdracht = request.form.get("search")
     zoeken = search_results(zoekopdracht)
@@ -676,6 +682,7 @@ def eventphoto():
 
         caption = request.form.get("caption")
 
+        # Check if uploaded file is an picture
         file = request.files['file']
         if not allowed_file(file.filename):
             return "This is not a picture"
@@ -697,6 +704,7 @@ def eventphoto():
 
 @app.route("/get_event/", methods=['POST'])
 def get_event():
+    # get event id
     eventform = request.form.get("eventname")
     event = get_event_id_by_name(eventform)
     event_idd = event[0]["event_id"]
@@ -705,6 +713,7 @@ def get_event():
 
 @app.route('/eventfeed/')
 def eventfeed():
+    # Get info from url
     url = request.url
     parsed = urlparse.urlparse(url)
     eventform = urlparse.parse_qs(parsed.query)['value']
@@ -717,6 +726,7 @@ def eventfeed():
     temporary = []
     event = get_eventfeed_info(event_idd)
 
+    # Add data from database in a list to upload to html page
     for number in range(len(event)):
         temp = []
         ex_temp = []
@@ -812,7 +822,6 @@ def dislike_photo():
     view = urlparse.parse_qs(parsed.query)['q']
 
     # Link to redirect
-    # Link to redirect
     urlBase = request.url_root
     link = urlBase + 'groupview?value='
     link += view[0]
@@ -850,7 +859,6 @@ def bin():
     name = urlparse.parse_qs(parsed.query)['value']
     view = urlparse.parse_qs(parsed.query)['q']
 
-    # Redirect link
     # Link to redirect
     urlBase = request.url_root
     link_back = urlBase + 'groupview?value='
@@ -894,7 +902,7 @@ def eventbin():
 @login_required
 def username():
     if request.method == "POST":
-
+        # Check if the username filled in is correct
         if request.form.get("newusername") != request.form.get("newusernameconfirmation"):
             flash("Username and confirmation username were not the same!")
             return redirect(url_for("settings"))
@@ -930,6 +938,7 @@ def username():
 
     return render_template("username.html")
 
+
 @app.route('/event_like_photo/')
 @login_required
 def event_like_photo():
@@ -939,7 +948,6 @@ def event_like_photo():
     name = urlparse.parse_qs(parsed.query)['value']
     view = urlparse.parse_qs(parsed.query)['q']
 
-    # Link to redirect
     # Link to redirect
     urlBase = request.url_root
     link = urlBase + 'eventfeed?value='
@@ -1033,12 +1041,14 @@ def comment():
 @app.route("/noevent")
 @login_required
 def noevent():
+    # Go to no event html
     return render_template("noevent.html")
 
 
 @app.route("/nogroup")
 @login_required
 def nogroup():
+    # Go to no group html
     return render_template("nogroup.html")
 
 

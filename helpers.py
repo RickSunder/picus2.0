@@ -27,6 +27,7 @@ def login_required(f):
     return decorated_function
 
 
+# Used in makegroup()
 def find_user(u):
     user = db.execute("SELECT * FROM users WHERE username=:username", username=u)
     return user
@@ -191,6 +192,7 @@ def comm_event(profilepicevent):
     return comment_event
 
 
+# Used in eventfeed()
 def get_nam_event():
     eventname = db.execute("SELECT event_name FROM event_account WHERE event_id=:event", event=session["event_id"])
     event = eventname[0]["event_name"]
@@ -203,26 +205,31 @@ def get_memb(row):
     return mem
 
 
+# Used in eventview()
 def get_event_id():
     eventje = db.execute("SELECT event_id FROM user_events WHERE user_id=:user_id", user_id=session["user_id"])
     return eventje
 
 
+# Used in eventview()
 def get_event_info(number):
     event_info = db.execute("SELECT event_name, event_picture FROM event_account WHERE event_id=:id_event", id_event=number)
     return event_info
 
 
+# Used in eventfeed()
 def get_event_name(name_event):
     event_name = db.execute("SELECT * FROM event_account WHERE event_name=:event", event=name_event)
     return event_name
 
 
+# Used in eventfeed()
 def get_event_nameid(name_event):
     eventnameid = db.execute("SELECT event_id FROM event_account WHERE event_name=:event", event=name_event)
     return eventnameid
 
 
+# Used in eventfeed()
 def get_eventfeed_info(event_idd):
     event = db.execute("SELECT user_id, images, caption, likes, dislikes, comments, time FROM event_feed WHERE event_id=:id_event ORDER BY time desc",
                        id_event=event_idd)
