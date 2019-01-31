@@ -503,7 +503,7 @@ def password():
         return redirect(url_for("settings"))
 
     if request.method == "GET":
-        return render_template("index.html")
+        return render_template("password.html")
 
 
 @app.route("/profilepicture", methods=["GET", "POST"])
@@ -928,8 +928,7 @@ def username():
         # als alles doorstaan en voltooid is, bevestig registratie
         return redirect(url_for("settings"))
 
-    return redirect(link)
-
+    return render_template("username.html")
 
 @app.route('/event_like_photo/')
 @login_required
