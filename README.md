@@ -25,7 +25,7 @@ Wij gaan een online platform maken, waarbij er twee soorten functies zijn: een i
 
 
 ## Productvideo
-https://www.youtube.com/watch?v=nd5EzoWR1lg
+https://www.youtube.com/watch?v=viAR7_KXiJg&feature=youtu.be
 
 
 * Homepage
